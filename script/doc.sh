@@ -2,11 +2,13 @@
 
 set -e
 
-npm run doc:build
+vuepress build doc
 
 cd doc/.vuepress/dist
 
 echo 'tedis.myour.tech' > CNAME
+
+ls -all
 
 git init
 git add -A
