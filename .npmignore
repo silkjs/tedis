@@ -4,10 +4,12 @@ example
 node_modules
 reference
 script
+src/**/*.spec.ts
 tools
 .editorconfig
 .eslintrc.json
 .gitignore
+.travis.yml
 docker-compose.yml
 jest.config.js
 tsconfig.json
