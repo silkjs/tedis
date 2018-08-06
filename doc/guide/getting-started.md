@@ -1,15 +1,20 @@
 ---
-# meta:
-#   - name: description
-#     content: hello
-#   - name: keywords
-#     content: super duper SEO
 prev: ./
 next: false
 ---
+
+# 指南
 
 # 快速上手
 
 ## 安装
 
+::: tip
+文档正在建设中
+:::
+
 ## 使用
+
+::: tip
+文档正在建设中
+:::

@@ -51,9 +51,9 @@ module.exports = {
     lineNumbers: false
   },
   themeConfig: {
-    repo: "dasoncheng/redis-typescript",
+    repo: "myour-cc/tedis",
     docsDir: "doc",
-    docsBranch: "dev",
+    docsBranch: "master",
     editLinks: true,
     displayAllHeaders: true,
     locales: {
