@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-# API
-
-::: tip
-文档正在建设中
-:::
-=======
 ---
 prev: false
 next: ./key
@@ -128,4 +121,3 @@ next: ./key
 - zrevrank(key: string, member: string)
 - zscore(key: string, member: string)
 - zunionstore(destination: string,objectKW: { [PropName: string]: number },aggregate: "SUM" | "MIN" | "MAX",)
->>>>>>> e7910b81660c9484355a0b36ed8fa50a0293b431

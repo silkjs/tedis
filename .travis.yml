@@ -14,7 +14,7 @@ branches:
     - master
 
 before_install:
-  - docker-compose up -d docker-compose.yml
+  - docker-compose up -d
 
 install:
   - npm install
