@@ -1,0 +1,14 @@
+.vscode
+doc
+example
+node_modules
+reference
+script
+tools
+.editorconfig
+.eslintrc.json
+.gitignore
+docker-compose.yml
+jest.config.js
+tsconfig.json
+tslint.json

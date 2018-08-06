@@ -1,0 +1,14 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "no-console": false,
+    "interface-name": false,
+    "variable-name": false,
+    "object-literal-sort-keys": false,
+    "max-classes-per-file": false
+  },
+  "rulesDirectory": []
+}

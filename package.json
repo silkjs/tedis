@@ -1,0 +1,53 @@
+{
+  "name": "tedis",
+  "version": "0.0.1",
+  "main": "build/main.js",
+  "typings": "types/index.d.ts",
+  "scripts": {
+    "doc:dev": "vuepress dev doc",
+    "doc:build": "vuepress build doc",
+    "pkg:build": "npx tsc -b src/tsconfig.app.json",
+    "pkg:test": "jest",
+    "upload:doc": "chmod +x ./script/deploy.sh && ./script/deploy.sh",
+    "upload:npm": "chmod +x ./script/npm.sh && ./script/npm.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/myour-cc/tedis.git"
+  },
+  "description": "redis client for node.js with typescript and async",
+  "keywords": [
+    "tedis",
+    "redis",
+    "typescript",
+    "async",
+    "await",
+    "promise"
+  ],
+  "authors": [
+    {
+      "name": "dasoncheng",
+      "email": "dasoncheng@foxmail.com"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/myour-cc/tedis/issues"
+  },
+  "homepage": "https://github.com/myour-cc/tedis#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/node": "^10.5.6",
+    "eslint": "^5.3.0",
+    "jest": "^23.4.2",
+    "ts-jest": "^23.1.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1",
+    "vuepress": "^0.13.1"
+  },
+  "directories": {
+    "doc": "doc",
+    "example": "example"
+  }
+}

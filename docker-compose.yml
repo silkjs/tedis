@@ -1,0 +1,18 @@
+version: "3.6"
+
+networks:
+  net-redis:
+
+volumes:
+  volume-redis:
+
+services:
+
+  redis:
+    image: redis:4.0.6
+    networks: 
+      - net-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - volume-redis:/data
