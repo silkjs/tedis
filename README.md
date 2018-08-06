@@ -1,5 +1,9 @@
 # tedis
 
+<p align="center">
+  <a href="https://github.com/myour-cc/tedis"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png"></a>
+</p>
+
 document [tedis](https://tedis.myour.tech)
 
 ## Introduction
