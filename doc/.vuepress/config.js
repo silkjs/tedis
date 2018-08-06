@@ -4,18 +4,16 @@ module.exports = {
     "/": {
       lang: "zh-CN",
       title: "Tedis",
-      description: "tedis 文档"
     },
     "/en/": {
       lang: "en-US",
       title: "Tedis",
-      description: "tedis guide"
     }
   },
   head: [
     ["link", {
       rel: "icon",
-      href: "/favicon.png"
+      href: "/images/favicon.png"
     }],
     ["link", {
       rel: "manifest",
@@ -47,6 +45,7 @@ module.exports = {
     }]
   ],
   serviceWorker: true,
+  evergreen: true,
   markdown: {
     lineNumbers: false
   },
@@ -63,21 +62,40 @@ module.exports = {
         editLinkText: "在 GitHub 上编辑此页",
         lastUpdated: "上次更新",
         nav: [{
-          text: "指南",
-          link: "/guide/"
-        },
-        {
-          text: "API",
-          link: "/api/"
-        }
+            text: "文档",
+            link: "/guide/"
+          },
+          {
+            text: "API",
+            link: "/api/"
+          },
+          {
+            text: "团队",
+            link: "/team/"
+          },
+          {
+            text: "支持Tedis",
+            link: "/support-tedis/"
+          },
+          {
+            text: "记要",
+            link: "/log/"
+          }
         ],
         sidebar: {
           "/guide/": [
             "",
             "getting-started",
           ],
-          "/api/": [],
-          "/": [],
+          "/api/": [
+            "",
+            "key",
+            "string",
+            "hash",
+            "list",
+            "set",
+            "zset"
+          ],
         }
       },
       "/en/": {

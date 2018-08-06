@@ -5,10 +5,9 @@
   "typings": "types/index.d.ts",
   "scripts": {
     "doc:dev": "vuepress dev doc",
-    "doc:build": "vuepress build doc",
     "pkg:build": "npx tsc -b src/tsconfig.app.json",
     "pkg:test": "jest",
-    "upload:doc": "chmod +x ./script/deploy.sh && ./script/deploy.sh",
+    "upload:doc": "chmod +x ./script/doc.sh && ./script/doc.sh",
     "upload:npm": "chmod +x ./script/npm.sh && ./script/npm.sh"
   },
   "repository": {
