@@ -10,8 +10,8 @@ services:
   - docker
 
 branches:
-  only:
-    - master
+  - master
+  - dev
 
 before_install:
   - docker-compose up -d
@@ -20,6 +20,5 @@ install:
   - npm install
 
 script:
-  - npm run upload:doc
   - npm run pkg:build
   - npm run pkg:test
