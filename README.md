@@ -1,26 +1,43 @@
-# tedis
-
-<p align="center">
+<div style="text-align:center;">
   <a href="https://github.com/myour-cc/tedis"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png"></a>
-</p>
+</div>
 
-document [tedis](https://tedis.myour.tech)
+# Tedis
+
+<a href="https://github.com/myour-cc/tedis/issues">
+  <img src="https://img.shields.io/github/issues-raw/myour-cc/tedis.svg" alt="issues">
+</a>
+<a href="https://travis-ci.org/myour-cc/tedis">
+  <img src="https://img.shields.io/travis/myour-cc/tedis.svg" alt="travis">
+</a>
+<a href="https://github.com/myour-cc/tedis">
+  <img src="https://img.shields.io/github/license/myour-cc/tedis.svg" alt="license">
+</a>
+<a href="https://www.npmjs.com/package/tedis">
+  <img src="https://img.shields.io/npm/v/tedis.svg" alt="package">
+</a>
+<a href='https://coveralls.io/github/myour-cc/tedis?branch=master'>
+  <img src='https://coveralls.io/repos/github/myour-cc/tedis/badge.svg?branch=master' alt='Coverage Status' />
+</a>
+<img src="https://img.shields.io/github/tag/myour-cc/tedis.svg" alt="tag">
+<img src="https://img.shields.io/github/release/myour-cc/tedis.svg" alt="release">
+<img src="https://img.shields.io/github/languages/top/myour-cc/tedis.svg" alt="languages">
+<img src="https://img.shields.io/github/languages/code-size/myour-cc/tedis.svg" alt="size">
+<img src="https://img.shields.io/github/last-commit/myour-cc/tedis.svg" alt="commit">
 
 ## Introduction
 
 ### what is tedis
 
-`tedis` write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
+[`tedis`](https://tedis.myour.tech) write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
 
-### Getting Started
-
-Installation
+### Installation
 
 ```sh
-npm install tedis -S
+yarn add tedis
 ```
 
-example
+### Getting started
 
 > commonjs
 
@@ -34,55 +51,49 @@ const { Redis } = require("tedis");
 import { Redis } from "tedis";
 ```
 
-```js
+```ts
 const client = new Redis({
   port: 6379,
   host: "127.0.0.1"
 });
+```
 
-setTimeout(async () => {
-  // key
-  console.log("keys", await client.keys("*"));
-  console.log("exists", await client.exists("a"));
-  // string
-  console.log("set", await client.set("string1", "abcdefg"));
-  console.log("get", await client.get("string1"));
-  // hash
-  console.log(
-    "hmset",
-    await client.hmset("hash1", {
-      name: "tom",
-      age: 23
-    })
-  );
-  console.log("hgetall", await client.hgetall("hash1"));
-  // list
-  console.log(
-    "lpush",
-    await client.lpush("list1", ["a", "b", "c", "d", 1, 2, 3, 4, 5])
-  );
-  console.log("llen", await client.llen("list1"));
-  // set
-  console.log(
-    "sadd",
-    await client.sadd("set1", ["a", "b", "c", "d", 1, 2, 3, 4, 5])
-  );
-  console.log("scard", await client.scard("set1"));
-  // zset
-  console.log(
-    "zadd",
-    await client.zadd("zset1", [
-      [1, "a"],
-      [10, "a"],
-      [2, "adg"],
-      [3, "aertet"],
-      [4, "afg"]
-    ])
-  );
-  console.log("zcard", await client.zcard("zset1"));
-  // base
-  client.close();
-}, 3000);
+```ts
+// key
+await client.keys("*");
+await client.exists("a");
+
+// string
+await client.set("string1", "abcdefg");
+await client.get("string1");
+
+// hash
+await client.hmset("hash1", {
+  name: "tom",
+  age: 23
+});
+await client.hgetall("hash1");
+
+// list
+await client.lpush("list1", ["a", "b", "c", "d", 1, 2, 3, 4, 5]);
+await client.llen("list1");
+
+// set
+await client.sadd("set1", ["a", "b", "c", "d", 1, 2, 3, 4, 5]);
+await client.scard("set1");
+
+// zset
+await client.zadd("zset1", [
+  [1, "a"],
+  [10, "a"],
+  [2, "adg"],
+  [3, "aertet"],
+  [4, "afg"]
+]);
+await client.zcard("zset1");
+
+// base
+client.close();
 ```
 
 ## methods

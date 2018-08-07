@@ -20,33 +20,41 @@ enum MethodKey {
 }
 
 export interface InterfaceKey {
-  del(key: string): Promise<any>;
-  dump(key: string): Promise<any>;
-  exists(key: string): Promise<any>;
-  expire(key: string, seconds: number): Promise<any>;
-  expireat(key: string, timestamp: string): Promise<any>;
-  pexpire(key: string, milliseconds: number): Promise<any>;
-  pexpireat(key: string, millisecondsTimestamp: string): Promise<any>;
-  keys(pattern: string): Promise<any>;
-  move(key: string, db: number): Promise<any>;
-  persist(key: string): Promise<any>;
-  pttl(key: string): Promise<any>;
-  ttl(key: string): Promise<any>;
-  randomkey(): Promise<any>;
+  del(key: string, ...keys: string[]): Promise<number>;
+  dump(key: string): Promise<null | string>;
+  exists(key: string, ...keys: string[]): Promise<number>;
+  expire(key: string, seconds: number): Promise<number>;
+  expireat(key: string, timestamp: string): Promise<number>;
+  keys(pattern: string): Promise<string[]>;
+  // MIGRATE
+  move(key: string, db: number): Promise<number>;
+  // object
+  persist(key: string): Promise<number>;
+  pexpire(key: string, milliseconds: number): Promise<number>;
+  pexpireat(key: string, millisecondsTimestamp: string): Promise<number>;
+  pttl(key: string): Promise<number>;
+  randomkey(): Promise<null | string>;
   rename(key: string, newKey: string): Promise<any>;
-  renamenx(key: string, newKey: string): Promise<any>;
-  type(key: string): Promise<any>;
+  renamenx(key: string, newKey: string): Promise<0 | 1>;
+  // RESTORE
+  // scan
+  // sort
+  // touch
+  ttl(key: string): Promise<number>;
+  type(key: string): Promise<string>;
+  // unlink
+  // wait
 }
 
 export class RedisKey extends RedisBase implements InterfaceKey {
-  public del(key: string) {
-    return this.command(MethodKey.del, key);
+  public del(key: string, ...keys: string[]) {
+    return this.command(MethodKey.del, key, ...keys);
   }
   public dump(key: string) {
     return this.command(MethodKey.dump, key);
   }
-  public exists(key: string) {
-    return this.command(MethodKey.exists, key);
+  public exists(key: string, ...keys: string[]) {
+    return this.command(MethodKey.exists, key, ...keys);
   }
   public expire(key: string, seconds: number) {
     return this.command(MethodKey.expire, key, seconds);

@@ -1,5 +1,6 @@
 .vscode
 .DS_Store
+coverage
 doc
 example
 node_modules
@@ -7,6 +8,7 @@ reference
 script
 src/**/*.spec.ts
 tools
+.coveralls.yml
 .editorconfig
 .eslintrc.json
 .gitignore

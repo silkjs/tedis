@@ -5,3 +5,8 @@ export function sleep(seconds: number): Promise<void> {
     }, seconds * 1000);
   });
 }
+
+export const config = {
+  prot: 6379,
+  host: "127.0.0.1",
+};
