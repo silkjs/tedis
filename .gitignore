@@ -1,4 +1,5 @@
 .vscode
+coverage/lcov-report
 node_modules
 build
 dist
