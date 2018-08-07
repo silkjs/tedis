@@ -1,35 +1,27 @@
-<div style="text-align:center;">
-  <a href="https://github.com/myour-cc/tedis"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png"></a>
-</div>
+<p align="center">
+  <a href="https://tedis.myour.tech" target="_blank" rel="noopener noreferrer"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png" alt="tedis logo"></a>
+</p>
 
-# Tedis
+<p align="center">
+  <a href="https://travis-ci.org/myour-cc/tedis"><img src="https://img.shields.io/travis/myour-cc/tedis.svg" alt="travis"></a>
+  <a href="https://github.com/myour-cc/tedis/issues"><img src="https://img.shields.io/github/issues-raw/myour-cc/tedis.svg" alt="issues"></a>
+  <a href="https://github.com/myour-cc/tedis"><img src="https://img.shields.io/github/license/myour-cc/tedis.svg" alt="license"></a>
+  <a href="https://www.npmjs.com/package/tedis"><img src="https://img.shields.io/npm/v/tedis.svg" alt="package"></a>
+  <a href='https://coveralls.io/github/myour-cc/tedis?branch=master'><img src='https://coveralls.io/repos/github/myour-cc/tedis/badge.svg?branch=master' alt='Coverage Status' /></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/tag/myour-cc/tedis.svg" alt="tag"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/release/myour-cc/tedis.svg" alt="release"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/top/myour-cc/tedis.svg" alt="languages"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/code-size/myour-cc/tedis.svg" alt="size"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/last-commit/myour-cc/tedis.svg" alt="commit"></a>
+</p>
 
-<a href="https://github.com/myour-cc/tedis/issues">
-  <img src="https://img.shields.io/github/issues-raw/myour-cc/tedis.svg" alt="issues">
-</a>
-<a href="https://travis-ci.org/myour-cc/tedis">
-  <img src="https://img.shields.io/travis/myour-cc/tedis.svg" alt="travis">
-</a>
-<a href="https://github.com/myour-cc/tedis">
-  <img src="https://img.shields.io/github/license/myour-cc/tedis.svg" alt="license">
-</a>
-<a href="https://www.npmjs.com/package/tedis">
-  <img src="https://img.shields.io/npm/v/tedis.svg" alt="package">
-</a>
-<a href='https://coveralls.io/github/myour-cc/tedis?branch=master'>
-  <img src='https://coveralls.io/repos/github/myour-cc/tedis/badge.svg?branch=master' alt='Coverage Status' />
-</a>
-<img src="https://img.shields.io/github/tag/myour-cc/tedis.svg" alt="tag">
-<img src="https://img.shields.io/github/release/myour-cc/tedis.svg" alt="release">
-<img src="https://img.shields.io/github/languages/top/myour-cc/tedis.svg" alt="languages">
-<img src="https://img.shields.io/github/languages/code-size/myour-cc/tedis.svg" alt="size">
-<img src="https://img.shields.io/github/last-commit/myour-cc/tedis.svg" alt="commit">
+<h2 align="center">Supporting Tedis</h2>
 
 ## Introduction
 
 ### what is tedis
 
-[`tedis`](https://tedis.myour.tech) write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
+`Tedis` write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
 
 ### Installation
 
