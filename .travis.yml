@@ -21,3 +21,6 @@ install:
 script:
   - npm run pkg:build
   - npm run pkg:test
+
+after_success:
+  - codecov -t 0f2848b9-8489-4756-84a9-89afa12ce6e6

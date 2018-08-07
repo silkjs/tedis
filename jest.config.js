@@ -3,6 +3,7 @@
 
 module.exports = {
   coverageDirectory: "coverage",
+  collectCoverage: true,
   globals: {
     "ts-jest": {
       "tsConfigFile": "src/tsconfig.spec.json"
