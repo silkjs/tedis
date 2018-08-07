@@ -16,21 +16,21 @@ export class RedisBase implements InterfaceBase {
     this._protocol = new Protocol();
     this._callbacks = [];
     this._socket.on("timeout", () => {
-      console.log("socket timeout");
+      // console.log("socket timeout");
       this._socket.end();
     });
     this._socket.on("connect", () => {
-      console.log("socket connect");
+      // console.log("socket connect");
     });
     this._socket.on("data", (buf) => {
-      console.log("socket data");
+      // console.log("socket data");
       this.data(buf);
     });
     this._socket.on("end", () => {
-      console.log("socket end");
+      // console.log("socket end");
     });
     this._socket.on("close", () => {
-      console.log("socket close");
+      // console.log("socket close");
     });
   }
   public on(type: string, lister: () => void) {

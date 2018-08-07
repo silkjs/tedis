@@ -1,12 +1,12 @@
-import { sleep } from "../tools";
+import { config, sleep } from "../tools";
 import { Redis } from "./main";
 
 let client: Redis;
 
 beforeAll(async () => {
   client = new Redis({
-    port: 6379,
-    host: "127.0.0.1",
+    port: config.prot,
+    host: config.host,
   });
   await sleep(2);
 });

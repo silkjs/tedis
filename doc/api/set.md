@@ -5,30 +5,30 @@ next: ./zset
 
 # set
 
-## sadd
+## TTTTTTTTTTTTTTTTTTTTTTTTTTTT
 
-## scard
+desc
 
-## sdiff
+#### _Redis_
 
-## sdiffstore
+- 可用版本：`>=`
+- 算法复杂度：`O()`
+- 返回值：
+- 指令案例：
 
-## sinter
+```bash
 
-## sinterstore
+```
 
-## sismember
+#### _Tedis_
 
-## smembers
+- 接口：
 
-## smove
+```ts
+```
 
-## spop
+- 示例：
 
-## srandmember
-
-## srem
-
-## sunion
-
-## sunionstore
+```ts
+await;
+```
