@@ -9,6 +9,7 @@
   <a href="https://www.npmjs.com/package/tedis"><img src="https://img.shields.io/npm/v/tedis.svg" alt="package"></a>
   <a href='https://coveralls.io/github/myour-cc/tedis?branch=master'><img src='https://coveralls.io/repos/github/myour-cc/tedis/badge.svg?branch=master' alt='Coverage Status' /></a>
   <a href="javascript:void(0)" ><img src="https://img.shields.io/github/tag/myour-cc/tedis.svg" alt="tag"></a>
+  <br>
   <a href="javascript:void(0)" ><img src="https://img.shields.io/github/release/myour-cc/tedis.svg" alt="release"></a>
   <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/top/myour-cc/tedis.svg" alt="languages"></a>
   <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/code-size/myour-cc/tedis.svg" alt="size"></a>
