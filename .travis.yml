@@ -11,7 +11,6 @@ services:
 
 branches:
   - master
-  - dev
 
 before_install:
   - docker-compose up -d
