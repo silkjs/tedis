@@ -13,7 +13,7 @@ This section of sample `String` as Tedis instance object, demonstration part omi
 
 If key already exists and is a string, this command appends the value at the end of the string. If key does not exist it is created and set as an empty string, so APPEND will be similar to SET in this special case.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/append)
 
 - available: `>= 2.0.0`
 - complexity: `O(1)`
@@ -52,7 +52,7 @@ await String.append("mykey", " World");
 
 Decrements the number stored at key by one. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/decr)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -91,7 +91,7 @@ await String.decr("key2");
 
 Decrements the number stored at key by decrement. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/decrby)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -124,7 +124,7 @@ await String.decrby("mykey", 3);
 
 Get the value of key. If the key does not exist the special value nil is returned. An error is returned if the value stored at key is not a string, because GET only handles string values.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/get)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -163,7 +163,7 @@ Returns the bit value at offset in the string value stored at key.
 
 When offset is beyond the string length, the string is assumed to be a contiguous space with 0 bits. When key does not exist it is assumed to be an empty string, so offset is always out of range and the value is also assumed to be a contiguous space with 0 bits.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/getbit)
 
 - available: `>= 2.2.0`
 - complexity: `O(1)`
@@ -210,7 +210,7 @@ Returns the substring of the string value stored at key, determined by the offse
 
 The function handles out of range requests by limiting the resulting range to the actual length of the string.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/getrange)
 
 - available: `>= 2.4.0`
 - complexity: `O(N)`
@@ -255,7 +255,7 @@ await String.getrange("mykey", [10, 100]);
 
 Atomically sets key to value and returns the old value stored at key. Returns an error when key exists but does not hold a string value.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/getset)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -294,7 +294,7 @@ Note: this is a string operation because Redis does not have a dedicated integer
 
 Redis stores integers in their integer representation, so for string values that actually hold an integer, there is no overhead for storing the string representation of the integer.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/incr)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -329,7 +329,7 @@ await String.incr("mykey");
 
 Increments the number stored at key by increment. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/incrby)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -367,7 +367,7 @@ Increment the string representing a floating point number stored at key by the s
 
 If the command is successful the new incremented value is stored as the new value of the key (replacing the old one), and returned to the caller as a string.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/incrbyfloat)
 
 - available: `>= 2.6.0`
 - complexity: `O(1)`
@@ -410,7 +410,7 @@ await String.incrbyfloat("key2", "2.0e2");
 
 Returns the values of all specified keys. For every key that does not hold a string value or does not exist, the special value nil is returned. Because of this, the operation never fails.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/mget)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -449,7 +449,7 @@ Sets the given keys to their respective values. MSET replaces existing values wi
 
 MSET is atomic, so all given keys are set at once. It is not possible for clients to see that some of the keys were updated while others are unchanged.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/mset)
 
 - available: `>= 1.0.1`
 - complexity: `O(N)`
@@ -493,7 +493,7 @@ Because of this semantic MSETNX can be used in order to set different keys repre
 
 MSETNX is atomic, so all given keys are set at once. It is not possible for clients to see that some of the keys were updated while others are unchanged.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/msetnx)
 
 - available: `>= 1.0.1`
 - complexity: `O(N)`
@@ -542,7 +542,7 @@ await String.mget("key1", "key2", "key3");
 
 PSETEX works exactly like SETEX with the sole difference that the expire time is specified in milliseconds instead of seconds.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/psetex)
 
 - available: `>= 2.6.0`
 - complexity: `O(1)`
@@ -585,7 +585,7 @@ Starting with Redis 2.6.12 SET supports a set of options that modify its behavio
 - NX -- Only set the key if it does not already exist.
 - XX -- Only set the key if it already exist.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/set)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -618,9 +618,9 @@ await String.set("mykey", "hello");
 
 Sets or clears the bit at offset in the string value stored at key.
 
-The bit is either set or cleared depending on value, which can be either 0 or 1. When key does not exist, a new string value is created. The string is grown to make sure it can hold a bit at offset. The offset argument is required to be greater than or equal to 0, and smaller than 2-32 (this limits bitmaps to 512MB). When the string at key is grown, added bits are set to 0.
+The bit is either set or cleared depending on value, which can be either 0 or 1. When key does not exist, a new string value is created. The string is grown to make sure it can hold a bit at offset. The offset argument is required to be greater than or equal to 0, and smaller than 2^32 (this limits bitmaps to 512MB). When the string at key is grown, added bits are set to 0.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/setbit)
 
 - available: `>= 2.2.0`
 - complexity: `O(1)`
@@ -657,7 +657,7 @@ await String.setbit("mykey", 7, 0);
 
 Set key to hold the string value and set key to timeout after a given number of seconds.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/setex)
 
 - available: `>= 2.0.0`
 - complexity: `O(1)`
@@ -692,7 +692,7 @@ await String.setex("mykey", 10, "Hello");
 
 Set key to hold string value if key does not exist. In that case, it is equal to SET. When key already holds a value, no operation is performed. SETNX is short for "SET if Not eXists".
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/setnx)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -731,7 +731,7 @@ await String.setnx("mykey", "world");
 
 Overwrites part of the string stored at key, starting at the specified offset, for the entire length of value. If the offset is larger than the current length of the string at key, the string is padded with zero-bytes to make offset fit. Non-existing keys are considered as empty strings, so this command will make sure it holds a string large enough to be able to set value at offset.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/setrange)
 
 - available: `>= 2.2.0`
 - complexity: `O(1)`
@@ -772,7 +772,7 @@ await String.setrange("key2", 6, "Redis");
 
 Returns the length of the string value stored at key. An error is returned when key holds a non-string value.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/strlen)
 
 - available: `>= 2.2.0`
 - complexity: `O(1)`

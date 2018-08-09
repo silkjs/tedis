@@ -30,11 +30,11 @@ Tedis is a redis client developed for nodejs platform. Its name was inspired by 
 
 `node-redlock` new features support not in time, although there are unit tests, but not comprehensive, type files do not support.
 
+## Getting Started
+
 ::: warning
 Tedis is ambitious, but many aspects of its inception, such as documentation and testing, are imperfect. And it is not proven by a lot of practices, so it is strongly recommended that developers do not use Tedis on formal projects for the time being. In addition, if you are open source enthusiastic, you are welcome to provide Tedis with testing, documentation and API advice, which will accelerate the development of Tedis to make it more robust, so as to use its various excellent features in the production environment as soon as possible.
 :::
-
-## Getting Started
 
 ### Installation
 

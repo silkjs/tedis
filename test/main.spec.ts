@@ -1,5 +1,5 @@
+import { Redis } from "../src/main";
 import { config, sleep } from "../tools";
-import { Redis } from "./main";
 
 let client: Redis;
 
@@ -38,24 +38,23 @@ describe("redis hash", () => {
 
 describe("redis list", () => {
   test("lpush", async () => {
-    await client.lpush("list1", ["a", "b", "c", "d", 1, 2, 3, 4, 5]);
+    await client.lpush("list1", ...["a", "b", "c", "d", 1, 2, 3, 4, 5]);
   });
 });
 
 describe("redis set", () => {
   test("sadd", async () => {
-    await client.sadd("set1", ["a", "b", "c", "d", 1, 2, 3, 4, 5]);
+    await client.sadd("set1", ...["a", "b", "c", "d", 1, 2, 3, 4, 5]);
   });
 });
 
 describe("redis zset", () => {
   test("zadd", async () => {
-    await client.zadd("zset1", [
-      [1, "a"],
-      [10, "a"],
-      [2, "adg"],
-      [3, "aertet"],
-      [4, "afg"],
-    ]);
+    await client.zadd("zset1", {
+      a: 1,
+      adg: 2,
+      sfa: 3,
+      gfdg: 4,
+    });
   });
 });

@@ -54,14 +54,14 @@ module.exports = {
     docsDir: "doc",
     docsBranch: "master",
     editLinks: true,
-    displayAllHeaders: true,
-    serviceWorker: {
-      updatePopup: true,
-      updatePopup: {
-        message: "文档有更新，现在即可浏览",
-        buttonText: "更新"
-      }
-    },
+    // displayAllHeaders: true,
+    // serviceWorker: {
+    //   updatePopup: true,
+    //   updatePopup: {
+    //     message: "文档有更新，现在即可浏览",
+    //     buttonText: "更新"
+    //   }
+    // },
     locales: {
       "/": {
         label: "简体中文",
@@ -76,18 +76,18 @@ module.exports = {
             text: "API",
             link: "/api/"
           },
-          {
-            text: "团队",
-            link: "/team/"
-          },
-          {
-            text: "支持Tedis",
-            link: "/support-tedis/"
-          },
-          {
-            text: "记要",
-            link: "/log/"
-          }
+          // {
+          //   text: "团队",
+          //   link: "/team/"
+          // },
+          // {
+          //   text: "支持Tedis",
+          //   link: "/support-tedis/"
+          // },
+          // {
+          //   text: "记要",
+          //   link: "/log/"
+          // }
         ],
         sidebar: {
           "/api/": [

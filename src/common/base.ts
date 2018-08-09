@@ -58,7 +58,7 @@ export class RedisBase implements InterfaceBase {
       }
       (this._callbacks.shift() as callback)(
         this._protocol.data.res.error,
-        this._protocol.data.res.data,
+        this._protocol.data.res.data
       );
     }
   }

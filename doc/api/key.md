@@ -13,7 +13,7 @@ next: ./string
 
 用于删除已存在的键。不存在的 key 会被忽略。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/del.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -48,7 +48,7 @@ await Key.del("key1", "key2", "key3");
 
 用于序列化给定 key ，并返回被序列化的值。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/dump.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -81,7 +81,7 @@ await Key.dump("mykey");
 
 命令用于检查给定 key 是否存在。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/exists.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -124,7 +124,7 @@ await Key.exists("key1", "key2", "nosuchkey");
 
 用于设置 key 的过期时间，以秒为单位。key 过期后将不再可用。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/expire.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -157,7 +157,7 @@ await Key.expire("mykey", 10);
 
 以 UNIX 时间戳(unix timestamp)格式设置 key 的过期时间。key 过期后将不再可用。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/expireat.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -190,7 +190,7 @@ await Key.expireat("mykey", "1293840000");
 
 查找所有符合给定模式 pattern（正则表达式）的 key 。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/keys.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -234,7 +234,7 @@ await Key.keys("mykey", "*");
 
 将当前数据库的 key 移动到给定的数据库 db 当中。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/move.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -269,7 +269,7 @@ Key.move("mykey", 1);
 
 移除给定 key 的生存时间。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/persist.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`
@@ -308,7 +308,7 @@ await Key.persist("mykey");
 
 这个命令和 EXPIRE 命令的作用类似，但是它以毫秒为单位设置 key 的生存时间，而不像 EXPIRE 命令那样，以秒为单位。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/pexpire.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -345,7 +345,7 @@ await Key.pexpire("mykey", 1500);
 
 PEXPIREAT 这个命令和 EXPIREAT 命令类似，但它以毫秒为单位设置 key 的过期 unix 时间戳，而不是像 EXPIREAT 那样，以秒为单位。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/pexpireat.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -385,7 +385,7 @@ await Key.pexpireat("mykey", "1555555555005");
 - 如果 key 不存在返回-2
 - 如果 key 存在且无过期时间返回-1
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/pttl.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -420,7 +420,7 @@ await Key.pttl("mykey");
 
 从当前数据库返回一个随机的 key。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/randomkey.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -453,7 +453,7 @@ await Key.randomkey();
 
 将 key 重命名为 newkey，如果 key 与 newkey 相同，将返回一个错误。如果 newkey 已经存在，则值将被覆盖。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/rename.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -488,7 +488,7 @@ await Key.rename("mykey", "myotherkey");
 
 当且仅当 newkey 不存在时，将 key 改名为 newkey 。当 key 不存在时，返回一个错误。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/renamenx.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -528,7 +528,7 @@ await Key.renamenx("mykey", "myotherkey");
 - 如果 key 不存在或者已过期，返回 -2
 - 如果 key 存在并且没有设置过期时间（永久有效），返回 -1 。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/ttl.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -563,7 +563,7 @@ await Key.ttl("mykey");
 
 返回 key 所存储的 value 的数据结构类型，它可以返回 string, list, set, zset 和 hash 等不同的类型。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/type.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`

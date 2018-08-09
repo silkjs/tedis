@@ -11,32 +11,38 @@ enum MethodHash {
   hlen = "HLEN",
   hmget = "HMGET",
   hmset = "HMSET",
+  hscan = "HSCAN",
   hset = "HSET",
   hsetnx = "HSETNX",
+  hstrlen = "HSTRLEN",
   hvals = "HVALS",
-  hscan = "HSCAN",
 }
 
 export interface InterfaceHash {
-  hdel(key: string, field: string, ...fields: string[]): Promise<any>;
-  hexists(key: string, field: string): Promise<any>;
+  hdel(key: string, field: string, ...fields: string[]): Promise<number>;
+  hexists(key: string, field: string): Promise<string | null>;
   hget(key: string, field: string): Promise<any>;
-  hgetall(key: string): Promise<any>;
-  hincrby(key: string, field: string, increment: number): Promise<any>;
-  hincrbyfloat(key: string, field: string, increment: number): Promise<any>;
-  hkeys(key: string): Promise<any>;
-  hlen(key: string): Promise<any>;
-  hmget(key: string, field: string, ...fields: string[]): Promise<any>;
+  hgetall(key: string): Promise<{ [propName: string]: string | number }>;
+  hincrby(key: string, field: string, increment: number): Promise<number>;
+  hincrbyfloat(key: string, field: string, increment: string): Promise<string>;
+  hkeys(key: string): Promise<string[]>;
+  hlen(key: string): Promise<number>;
+  hmget(
+    key: string,
+    field: string,
+    ...fields: string[]
+  ): Promise<Array<string | number | null>>;
   hmset(
     key: string,
     hash: {
       [propName: string]: string | number;
-    },
+    }
   ): Promise<any>;
-  hset(key: string, field: string, value: string): Promise<any>;
-  hsetnx(key: string, field: string, value: string): Promise<any>;
-  hvals(key: string): Promise<any>;
-  // hscan(key: string, cursor: number, pattern: string, count: string): Promise<any>;
+  // hscan
+  hset(key: string, field: string, value: string | number): Promise<number>;
+  hsetnx(key: string, field: string, value: string): Promise<number>;
+  hstrlen(key: string, field: string): Promise<number>;
+  hvals(key: string): Promise<Array<string | number>>;
 }
 
 export class RedisHash extends RedisBase implements InterfaceHash {
@@ -55,7 +61,7 @@ export class RedisHash extends RedisBase implements InterfaceHash {
   public hincrby(key: string, field: string, increment: number) {
     return this.command(MethodHash.hincrby, key, field, increment);
   }
-  public hincrbyfloat(key: string, field: string, increment: number) {
+  public hincrbyfloat(key: string, field: string, increment: string) {
     return this.command(MethodHash.hincrbyfloat, key, field, increment);
   }
   public hkeys(key: string) {
@@ -71,7 +77,7 @@ export class RedisHash extends RedisBase implements InterfaceHash {
     key: string,
     hash: {
       [propName: string]: string;
-    },
+    }
   ) {
     const arrayFV = new Array();
     (Reflect.ownKeys(hash) as string[]).forEach((field) => {
@@ -84,6 +90,9 @@ export class RedisHash extends RedisBase implements InterfaceHash {
   }
   public hsetnx(key: string, field: string, value: string) {
     return this.command(MethodHash.hsetnx, key, field, value);
+  }
+  public hstrlen(key: string, field: string) {
+    return this.command(MethodHash.hstrlen, key, field);
   }
   public hvals(key: string) {
     return this.command(MethodHash.hvals, key);
