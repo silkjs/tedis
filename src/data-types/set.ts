@@ -13,46 +13,46 @@ enum MethodSet {
   spop = "SPOP",
   srandmember = "SRANDMEMBER",
   srem = "SREM",
+  sscan = "SSCAN",
   sunion = "SUNION",
   sunionstore = "SUNIONSTORE",
-  sscan = "SSCAN",
 }
 
 export interface InterfaceSet {
-  sadd(key: string, members: Array<string | number>): Promise<any>;
-  scard(key: string): Promise<any>;
-  sdiff(keys: string[]): Promise<any>;
-  sdiffstore(destination: string, keys: string[]): Promise<any>;
-  sinter(keys: string[]): Promise<any>;
-  sinterstore(destination: string, keys: string[]): Promise<any>;
-  sismember(key: string, member: string): Promise<any>;
-  smembers(key: string): Promise<any>;
-  smove(source: string, destination: string, member: string): Promise<any>;
-  spop(key: string, count?: number): Promise<any>;
-  srandmember(key: string, count?: number): Promise<any>;
-  srem(key: string, members: string[]): Promise<any>;
-  sunion(keys: string[]): Promise<any>;
-  sunionstore(destination: string, keys: string[]): Promise<any>;
+  sadd(key: string, member: string, ...members: Array<string | number>): Promise<number>;
+  scard(key: string): Promise<number>;
+  sdiff(key: string, ...keys: string[]): Promise<Array<string | number>>;
+  sdiffstore(destination: string, key: string, ...keys: string[]): Promise<number>;
+  sinter(key: string, ...keys: string[]): Promise<Array<string | number>>;
+  sinterstore(destination: string, key: string, ...keys: string[]): Promise<number>;
+  sismember(key: string, member: string): Promise<number>;
+  smembers(key: string): Promise<Array<string|number>>;
+  smove(source: string, destination: string, member: string): Promise<number>;
+  spop(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
+  srandmember(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
+  srem(key: string, member: string, ...members: string[]): Promise<number>;
   // sscan(): Promise<any>;
+  sunion(key: string, keys: string[]): Promise<Array<string|number>>;
+  sunionstore(destination: string, key: string, keys: string[]): Promise<number>;
 }
 
 export class RedisSet extends RedisBase implements InterfaceSet {
-  public sadd(key: string, members: string[]) {
-    return this.command(MethodSet.sadd, key, ...members);
+  public sadd(key: string, member: string, ...members: string[]) {
+    return this.command(MethodSet.sadd, key, member, ...members);
   }
   public scard(key: string) {
     return this.command(MethodSet.scard, key);
   }
-  public sdiff(keys: string[]) {
-    return this.command(MethodSet.sdiff, ...keys);
+  public sdiff(key: string, ...keys: string[]) {
+    return this.command(MethodSet.sdiff, key, ...keys);
   }
-  public sdiffstore(destination: string, keys: string[]) {
-    return this.command(MethodSet.sdiffstore, destination, ...keys);
+  public sdiffstore(destination: string, key: string, ...keys: string[]) {
+    return this.command(MethodSet.sdiffstore, destination, key, ...keys);
   }
-  public sinter(keys: string[]) {
-    return this.command(MethodSet.sinter, ...keys);
+  public sinter(key: string, ...keys: string[]) {
+    return this.command(MethodSet.sinter, key, ...keys);
   }
-  public sinterstore(destination: string, keys: string[]) {
+  public sinterstore(destination: string, key: string, ...keys: string[]) {
     return this.command(MethodSet.sinterstore, destination, ...keys);
   }
   public sismember(key: string, member: string) {
@@ -78,13 +78,13 @@ export class RedisSet extends RedisBase implements InterfaceSet {
       return this.command(MethodSet.srandmember, key);
     }
   }
-  public srem(key: string, members: string[]) {
-    return this.command(MethodSet.srem, key, ...members);
+  public srem(key: string, member: string, ...members: string[]) {
+    return this.command(MethodSet.srem, key, member, ...members);
   }
-  public sunion(keys: string[]) {
-    return this.command(MethodSet.sunion, ...keys);
+  public sunion(key: string, keys: string[]) {
+    return this.command(MethodSet.sunion, key, ...keys);
   }
-  public sunionstore(destination: string, keys: string[]) {
-    return this.command(MethodSet.sunionstore, destination, ...keys);
+  public sunionstore(destination: string, key: string, keys: string[]) {
+    return this.command(MethodSet.sunionstore, destination, key, ...keys);
   }
 }

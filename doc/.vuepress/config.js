@@ -54,7 +54,14 @@ module.exports = {
     docsDir: "doc",
     docsBranch: "master",
     editLinks: true,
-    displayAllHeaders: true,
+    // displayAllHeaders: true,
+    serviceWorker: {
+      updatePopup: true,
+      updatePopup: {
+        message: "文档有更新，现在即可浏览",
+        buttonText: "更新"
+      }
+    },
     locales: {
       "/": {
         label: "简体中文",
@@ -83,10 +90,6 @@ module.exports = {
           }
         ],
         sidebar: {
-          "/guide/": [
-            "",
-            "getting-started",
-          ],
           "/api/": [
             "",
             "key",
@@ -103,6 +106,26 @@ module.exports = {
         selectText: "Translations",
         editLinkText: "Edit this page on GitHub",
         lastUpdated: "Last Updated",
+        nav: [{
+            text: "Guide",
+            link: "/en/guide/"
+          },
+          {
+            text: "API",
+            link: "/en/api/"
+          }
+        ],
+        sidebar: {
+          "/en/api/": [
+            "",
+            "key",
+            "string",
+            "hash",
+            "list",
+            "set",
+            "zset"
+          ],
+        }
       }
     }
   }

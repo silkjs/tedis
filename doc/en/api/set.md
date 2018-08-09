@@ -5,26 +5,26 @@ next: ./zset
 
 # set
 
-::: tip 说明
-本节示例中的 `Set` 为 Tedis 实例对象，演示部分省略了外部的 async 函数层
+::: tip
+This section of sample `Set` as Tedis instance object, demonstration part omitted async function of the external layer
 :::
 
 ## sadd
 
-添加一个或多个指定的 member 元素到集合的 key 中.指定的一个或者多个元素 member 如果已经在集合 key 中存在则忽略。如果集合 key 不存在，则新建集合 key，并添加 member 元素到集合 key 中。
+Add the specified members to the set stored at key. Specified members that are already a member of this set are ignored. If key does not exist, a new set is created before adding the specified members.
 
-如果 key 的类型不是集合则返回错误。
+An error is returned when the value stored at key is not a set.
 
-**历史**
+**History**
 
-`>= 2.4`：接受多个 member 参数。Redis 2.4 以前的版本每次只能添加一个 member 元素。
+`>= 2.4`: Accepts multiple member arguments. Redis versions before 2.4 are only able to add a single member per call.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：返回新成功添加到集合里元素的数量，不包括已经存在于集合中的元素。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the number of elements that were added to the set, not including all the elements already present into the set.
+- examples:
 
 ```bash
 redis> SADD myset "Hello"
@@ -40,13 +40,13 @@ redis> SMEMBERS myset
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sadd(key: string, member: string, ...members: Array<string | number>): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sadd("myset", "Hello");
@@ -59,14 +59,14 @@ await Set.sadd("myset", "World");
 
 ## scard
 
-返回集合存储的 key 的基数 (集合元素的数量)。
+Returns the set cardinality (number of elements) of the set stored at key.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：集合的基数（元素的数量），如果 key 不存在则返回 0。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the cardinality (number of elements) of the set, or 0 if key does not exist.
+- examples:
 
 ```bash
 redis> SADD myset "Hello"
@@ -79,13 +79,13 @@ redis> SCARD myset
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 scard(key: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.scard("myset");
@@ -94,14 +94,14 @@ await Set.scard("myset");
 
 ## sdiff
 
-返回一个集合与给定集合的差集的元素。不存在的 key 认为是空集。
+Returns the members of the set resulting from the difference between the first set and all the successive sets. Keys that do not exist are considered to be empty sets.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：结果集的元素
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: list with members of the resulting set.
+- examples:
 
 ```bash
 redis> SADD key1 "a"
@@ -123,13 +123,13 @@ redis> SDIFF key1 key2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sdiff(key: string, ...keys: string[]): Promise<Array<string | number>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sdiff("key1", "key2");
@@ -138,16 +138,16 @@ await Set.sdiff("key1", "key2");
 
 ## sdiffstore
 
-该命令类似于 SDIFF，不同之处在于该命令不返回结果集，而是将结果存放在 destination 集合中
+This command is equal to SDIFF, but instead of returning the resulting set, it is stored in destination.
 
-如果 destination 已经存在，则将其覆盖重写
+If destination already exists, it is overwritten.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：结果集元素的个数
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: the number of elements in the resulting set.
+- examples:
 
 ```bash
 redis> SADD key1 "a"
@@ -171,13 +171,13 @@ redis> SMEMBERS key
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sdiffstore(destination: string, key: string, ...keys: string[]): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sdiffstore("key", "key1", "key2");
@@ -186,14 +186,16 @@ await Set.sdiffstore("key", "key1", "key2");
 
 ## sinter
 
-返回指定所有的集合的成员的交集。如果 key 不存在则被认为是一个空的集合，当给定的集合为空的时候，结果也为空（一个集合为空，结果一直为空）
+Returns the members of the set resulting from the intersection of all the given sets.
+
+Keys that do not exist are considered to be empty sets. With one of the keys being an empty set, the resulting set is also empty (since set intersection with an empty set always results in an empty set).
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N*M)`
-- 返回值：结果集成员的列表
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N*M)`
+- return: list with members of the resulting set.
+- examples:
 
 ```bash
 redis> SADD key1 "a"
@@ -214,13 +216,13 @@ redis> SINTER key1 key2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sinter(key: string, ...keys: string[]): Promise<Array<string | number>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sinter("key1", "key2");
@@ -229,15 +231,16 @@ await Set.sinter("key1", "key2");
 
 ## sinterstore
 
-这个命令与 SINTER 命令类似，但是它并不是直接返回结果集，而是将结果保存在 destination 集合中。
-如果 destination 集合存在，则会被重写。
+This command is equal to SINTER, but instead of returning the resulting set, it is stored in destination.
+
+If destination already exists, it is overwritten.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N*M)`
-- 返回值：结果集中成员的个数
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N*M)`
+- return: the number of elements in the resulting set.
+- examples:
 
 ```bash
 redis> SADD key1 "a"
@@ -260,13 +263,13 @@ redis> SMEMBERS key
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sinterstore(destination: string, key: string, ...keys: string[]): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sinterstore("key", "key1", "key2");
@@ -275,16 +278,16 @@ await Set.sinterstore("key", "key1", "key2");
 
 ## sismember
 
-返回成员 member 是否是存储的集合 key 的成员
+Returns if member is a member of the set stored at key.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 如果 member 元素是集合 key 的成员，则返回 1
-  - 如果 member 元素不是 key 的成员，或者集合 key 不存在，则返回 0
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return:
+  - 1 if the element is a member of the set.
+  - 0 if the element is not a member of the set, or if key does not exist.
+- examples:
 
 ```bash
 redis> SADD myset "one"
@@ -297,13 +300,13 @@ redis> SISMEMBER myset "two"
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sismember(key: string, member: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sismember("myset", "one");
@@ -314,14 +317,16 @@ await Set.sismember("myset", "two");
 
 ## smembers
 
-返回 key 集合所有的元素，该命令的作用与使用一个参数的 SINTER 命令作用相同。
+Returns all the members of the set value stored at key.
+
+This has the same effect as running SINTER with one argument key.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：集合中的所有元素.
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: all elements of the set.
+- examples:
 
 ```bash
 redis> SADD myset "Hello"
@@ -335,13 +340,13 @@ redis> SMEMBERS myset
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 smembers(key: string): Promise<Array<string|number>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.smembers("myset");
@@ -350,20 +355,20 @@ await Set.smembers("myset");
 
 ## smove
 
-将 member 从 source 集合移动到 destination 集合中。对于其他的客户端,在特定的时间元素将会作为 source 或者 destination 集合的成员出现。
+Move member from the set at source to the set at destination. This operation is atomic. In every given moment the element will appear to be a member of source or destination for other clients.
 
-如果 source 集合不存在或者不包含指定的元素，这 smove 命令不执行任何操作并且返回 0，否则对象将会从 source 集合中移除，并添加到 destination 集合中去。如果 destination 集合已经存在该元素，则 smove 命令仅将该元素充 source 集合中移除。
+If the source set does not exist or does not contain the specified element, no operation is performed and 0 is returned. Otherwise, the element is removed from the source set and added to the destination set. When the specified element already exists in the destination set, it is only removed from the source set.
 
-如果 source 和 destination 不是集合类型，则返回错误。
+An error is returned if source or destination does not hold a set value.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 如果该元素成功移除，返回 1
-  - 如果该元素不是 source 集合成员，无任何操作，则返回 0
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return:
+  - 1 if the element is moved.
+  - 0 if the element is not a member of source and no operation was performed.
+- examples:
 
 ```bash
 redis> SADD myset "one"
@@ -383,13 +388,13 @@ redis> SMEMBERS myotherset
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 smove(source: string, destination: string, member: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.smove("myset", "myotherset", "two");
@@ -398,16 +403,18 @@ await Set.smove("myset", "myotherset", "two");
 
 ## spop
 
-移除并返回集合中的一个随机元素。
+Removes and returns one or more random elements from the set value store at key.
 
-`>= 3.2` 可以使用 count 参数
+This operation is similar to SRANDMEMBER, that returns one or more random elements from a set but does not remove it.
+
+The count argument is available since version 3.2.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：被移除的随机元素。 当集合不存在或是空集时，返回 nil 。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the removed element, or nil when key does not exist.
+- examples:
 
 ```bash
 redis> SADD myset "one"
@@ -435,13 +442,13 @@ redis> SMEMBERS myset
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 spop(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.spop("myset");
@@ -452,18 +459,18 @@ await Set.spop("myset", 3);
 
 ## srandmember
 
-仅提供 key 参数，那么随机返回 key 集合中的一个元素。
+When called with just the key argument, return a random element from the set value stored at key.
 
-Redis 2.6 开始，可以接受 count 参数，如果 count 是整数且小于元素的个数，返回含有 count 个不同的元素的数组，如果 count 是个整数且大于集合中元素的个数时，仅返回整个集合的所有元素，当 count 是负数，则会返回一个包含 count 的绝对值的个数元素的数组，如果 count 的绝对值大于元素的个数，则返回的结果集里会出现一个元素出现多次的情况。
+Starting from Redis version 2.6, when called with the additional count argument, return an array of count distinct elements if count is positive. If called with a negative count the behavior changes and the command is allowed to return the same element multiple times. In this case the number of returned elements is the absolute value of the specified count.
 
-仅提供 key 参数时，该命令作用类似于 SPOP 命令，不同的是 SPOP 命令会将被选择的随机元素从集合中移除，而 SRANDMEMBER 仅仅是返回该随记元素，而不做任何操作。
+When called with just the key argument, the operation is similar to SPOP, however while SPOP also removes the randomly selected element from the set, SRANDMEMBER will just return a random element without altering the original set in any way.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)|O(N)`
-- 返回值：不使用 count 参数的情况下该命令返回随机的元素，如果 key 不存在则返回 nil。使用 count 参数，则返回一个随机的元素数组，如果 key 不存在则返回一个空的数组。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)|O(N)`
+- return: without the additional count argument the command returns a Bulk Reply with the randomly selected element, or nil when key does not exist. Array reply: when the additional count argument is passed the command returns an array of elements, or an empty array when key does not exist.
+- examples:
 
 ```bash
 redis> SADD myset one two three
@@ -483,13 +490,13 @@ redis> SRANDMEMBER myset -5
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 srandmember(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.srandmember("myset");
@@ -502,19 +509,20 @@ await Set.srandmember("myset", -5);
 
 ## srem
 
-在 key 集合中移除指定的元素。如果指定的元素不是 key 集合中的元素则忽略 如果 key 集合不存在则被视为一个空的集合，该命令返回 0。
-如果 key 的类型不是一个集合，则返回错误。
+Remove the specified members from the set stored at key. Specified members that are not a member of this set are ignored. If key does not exist, it is treated as an empty set and this command returns 0.
 
-**历史**
+An error is returned when the value stored at key is not a set.
 
-`>= 2.4`: 接受多个 member 元素参数。Redis 2.4 之前的版本每次只能移除一个元素
+**History**
+
+`>= 2.4`: Accepts multiple member arguments. Redis versions older than 2.4 can only remove a set member per call.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：从集合中移除元素的个数，不包括不存在的成员
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: the number of members that were removed from the set, not including non existing members.
+- examples:
 
 ```bash
 redis> SADD myset "one"
@@ -534,13 +542,13 @@ redis> SMEMBERS myset
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 srem(key: string, member: string, ...members: string[]): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.srem("myset", "one");
@@ -551,14 +559,14 @@ await Set.srem("myset", "four");
 
 ## sunion
 
-返回给定的多个集合的并集中的所有成员，不存在的 key 可以认为是空的集合
+Returns the members of the set resulting from the union of all the given sets. Keys that do not exist are considered to be empty sets.
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：并集的成员列表
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: list with members of the resulting set.
+- examples:
 
 ```bash
 redis> SADD key1 "a"
@@ -583,13 +591,13 @@ redis> SUNION key1 key2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sunion(key: string, keys: string[]): Promise<Array<string|number>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sunion("key1", "key2");
@@ -598,15 +606,18 @@ await Set.sunion("key1", "key2");
 
 ## sunionstore
 
-该命令作用类似于 SUNION 命令，不同的是它并不返回结果集，而是将结果存储在 destination 集合中。
-如果 destination 已经存在，则将其覆盖。
+This command is equal to SUNION, but instead of returning the resulting set, it is stored in destination.
+
+If destination already exists, it is overwritten.
+
+
 
 #### _Redis_
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：结果集中元素的个数
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: the number of elements in the resulting set.
+- examples:
 
 ```bash
 redis> SADD key1 "a"
@@ -633,13 +644,13 @@ redis> SMEMBERS key
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 sunionstore(destination: string, key: string, keys: string[]): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Set.sunionstore("key", "key1", "key2");
