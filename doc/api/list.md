@@ -13,7 +13,7 @@ next: ./set
 
 BLPOP 是阻塞式列表的弹出原语。它是命令 LPOP 的阻塞版本，这是因为当给定列表内没有任何元素可供弹出的时候，连接将被 BLPOP 命令阻塞。当给定多个 key 参数时，按参数 key 的先后顺序依次检查各个列表，弹出第一个非空列表的头元素。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/blpop.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -54,7 +54,7 @@ await List.blpop(["list1", "list2"], 0);
 
 BRPOP 是一个阻塞的列表弹出原语，它是 RPOP 的阻塞版本，因为这个命令会在给定 list 无法弹出任何元素的时候阻塞连接。该命令会按照给出的 key 顺序查看 list，并在找到的第一个非空 list 的尾部弹出一个元素。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/brpop.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -92,7 +92,7 @@ await List.brpop(["list1", "list2", 0]);
 
 BRPOPLPUSH 是 RPOPLPUSH 的阻塞版本。当 source 包含元素的时候，这个命令表现得跟 RPOPLPUSH 一模一样。当 source 是空的时候，Redis 将会阻塞这个连接，直到另一个客户端 push 元素进入或者达到 timeout 时限。timeout 为 0 能用于无限期阻塞客户端
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/brpoplpush.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`
@@ -133,7 +133,7 @@ await List.brpoplpush("mylist", "reciver", 500);
 
 返回列表里的元素的索引 index 存储在 key 里面。下标是从 0 开始索引的，所以 0 是表示第一个元素， 1 表示第二个元素，并以此类推。负数索引用于指定从列表尾部开始索引的元素。在这种方法下，-1 表示最后一个元素，-2 表示倒数第二个元素，并以此往前推。当 key 位置的值不是一个列表的时候，会返回一个 error。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lindex.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -176,7 +176,7 @@ await List.lindex("mylist", 3);
 
 把 value 插入存于 key 的列表中在基准值 pivot 的前面或后面。当 key 不存在时，这个 list 会被看作是空 list，任何操作都不会发生。当 key 存在，但保存的不是一个 list 的时候，会返回 error。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/linsert.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(N)`
@@ -220,7 +220,7 @@ await List.linsert("mylist", "BEFORE", "World", "There");
 
 返回存储在 key 里的 list 的长度。如果 key 不存在，那么就被看作是空 list，并且返回长度为 0。当存储在 key 里的值不是一个 list 的话，会返回 error。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/llen.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -255,7 +255,7 @@ await List.llen("mylist");
 
 移除并且返回 key 对应的 list 的第一个元素。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lpop.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -301,7 +301,7 @@ await List.lpop("mylist");
 
 - `>= 2.4`: 接受多个 value 参数。版本老于 2.4 的 Redis 只能每条命令 push 一个值。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lpush.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -339,7 +339,7 @@ await List.lpush("mylist", "hello");
 
 只有当 key 已经存在并且存着一个 list 的时候，在这个 key 下面的 list 的头部插入 value。与 LPUSH 相反，当 key 不存在的时候不会进行任何操作。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lpushx.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`
@@ -391,7 +391,7 @@ await List.lpushx("myotherlist", "Hello");
 
 当下标超过 list 范围的时候不会产生 error。如果 start 比 list 的尾部下标大的时候，会返回一个空列表。如果 stop 比 list 的实际尾部大的时候，Redis 会当它是最后一个元素的下标。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lrange.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(S+N)`
@@ -450,7 +450,7 @@ await List.lrange("mylist", 5, 10);
 
 比如，`LREM list -2 “hello”` 会从存于 list 的列表里移除最后两个出现的 “hello”。需要注意的是，如果 list 里没有存在 key 就会被当作空 list 处理，所以当 key 不存在的时候，这个命令会返回 0。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lrem.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -492,7 +492,7 @@ await List.lrem("mylist", -2, "hello");
 
 设置 index 位置的 list 元素的值为 value。更多关于 index 参数的信息，详见 LINDEX。当 index 超出范围时会返回一个 error。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/lset.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -552,7 +552,7 @@ LTRIM mylist 0 99
 
 这一对命令会将一个新的元素 push 进列表里，并保证该列表不会增长到超过 100 个元素。这个是很有用的，比如当用 Redis 来存储日志。需要特别注意的是，当用这种方式来使用 LTRIM 的时候，操作的复杂度是 O(1) ，因为平均情况下，每次只有一个元素会被移除。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/ltrim.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -592,7 +592,7 @@ await List.ltrim("mylist", 1, -1);
 
 移除并返回存于 key 的 list 的最后一个元素。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/rpop.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -636,7 +636,7 @@ await List.rpop("mylist");
 
 如果 source 不存在，那么会返回 nil 值，并且不会执行任何操作。如果 source 和 destination 是同样的，那么这个操作等同于移除列表最后一个元素并且把该元素放在列表头部，所以这个命令也可以当作是一个旋转列表的命令。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/rpoplpush.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(1)`
@@ -684,7 +684,7 @@ await List.rpoplpush("mylist", "myotherlist");
 
 `>=2.4`: 接受多个 value 参数。在老于 2.4 的 Redis 版本中，一条命令只能 push 单一个值。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/rpush.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -722,7 +722,7 @@ await List.rpush("mylist", "world");
 
 将值 value 插入到列表 key 的表尾, 当且仅当 key 存在并且是一个列表。和 RPUSH 命令相反, 当 key 不存在时，RPUSHX 命令什么也不做。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/rpushx.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`

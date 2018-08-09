@@ -13,7 +13,7 @@ next: ./list
 
 从 key 指定的哈希集中移除指定的域。在哈希集中不存在的域将被忽略。如果 key 指定的哈希集不存在，它将被认为是一个空的哈希集，该命令将返回 0。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hdel.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(N)`
@@ -50,7 +50,7 @@ await Hash.hdel("myhash", "field2");
 
 desc
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hexists.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -89,7 +89,7 @@ await Hash.hexists("myhash", "field2");
 
 返回 key 指定的哈希集中该字段所关联的值
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hget.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -126,7 +126,7 @@ await Hash.hexists("myhash", "field2");
 
 返回 key 指定的哈希集中所有的字段和值。返回值中，每个字段名的下一个是它的值，所以返回值的长度是哈希集大小的两倍
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hgetall.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -167,7 +167,7 @@ await Hash.hgetall("myhash");
 
 增加 key 指定的哈希集中指定字段的数值。如果 key 不存在，会创建一个新的哈希集并与 key 关联。如果字段不存在，则字段的值在该操作执行前被设置为 0。HINCRBY 支持的值的范围限定在 64 位 有符号整数
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hincrby.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -211,7 +211,7 @@ await Hash.hincrby("myhash", "field", -10);
 - field 的值包含的类型错误(不是字符串)。
 - 当前 field 或者 increment 不能解析为一个 float 类型。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hincrbyfloat.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -254,7 +254,7 @@ await Hash.hincrbyfloat("mykey", "field", "2.0e2");
 
 返回 key 指定的哈希集中所有字段的名字。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hkeys.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(N)`
@@ -290,7 +290,7 @@ await Hash.hkeys("myhash");
 
 返回 key 指定的哈希集包含的字段的数量。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hlen.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -325,7 +325,7 @@ await Hash.hlen("myhash");
 
 返回 key 指定的哈希集中指定字段的值。对于哈希集中不存在的每个字段，返回 nil 值。因为不存在的 keys 被认为是一个空的哈希集，对一个不存在的 key 执行 HMGET 将返回一个只含有 nil 值的列表
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hmget.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -362,7 +362,7 @@ await Hash.hmget("myhash", "field1", "field2", "nofield");
 
 设置 key 指定的哈希集中指定字段的值。该命令将重写所有在哈希集中存在的字段。如果 key 指定的哈希集不存在，会创建一个新的哈希集并与 key 关联
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hmset.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(N)`
@@ -405,7 +405,7 @@ await Hash.hmset("myhash", {
 
 设置 key 指定的哈希集中指定字段的值。如果 key 指定的哈希集不存在，会创建一个新的哈希集并与 key 关联。如果字段在哈希集中存在，它将被重写。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hset.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -440,7 +440,7 @@ await Hash.hset("myhash", "field1", "Hello");
 
 只在 key 指定的哈希集中不存在指定的字段时，设置字段的值。如果 key 指定的哈希集不存在，会创建一个新的哈希集并与 key 关联。如果字段已存在，该操作无效果。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hsetnx.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -479,7 +479,7 @@ await Hash.hsetnx("myhash", "field", "World");
 
 返回 hash 指定 field 的 value 的字符串长度，如果 hash 或者 field 不存在，返回 0
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hstrlen.html)
 
 - 可用版本：`>= 3.2.0`
 - 算法复杂度：`O(1)`
@@ -520,7 +520,7 @@ await Hash.hstrlen("myhash", "f3");
 
 返回 key 指定的哈希集中所有字段的值。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/hvals.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(N)`

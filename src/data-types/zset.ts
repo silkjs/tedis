@@ -31,20 +31,16 @@ enum MethodZset {
 export interface InterfaceZset {
   // bzpopmax
   // bzpopmin
-  zadd(key: string, arraySM: Array<[number, string]>): Promise<any>;
-  zcard(key: string): Promise<any>;
-  zcount(key: string, min: number, max: number): Promise<any>;
-  zincrby(key: string, increment: number, member: string): Promise<any>;
+  zadd(key: string, objMS: { [propName: string]: number }): Promise<number>;
+  zcard(key: string): Promise<number>;
+  zcount(key: string, min: string, max: string): Promise<number>;
+  zincrby(key: string, increment: number, member: string): Promise<string>;
   zinterstore(
     destination: string,
     objectKW: { [PropName: string]: number },
-    aggregate: "SUM" | "MIN" | "MAX"
-  ): Promise<any>;
-  zlexcount(
-    key: string,
-    min: string | number,
-    max: string | number
-  ): Promise<any>;
+    aggregate?: "SUM" | "MIN" | "MAX"
+  ): Promise<number>;
+  zlexcount(key: string, min: string, max: string): Promise<number>;
   // zpopmax
   // zpopmin
   zrange(
@@ -52,7 +48,7 @@ export interface InterfaceZset {
     start: number,
     stop: number,
     withscores?: boolean
-  ): Promise<any>;
+  ): Promise<string[]>;
   zrangebylex(
     key: string,
     min: string,
@@ -60,7 +56,7 @@ export interface InterfaceZset {
     limit?: boolean,
     offset?: number,
     count?: number
-  ): Promise<any>;
+  ): Promise<string[]>;
   zrangebyscore(
     key: string,
     min: string,
@@ -69,42 +65,47 @@ export interface InterfaceZset {
     limit?: boolean,
     offset?: number,
     count?: number
-  ): Promise<any>;
-  zrank(key: string, member: string): Promise<any>;
-  zrem(key: string, members: string[]): Promise<any>;
-  zremrangebylex(key: string, min: string, max: string): Promise<any>;
-  zremrangebyrank(key: string, start: number, stop: number): Promise<any>;
-  zremrangebyscore(key: string, min: string, max: string): Promise<any>;
+  ): Promise<string[]>;
+  zrank(key: string, member: string): Promise<number | null>;
+  zrem(key: string, member: string, ...members: string[]): Promise<number>;
+  zremrangebylex(key: string, min: string, max: string): Promise<number>;
+  zremrangebyrank(key: string, start: number, stop: number): Promise<number>;
+  zremrangebyscore(key: string, min: string, max: string): Promise<number>;
   zrevrange(
     key: string,
     start: number,
     stop: number,
     withscores?: boolean
-  ): Promise<any>;
+  ): Promise<string[] | { [propName: string]: number }>;
   // zrevrangebylex
-  zrevrangebyscore(key: string, min: string, max: string): Promise<any>;
-  zrevrank(key: string, member: string): Promise<any>;
+  zrevrangebyscore(
+    key: string,
+    min: string,
+    max: string
+  ): Promise<string[] | { [propName: string]: number }>;
+  zrevrank(key: string, member: string): Promise<number | null>;
   // zscan
-  zscore(key: string, member: string): Promise<any>;
+  zscore(key: string, member: string): Promise<string>;
   zunionstore(
     destination: string,
     objectKW: { [PropName: string]: number },
-    aggregate: "SUM" | "MIN" | "MAX"
-  ): Promise<any>;
+    aggregate?: "SUM" | "MIN" | "MAX"
+  ): Promise<number>;
 }
 
 export class RedisZset extends RedisBase implements InterfaceZset {
-  public zadd(key: string, arraySM: Array<[number, string]>) {
+  public zadd(key: string, objMS: { [propName: string]: number }) {
     const array = new Array();
-    arraySM.forEach(([score, member]) => {
-      array.push(score, member);
+    Reflect.ownKeys(objMS).forEach((member) => {
+      array.push(objMS[member as string], member);
     });
+
     return this.command(MethodZset.zadd, key, ...array);
   }
   public zcard(key: string) {
     return this.command(MethodZset.zcard, key);
   }
-  public zcount(key: string, min: string | number, max: string | number) {
+  public zcount(key: string, min: string, max: string) {
     return this.command(MethodZset.zcount, key, min, max);
   }
   public zincrby(key: string, increment: number, member: string) {
@@ -113,7 +114,7 @@ export class RedisZset extends RedisBase implements InterfaceZset {
   public zinterstore(
     destination: string,
     objectKW: { [PropName: string]: number },
-    aggregate: "SUM" | "MIN" | "MAX"
+    aggregate: "SUM" | "MIN" | "MAX" = "SUM"
   ) {
     const keys = new Array();
     const weights = new Array();
@@ -214,8 +215,8 @@ export class RedisZset extends RedisBase implements InterfaceZset {
   public zrank(key: string, member: string) {
     return this.command(MethodZset.zrank, key, member);
   }
-  public zrem(key: string, members: string[]) {
-    return this.command(MethodZset.zrem, key, ...members);
+  public zrem(key: string, member: string, ...members: string[]) {
+    return this.command(MethodZset.zrem, key, member, ...members);
   }
   public zremrangebylex(key: string, min: string, max: string) {
     return this.command(MethodZset.zremrangebylex, key, min, max);
@@ -249,7 +250,7 @@ export class RedisZset extends RedisBase implements InterfaceZset {
   public zunionstore(
     destination: string,
     objectKW: { [PropName: string]: number },
-    aggregate: "SUM" | "MIN" | "MAX"
+    aggregate: "SUM" | "MIN" | "MAX" = "SUM"
   ) {
     const keys = new Array();
     const weights = new Array();

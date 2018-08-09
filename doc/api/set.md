@@ -19,7 +19,7 @@ next: ./zset
 
 `>= 2.4`：接受多个 member 参数。Redis 2.4 以前的版本每次只能添加一个 member 元素。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sadd.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -43,7 +43,7 @@ redis> SMEMBERS myset
 - 接口：
 
 ```ts
-sadd(key: string, member: string, ...members: Array<string | number>): Promise<number>;
+sadd(key: string, ...members: Array<string | number>): Promise<number>;
 ```
 
 - 示例：
@@ -61,7 +61,7 @@ await Set.sadd("myset", "World");
 
 返回集合存储的 key 的基数 (集合元素的数量)。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/scard.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -96,7 +96,7 @@ await Set.scard("myset");
 
 返回一个集合与给定集合的差集的元素。不存在的 key 认为是空集。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sdiff.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -142,7 +142,7 @@ await Set.sdiff("key1", "key2");
 
 如果 destination 已经存在，则将其覆盖重写
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sdiffstore.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -188,7 +188,7 @@ await Set.sdiffstore("key", "key1", "key2");
 
 返回指定所有的集合的成员的交集。如果 key 不存在则被认为是一个空的集合，当给定的集合为空的时候，结果也为空（一个集合为空，结果一直为空）
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sinter.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N*M)`
@@ -232,7 +232,7 @@ await Set.sinter("key1", "key2");
 这个命令与 SINTER 命令类似，但是它并不是直接返回结果集，而是将结果保存在 destination 集合中。
 如果 destination 集合存在，则会被重写。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sinterstore.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N*M)`
@@ -277,7 +277,7 @@ await Set.sinterstore("key", "key1", "key2");
 
 返回成员 member 是否是存储的集合 key 的成员
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sismember.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -316,7 +316,7 @@ await Set.sismember("myset", "two");
 
 返回 key 集合所有的元素，该命令的作用与使用一个参数的 SINTER 命令作用相同。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/smembers.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -356,7 +356,7 @@ await Set.smembers("myset");
 
 如果 source 和 destination 不是集合类型，则返回错误。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/smove.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -402,7 +402,7 @@ await Set.smove("myset", "myotherset", "two");
 
 `>= 3.2` 可以使用 count 参数
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/spop.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -458,7 +458,7 @@ Redis 2.6 开始，可以接受 count 参数，如果 count 是整数且小于�
 
 仅提供 key 参数时，该命令作用类似于 SPOP 命令，不同的是 SPOP 命令会将被选择的随机元素从集合中移除，而 SRANDMEMBER 仅仅是返回该随记元素，而不做任何操作。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/srandmember.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)|O(N)`
@@ -509,7 +509,7 @@ await Set.srandmember("myset", -5);
 
 `>= 2.4`: 接受多个 member 元素参数。Redis 2.4 之前的版本每次只能移除一个元素
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/srem.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -553,7 +553,7 @@ await Set.srem("myset", "four");
 
 返回给定的多个集合的并集中的所有成员，不存在的 key 可以认为是空的集合
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sunion.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -601,7 +601,7 @@ await Set.sunion("key1", "key2");
 该命令作用类似于 SUNION 命令，不同的是它并不返回结果集，而是将结果存储在 destination 集合中。
 如果 destination 已经存在，则将其覆盖。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/sunionstore.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`

@@ -74,7 +74,7 @@ next: ./key
 - hscan
 - [hset](/api/hash.md#hset)
 - [hsetnx](/api/hash.md#hsetnx)
-- hstrlen
+- [hstrlen](/api/hash.md#hstrlen)
 - [hvals](/api/hash.md#hvals)
 
 ## list

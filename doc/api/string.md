@@ -13,7 +13,7 @@ next: ./hash
 
 如果 key 已经存在，并且值为字符串，那么这个命令会把 value 追加到原来值（value）的结尾。如果 key 不存在，那么它将首先创建一个空字符串的 key，再执行追加操作
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/append.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -52,7 +52,7 @@ await String.append("mykey", " World");
 
 对 key 对应的数字做减 1 操作。如果 key 不存在，那么在操作之前，这个 key 对应的值会被置为 0。如果 key 有一个错误类型的 value 或者是一个不能表示成数字的字符串，就返回错误。这个操作最大支持在 64 位有符号的整型数字。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/decr.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -91,7 +91,7 @@ await String.decr("key2");
 
 将 key 对应的数字减 decrement。如果 key 不存在，操作之前，key 就会被置为 0。如果 key 的 value 类型错误或者是个不能表示成数字的字符串，就返回错误。这个操作最多支持 64 位有符号的正型数字。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/decrby.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -124,7 +124,7 @@ await String.decrby("mykey", 3);
 
 返回 key 的 value。如果 key 不存在，返回特殊值 nil。如果 key 的 value 不是 string，就返回错误，因为 GET 只处理 string 类型的 values。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/get.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -161,7 +161,7 @@ await String.get("mykey");
 
 返回 key 对应的 string 在 offset 处的 bit 值 当 offset 超出了字符串长度的时候，这个字符串就被假定为由 0 比特填充的连续空间。当 key 不存在的时候，它就认为是一个空字符串，所以 offset 总是超出范围，然后 value 也被认为是由 0 比特填充的连续空间。到内存分配。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/getbit.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`
@@ -206,7 +206,7 @@ await String.getbit("mykey", 100);
 
 返回 key 对应的字符串 value 的子串，这个子串是由 start 和 end 位移决定的（两者都在 string 内）。可以用负的位移来表示从 string 尾部开始数的下标。所以-1 就是最后一个字符，-2 就是倒数第二个，以此类推。这个函数处理超出范围的请求时，都把结果限制在 string 内。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/getrange.html)
 
 - 可用版本：`>= 2.4.0`
 - 算法复杂度：`O(N)`
@@ -251,7 +251,7 @@ await String.getrange("mykey", [10, 100]);
 
 自动将 key 对应到 value 并且返回原来 key 对应的 value。如果 key 存在但是对应的 value 不是字符串，就返回错误。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/getset.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -286,7 +286,7 @@ await String.getset("mykey", "World");
 
 对存储在指定 key 的数值执行原子的加 1 操作。如果指定的 key 不存在，那么在执行 incr 操作之前，会先将它的值设定为 0。如果指定的 key 中存储的值不是字符串类型或者存储的字符串类型不能表示为一个整数，那么执行这个命令时服务器会返回一个错误。这个操作仅限于 64 位的有符号整型数据。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/incr.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -321,7 +321,7 @@ await String.incr("mykey");
 
 将 key 对应的数字加 decrement。如果 key 不存在，操作之前，key 就会被置为 0。如果 key 的 value 类型错误或者是个不能表示成数字的字符串，就返回错误。这个操作最多支持 64 位有符号的正型数字。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/incrby.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -359,7 +359,7 @@ await String.incrby("mykey", 5);
 
 如果操作命令成功，相加后的值将替换原值存储在对应的键值上，并以 string 的类型返回。string 中已存的值或者相加参数可以任意选用指数符号，但相加计算的结果会以科学计数法的格式存储。无论各计算的内部精度如何，输出精度都固定为小数点后 17 位。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/incrbyfloat.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -402,7 +402,7 @@ await String.incrbyfloat("key2", "2.0e2");
 
 返回所有指定的 key 的 value。对于每个不对应 string 或者不存在的 key，都返回特殊值 nil。正因为此，这个操作从来不会失败。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/mget.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(N)`
@@ -441,7 +441,7 @@ await String.mget("key1", "key2", "nonexisting");
 
 MSET 是原子的，所以所有给定的 keys 是一次性 set 的。客户端不可能看到这种一部分 keys 被更新而另外的没有改变的情况。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/mset.html)
 
 - 可用版本：`>= 1.0.1`
 - 算法复杂度：`O(N)`
@@ -483,7 +483,7 @@ await String.mget("key1", "key2");
 
 MSETNX 是原子的，所以所有给定的 keys 是一次性 set 的。客户端不可能看到这种一部分 keys 被更新而另外的没有改变的情况。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/msetnx.html)
 
 - 可用版本：`>= 1.0.1`
 - 算法复杂度：`O(N)`
@@ -530,7 +530,7 @@ await String.mget("key1", "key2", "key3");
 
 设置 key-value 的同时以毫秒为单位设置 key 的生存时间。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/psetex.html)
 
 - 可用版本：`>= 2.6.0`
 - 算法复杂度：`O(1)`
@@ -572,7 +572,7 @@ await String.psetex("mykey", 1000, "Hello");
 - NX – 只有键 key 不存在的时候才会设置 key 的值
 - XX – 只有键 key 存在的时候才会设置 key 的值
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/set.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -603,9 +603,9 @@ await String.set("mykey", "hello");
 
 ## setbit
 
-设置或者清空 key 的 value(字符串)在 offset 处的 bit 值。那个位置的 bit 要么被设置，要么被清空，这个由 value（只能是 0 或者 1）来决定。当 key 不存在的时候，就创建一个新的字符串 value。要确保这个字符串大到在 offset 处有 bit 值。参数 offset 需要大于等于 0，并且小于 2-32(限制 bitmap 大小为 512MB)。当 key 对应的字符串增大的时候，新增的部分 bit 值都是设置为 0。
+设置或者清空 key 的 value(字符串)在 offset 处的 bit 值。那个位置的 bit 要么被设置，要么被清空，这个由 value（只能是 0 或者 1）来决定。当 key 不存在的时候，就创建一个新的字符串 value。要确保这个字符串大到在 offset 处有 bit 值。参数 offset 需要大于等于 0，并且小于 2^32(限制 bitmap 大小为 512MB)。当 key 对应的字符串增大的时候，新增的部分 bit 值都是设置为 0。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/setbit.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`
@@ -642,7 +642,7 @@ await String.setbit("mykey", 7, 0);
 
 设置 key 对应字符串 value，并且设置 key 在给定的 seconds 时间之后超时过期。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/setex.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(1)`
@@ -677,7 +677,7 @@ await String.setex("mykey", 10, "Hello");
 
 将 key 设置值为 value，如果 key 不存在，这种情况下等同 SET 命令。 当 key 存在时，什么也不做。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/setnx.html)
 
 - 可用版本：`>= 1.0.0`
 - 算法复杂度：`O(1)`
@@ -714,7 +714,7 @@ await String.setnx("mykey", "world");
 
 这个命令的作用是覆盖 key 对应的 string 的一部分，从指定的 offset 处开始，覆盖 value 的长度。如果 offset 比当前 key 对应 string 还要长，那这个 string 后面就补 0 以达到 offset。不存在的 keys 被认为是空字符串，所以这个命令可以确保 key 有一个足够大的字符串，能在 offset 处设置 value。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/setrange.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`
@@ -755,7 +755,7 @@ await String.setrange("key2", 6, "Redis");
 
 返回 key 的 string 类型 value 的长度。如果 key 对应的非 string 类型，就返回错误。
 
-#### _Redis_
+#### _Redis_ [+](http://www.redis.cn/commands/strlen.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(1)`

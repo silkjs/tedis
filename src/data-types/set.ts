@@ -19,7 +19,7 @@ enum MethodSet {
 }
 
 export interface InterfaceSet {
-  sadd(key: string, member: string, ...members: Array<string | number>): Promise<number>;
+  sadd(key: string, ...members: Array<string | number>): Promise<number>;
   scard(key: string): Promise<number>;
   sdiff(key: string, ...keys: string[]): Promise<Array<string | number>>;
   sdiffstore(destination: string, key: string, ...keys: string[]): Promise<number>;
@@ -37,8 +37,8 @@ export interface InterfaceSet {
 }
 
 export class RedisSet extends RedisBase implements InterfaceSet {
-  public sadd(key: string, member: string, ...members: string[]) {
-    return this.command(MethodSet.sadd, key, member, ...members);
+  public sadd(key: string, ...members: string[]) {
+    return this.command(MethodSet.sadd, key,  ...members);
   }
   public scard(key: string) {
     return this.command(MethodSet.scard, key);

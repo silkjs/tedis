@@ -19,7 +19,7 @@ An error is returned when the value stored at key is not a set.
 
 `>= 2.4`: Accepts multiple member arguments. Redis versions before 2.4 are only able to add a single member per call.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sadd)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -43,7 +43,7 @@ redis> SMEMBERS myset
 - interface:
 
 ```ts
-sadd(key: string, member: string, ...members: Array<string | number>): Promise<number>;
+sadd(key: string, ...members: Array<string | number>): Promise<number>;
 ```
 
 - example:
@@ -61,7 +61,7 @@ await Set.sadd("myset", "World");
 
 Returns the set cardinality (number of elements) of the set stored at key.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/scard)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -96,7 +96,7 @@ await Set.scard("myset");
 
 Returns the members of the set resulting from the difference between the first set and all the successive sets. Keys that do not exist are considered to be empty sets.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sdiff)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -142,7 +142,7 @@ This command is equal to SDIFF, but instead of returning the resulting set, it i
 
 If destination already exists, it is overwritten.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sdiffstore)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -190,7 +190,7 @@ Returns the members of the set resulting from the intersection of all the given 
 
 Keys that do not exist are considered to be empty sets. With one of the keys being an empty set, the resulting set is also empty (since set intersection with an empty set always results in an empty set).
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sinter)
 
 - available: `>= 1.0.0`
 - complexity: `O(N*M)`
@@ -235,7 +235,7 @@ This command is equal to SINTER, but instead of returning the resulting set, it 
 
 If destination already exists, it is overwritten.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sinterstore)
 
 - available: `>= 1.0.0`
 - complexity: `O(N*M)`
@@ -280,7 +280,7 @@ await Set.sinterstore("key", "key1", "key2");
 
 Returns if member is a member of the set stored at key.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sismember)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -321,7 +321,7 @@ Returns all the members of the set value stored at key.
 
 This has the same effect as running SINTER with one argument key.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/smembers)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -361,7 +361,7 @@ If the source set does not exist or does not contain the specified element, no o
 
 An error is returned if source or destination does not hold a set value.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/smove)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -409,7 +409,7 @@ This operation is similar to SRANDMEMBER, that returns one or more random elemen
 
 The count argument is available since version 3.2.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/spop)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -465,7 +465,7 @@ Starting from Redis version 2.6, when called with the additional count argument,
 
 When called with just the key argument, the operation is similar to SPOP, however while SPOP also removes the randomly selected element from the set, SRANDMEMBER will just return a random element without altering the original set in any way.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/srandmember)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)|O(N)`
@@ -517,7 +517,7 @@ An error is returned when the value stored at key is not a set.
 
 `>= 2.4`: Accepts multiple member arguments. Redis versions older than 2.4 can only remove a set member per call.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/srem)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -561,7 +561,7 @@ await Set.srem("myset", "four");
 
 Returns the members of the set resulting from the union of all the given sets. Keys that do not exist are considered to be empty sets.
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sunion)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -612,7 +612,7 @@ If destination already exists, it is overwritten.
 
 
 
-#### _Redis_
+#### _Redis_ [+](https://redis.io/commands/sunionstore)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
