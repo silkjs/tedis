@@ -55,13 +55,13 @@ module.exports = {
     docsBranch: "master",
     editLinks: true,
     // displayAllHeaders: true,
-    // serviceWorker: {
-    //   updatePopup: true,
-    //   updatePopup: {
-    //     message: "文档有更新，现在即可浏览",
-    //     buttonText: "更新"
-    //   }
-    // },
+    serviceWorker: {
+      updatePopup: true,
+      updatePopup: {
+        message: "文档有更新，现在即可浏览",
+        buttonText: "更新"
+      }
+    },
     locales: {
       "/": {
         label: "简体中文",
