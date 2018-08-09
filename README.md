@@ -71,23 +71,19 @@ await client.hmset("hash1", {
 await client.hgetall("hash1");
 
 // list
-await client.lpush("list1", ["a", "b", "c", "d", 1, 2, 3, 4, 5]);
+await client.lpush("list1", ...["a", "b", "c", "d", 1, 2, 3, 4, 5]);
 await client.llen("list1");
 
 // set
-await client.sadd("set1", ["a", "b", "c", "d", 1, 2, 3, 4, 5]);
+await client.sadd("set1", ...["a", "b", "c", "d", 1, 2, 3, 4, 5]);
 await client.scard("set1");
 
 // zset
-await client.zadd("zset1", [
-  [1, "a"],
-  [10, "a"],
-  [2, "adg"],
-  [3, "aertet"],
-  [4, "afg"]
-]);
+await client.zadd("zset1", {
+  a: 1,
+  adg: 2,
+  sfa: 3,
+  gfdg: 4
+});
 await client.zcard("zset1");
-
-// base
-client.close();
 ```

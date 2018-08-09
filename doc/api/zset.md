@@ -47,7 +47,7 @@ Redis 有序集合的分数使用双精度 64 位浮点数。我们支持所有�
 
 `>= 2.4`: 接受多个成员。 在 Redis 2.4 以前，命令只能添加或者更新一个成员。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zadd.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zadd.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(log(N))`
@@ -104,7 +104,7 @@ await Zset.zadd("myzset", {
 
 返回 key 的有序集元素个数。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zcard.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zcard.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(1)`
@@ -139,7 +139,7 @@ await Zset.zcard("myzset");
 
 返回有序集 key 中，score 值在 min 和 max 之间(默认包括 score 值等于 min 或 max)的成员。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zcount.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zcount.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(log(N))`
@@ -184,7 +184,7 @@ await Zset.zcount("myzset", "(1", "3");
 
 score 值必须是字符串表示的整数值或双精度浮点数，并且能接受 double 精度的浮点数。也有可能给一个负数来减少 score 的值。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zincrby.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zincrby.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(log(N))`
@@ -228,7 +228,7 @@ await Zset.zincrby("myzset", 2, "one");
 
 如果 destination 存在，就把它覆盖。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zinterstore.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zinterstore.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(N*K)+O(M*log(M))`
@@ -277,7 +277,7 @@ await Zset.zinterstore("out", {
 
 此命令用于计算有序集合中指定成员之间的成员数量。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zlexcount.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zlexcount.html)
 
 - 可用版本：`>= 2.8.9`
 - 算法复杂度：`O(log(N))`
@@ -316,7 +316,7 @@ await Zset.zlexcount("myzset", "[b", "[f");
 
 返回有序集中，指定区间内的成员。其中成员的位置按分数值递增(从小到大)来排序。具有相同分数值的成员按字典序(lexicographical order )来排列。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrange.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrange.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(log(N)+M)`
@@ -364,7 +364,7 @@ await Zset.zrange("myzset", -2, -1);
 
 ZRANGEBYLEX 返回指定成员区间内的成员，按成员字典正序排序, 分数必须相同。 在某些业务场景中,需要对一个字符串数组按名称的字典顺序进行排序时,可以使用 Redis 中 SortSet 这种数据结构来处理。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrangebylex.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrangebylex.html)
 
 - 可用版本：`>= 2.8.9`
 - 算法复杂度：`O(log(N)+M)`
@@ -412,7 +412,7 @@ await Zset.zrangebylex("myzset", "[aaa", "(g)");
 
 返回有序集合中指定分数区间的成员列表。有序集成员按分数值递增(从小到大)次序排列。具有相同分数值的成员按字典序来排列(该属性是有序集提供的，不需要额外的计算)。默认情况下，区间的取值使用闭区间 (小于等于或大于等于)，你也可以通过给参数前增加 ( 符号来使用可选的开区间 (小于或大于)。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrangebyscore.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrangebyscore.html)
 
 - 可用版本：`>= 1.0.5`
 - 算法复杂度：`O(log(N)+M)`
@@ -472,7 +472,7 @@ await Zset.zrangebyscore("myzset", "(1", "(2");
 
 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递增(从小到大)顺序排列。排名以 0 为底，也就是说，score 值最小的成员排名为 0。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrank.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrank.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(log(N)`
@@ -519,7 +519,7 @@ await Zset.zrank("myzset", "four");
 
 `>= 2.4`: 接受多个元素。在 2.4 之前的版本中，每次只能删除一个成员。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrem.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrem.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(M*log(N))`
@@ -561,7 +561,7 @@ await Zset.zrem("myzset", "two");
 
 移除有序集合中给定的字典区间的所有成员。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zremrangebylex.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zremrangebylex.html)
 
 - 可用版本：`>= 2.8.9`
 - 算法复杂度：`O(log(N)+M)`
@@ -612,7 +612,7 @@ await Zset.zremrangebylex("myzset", "[alpha", "[omega");
 
 移除有序集 key 中，指定排名(rank)区间内的所有成员。下标参数 start 和 stop 都以 0 为底，0 处是分数最小的那个元素。这些索引也可是负数，表示位移从最高分处开始数。例如，-1 是分数最高的元素，-2 是分数第二高的，依次类推。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zremrangebyrank.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zremrangebyrank.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(log(N)+M)`
@@ -652,7 +652,7 @@ await Zset.zremrangebyrank("myzset", 0, 1);
 
 移除有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max)的成员。 自版本 2.1.6 开始，score 值等于 min 或 max 的成员也可以不包括在内
 
-#### _Redis_ [+](http://www.redis.cn.commads/zremrangebyscore.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zremrangebyscore.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(log(N)+M)`
@@ -694,7 +694,7 @@ await Zset.zremrangebyscore("myzset", "-inf", "(2");
 
 返回有序集 key 中，指定区间内的成员。其中成员的位置按 score 值递减(从大到小)来排列。具有相同 score 值的成员按字典序的反序排列。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrevrange.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrevrange.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(log(N)+M)`
@@ -747,7 +747,7 @@ await Zset.zrevrange("myzset", -2, -1);
 
 返回有序集中指定分数区间内的所有的成员。有序集成员按分数值递减(从大到小)的次序排列。具有相同分数值的成员按字典序的逆序(reverse lexicographical order )排列。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrevrangebyscore.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrevrangebyscore.html)
 
 - 可用版本：`>= 2.2.0`
 - 算法复杂度：`O(log(N)+M)`
@@ -797,7 +797,7 @@ await Zset.zrevrangebyscore("myzset", "(2", "(1");
 
 返回有序集 key 中成员 member 的排名，其中有序集成员按 score 值从大到小排列。排名以 0 为底，也就是说，score 值最大的成员排名为 0。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zrevrank.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zrevrank.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(log(N))`
@@ -840,7 +840,7 @@ await Zset.zrevrank("myzset", "four");
 
 返回有序集 key 中，成员 member 的 score 值。如果 member 元素不是有序集 key 的成员，或 key 不存在，返回 nil。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zscore.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zscore.html)
 
 - 可用版本：`>= 1.2.0`
 - 算法复杂度：`O(1)`
@@ -874,7 +874,7 @@ await Zset.zscore("myzset", "one");
 计算给定的一个或多个有序集的并集，其中给定 key 的数量必须以 numkeys 参数指定，并将该并集(结果集)储存到 destination 。
 默认情况下，结果集中某个成员的分数值是所有给定集下该成员分数值之和 。
 
-#### _Redis_ [+](http://www.redis.cn.commads/zunionstore.html)
+#### _Redis_ [+](http://www.redis.cn/commads/zunionstore.html)
 
 - 可用版本：`>= 2.0.0`
 - 算法复杂度：`O(N)+O(M log(M))`
