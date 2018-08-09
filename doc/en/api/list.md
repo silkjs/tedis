@@ -13,7 +13,7 @@ This section of sample `List` as Tedis instance object, demonstration part omitt
 
 BLPOP is a blocking list pop primitive. It is the blocking version of LPOP because it blocks the connection when there are no elements to pop from any of the given lists. An element is popped from the head of the first list that is non-empty, with the given keys being checked in the order that they are given.
 
-#### _Redis_ [+](https://redis.io/commandss/blpop)
+#### _Redis_ [+](https://redis.io/commands/blpop)
 
 - available: `>= 2.0.0`
 - complexity: `O(1)`
@@ -54,7 +54,7 @@ await List.blpop(["list1", "list2"], 0);
 
 BRPOP is a blocking list pop primitive. It is the blocking version of RPOP because it blocks the connection when there are no elements to pop from any of the given lists. An element is popped from the tail of the first list that is non-empty, with the given keys being checked in the order that they are given.
 
-#### _Redis_ [+](https://redis.io/commandss/brpop)
+#### _Redis_ [+](https://redis.io/commands/brpop)
 
 - available: `>= 2.0.0`
 - complexity: `O(1)`
@@ -92,7 +92,7 @@ await List.brpop(["list1", "list2", 0]);
 
 BRPOPLPUSH is the blocking variant of RPOPLPUSH. When source contains elements, this command behaves exactly like RPOPLPUSH. When used inside a MULTI/EXEC block, this command behaves exactly like RPOPLPUSH. When source is empty, Redis will block the connection until another client pushes to it or until timeout is reached. A timeout of zero can be used to block indefinitely.
 
-#### _Redis_ [+](https://redis.io/commandss/brpoplpush)
+#### _Redis_ [+](https://redis.io/commands/brpoplpush)
 
 - available: `>= 2.2.0`
 - complexity: `O(1)`
@@ -135,7 +135,7 @@ Returns the element at index index in the list stored at key. The index is zero-
 
 When the value at key is not a list, an error is returned.
 
-#### _Redis_ [+](https://redis.io/commandss/lindex)
+#### _Redis_ [+](https://redis.io/commands/lindex)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -182,7 +182,7 @@ When key does not exist, it is considered an empty list and no operation is perf
 
 An error is returned when key exists but does not hold a list value.
 
-#### _Redis_ [+](https://redis.io/commandss/linsert)
+#### _Redis_ [+](https://redis.io/commands/linsert)
 
 - available: `>= 2.2.0`
 - complexity: `O(N)`
@@ -226,7 +226,7 @@ await List.linsert("mylist", "BEFORE", "World", "There");
 
 Returns the length of the list stored at key. If key does not exist, it is interpreted as an empty list and 0 is returned. An error is returned when the value stored at key is not a list.
 
-#### _Redis_ [+](https://redis.io/commandss/llen)
+#### _Redis_ [+](https://redis.io/commands/llen)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -261,7 +261,7 @@ await List.llen("mylist");
 
 Removes and returns the first element of the list stored at key.
 
-#### _Redis_ [+](https://redis.io/commandss/lpop)
+#### _Redis_ [+](https://redis.io/commands/lpop)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -307,7 +307,7 @@ History
 
 - `>= 2.4`: Accepts multiple value arguments. In Redis versions older than 2.4 it was possible to push a single value per command.
 
-#### _Redis_ [+](https://redis.io/commandss/lpush)
+#### _Redis_ [+](https://redis.io/commands/lpush)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -345,7 +345,7 @@ await List.lpush("mylist", "hello");
 
 Inserts value at the head of the list stored at key, only if key already exists and holds a list. In contrary to LPUSH, no operation will be performed when key does not yet exist.
 
-#### _Redis_ [+](https://redis.io/commandss/lpushx)
+#### _Redis_ [+](https://redis.io/commands/lpushx)
 
 - available: `>= 2.2.0`
 - complexity: `O(1)`
@@ -397,7 +397,7 @@ Note that if you have a list of numbers from 0 to 100, LRANGE list 0 10 will ret
 
 Out of range indexes will not produce an error. If start is larger than the end of the list, an empty list is returned. If stop is larger than the actual end of the list, Redis will treat it like the last element of the list.
 
-#### _Redis_ [+](https://redis.io/commandss/lrange)
+#### _Redis_ [+](https://redis.io/commands/lrange)
 
 - available: `>= 1.0.0`
 - complexity: `O(S+N)`
@@ -458,7 +458,7 @@ For example, LREM list -2 "hello" will remove the last two occurrences of "hello
 
 Note that non-existing keys are treated like empty lists, so when key does not exist, the command will always return 0.
 
-#### _Redis_ [+](https://redis.io/commandss/lrem)
+#### _Redis_ [+](https://redis.io/commands/lrem)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -502,7 +502,7 @@ Sets the list element at index to value. For more information on the index argum
 
 An error is returned for out of range indexes.
 
-#### _Redis_ [+](https://redis.io/commandss/lset)
+#### _Redis_ [+](https://redis.io/commands/lset)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -562,7 +562,7 @@ LTRIM mylist 0 99
 
 This pair of commands will push a new element on the list, while making sure that the list will not grow larger than 100 elements. This is very useful when using Redis to store logs for example. It is important to note that when used in this way LTRIM is an O(1) operation because in the average case just one element is removed from the tail of the list.
 
-#### _Redis_ [+](https://redis.io/commandss/ltrim)
+#### _Redis_ [+](https://redis.io/commands/ltrim)
 
 - available: `>= 1.0.0`
 - complexity: `O(N)`
@@ -602,7 +602,7 @@ await List.ltrim("mylist", 1, -1);
 
 Removes and returns the last element of the list stored at key.
 
-#### _Redis_ [+](https://redis.io/commandss/rpop)
+#### _Redis_ [+](https://redis.io/commands/rpop)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -646,7 +646,7 @@ For example: consider source holding the list a,b,c, and destination holding the
 
 If source does not exist, the value nil is returned and no operation is performed. If source and destination are the same, the operation is equivalent to removing the last element from the list and pushing it as first element of the list, so it can be considered as a list rotation command.
 
-#### _Redis_ [+](https://redis.io/commandss/rpoplpush)
+#### _Redis_ [+](https://redis.io/commands/rpoplpush)
 
 - available: `>= 1.2.0`
 - complexity: `O(1)`
@@ -694,7 +694,7 @@ It is possible to push multiple elements using a single command call just specif
 
 `>= 2.4`: Accepts multiple value arguments. In Redis versions older than 2.4 it was possible to push a single value per command.
 
-#### _Redis_ [+](https://redis.io/commandss/rpush)
+#### _Redis_ [+](https://redis.io/commands/rpush)
 
 - available: `>= 1.0.0`
 - complexity: `O(1)`
@@ -732,7 +732,7 @@ await List.rpush("mylist", "world");
 
 Inserts value at the tail of the list stored at key, only if key already exists and holds a list. In contrary to RPUSH, no operation will be performed when key does not yet exist.
 
-#### _Redis_ [+](https://redis.io/commandss/rpushx)
+#### _Redis_ [+](https://redis.io/commands/rpushx)
 
 - available: `>= 2.0.0`
 - complexity: `O(1)`
