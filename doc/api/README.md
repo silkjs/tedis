@@ -8,7 +8,7 @@ next: ./key
 ## key
 
 - [del](/api/key.md#del)
-- [dump](/api/key.md#dump)
+- dump
 - [exists](/api/key.md#exists)
 - [expire](/api/key.md#expire)
 - [expireat](/api/key.md#expireat)

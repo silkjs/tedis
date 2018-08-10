@@ -44,7 +44,7 @@ await Key.del("key1", "key2", "key3");
 // 2
 ```
 
-## dump
+<!-- ## dump
 
 Serialize the value stored at key in a Redis-specific format and return it to the user. The returned value can be synthesized back into a Redis key using the RESTORE command.
 
@@ -75,7 +75,7 @@ dump(key: string): Promise<null | string>;
 ```ts
 await Key.dump("mykey");
 // "\u0000\xC0\n\t\u0000\xBEm\u0006\x89Z(\u0000\n"
-```
+``` -->
 
 ## exists
 
@@ -188,13 +188,13 @@ redis> EXPIREAT mykey 1293840000
 - interface:
 
 ```ts
-expireat(key: string, timestamp: string): Promise<number>;
+expireat(key: string, timestamp: number): Promise<number>;
 ```
 
 - example:
 
 ```ts
-await Key.expireat("mykey", "1293840000");
+await Key.expireat("mykey", 1293840000);
 // 1
 ```
 
@@ -234,11 +234,11 @@ keys(pattern: string): Promise<string[]>;
 - example:
 
 ```ts
-await Key.keys("mykey", "*name*");
+await Key.keys("*name*");
 // ["firstname", "lastname"];
-await Key.keys("mykey", "a??");
+await Key.keys("a??");
 // ["age"];
-await Key.keys("mykey", "*");
+await Key.keys("*");
 // ["firstname", "lastname", "age"];
 ```
 
@@ -388,13 +388,13 @@ redis> PTTL mykey
 - interface:
 
 ```ts
-pexpireat(key: string, millisecondsTimestamp: string): Promise<number>;
+pexpireat(key: string, millisecondsTimestamp: number): Promise<number>;
 ```
 
 - example:
 
 ```ts
-await Key.pexpireat("mykey", "1555555555005");
+await Key.pexpireat("mykey", 1555555555005);
 // 1
 ```
 

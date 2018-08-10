@@ -22,8 +22,8 @@ enum MethodList {
 
 export interface InterfaceList {
   blpop(
-    keys: string[],
-    timeout?: number
+    timeout: number,
+    ...keys: string[]
   ): Promise<Array<string | number | null>>;
   brpop(
     keys: string[],
@@ -60,11 +60,8 @@ export interface InterfaceList {
 }
 
 export class RedisList extends RedisBase implements InterfaceList {
-  public blpop(keys: string[], timeout?: number) {
-    if ("number" === typeof timeout) {
-      return this.command(MethodList.blpop, ...keys, timeout);
-    }
-    return this.command(MethodList.blpop, ...keys);
+  public blpop(timeout: number, ...keys: string[]) {
+    return this.command(MethodList.blpop, ...keys, timeout);
   }
   public brpop(keys: string[], timeout?: number) {
     if ("number" === typeof timeout) {

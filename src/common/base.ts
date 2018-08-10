@@ -5,7 +5,9 @@ import { Options, Parameters } from "./variable";
 type callback = (err: any, res: any) => void;
 
 export interface InterfaceBase {
+  command(...parameters: Parameters): Promise<any>;
   close(): void;
+  on(type: string, listener: () => void): void;
 }
 export class RedisBase implements InterfaceBase {
   private _socket: net.Socket;
@@ -13,7 +15,9 @@ export class RedisBase implements InterfaceBase {
   private _callbacks: callback[];
   constructor(options: Options) {
     this._socket = net.createConnection(options);
-    this._protocol = new Protocol();
+    this._protocol = new Protocol({
+      debug: options.debug,
+    });
     this._callbacks = [];
     this._socket.on("timeout", () => {
       // console.log("socket timeout");
@@ -33,13 +37,13 @@ export class RedisBase implements InterfaceBase {
       // console.log("socket close");
     });
   }
-  public on(type: string, lister: () => void) {
+  public on(type: string, listener: () => void) {
     //
   }
   public close() {
     this._socket.end();
   }
-  protected command(...parameters: Parameters): Promise<any> {
+  public command(...parameters: Parameters): Promise<any> {
     return new Promise((resolve, reject) => {
       this._callbacks.push((err: any, res: any) => {
         err ? reject(res) : resolve(res);

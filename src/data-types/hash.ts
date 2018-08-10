@@ -46,8 +46,13 @@ export interface InterfaceHash {
 }
 
 export class RedisHash extends RedisBase implements InterfaceHash {
-  public hdel(key: string, field: string, ...fields: string[]) {
-    return this.command(MethodHash.hdel, key, field, ...fields);
+  public async hdel(key: string, field: string, ...fields: string[]) {
+    return (await this.command(
+      MethodHash.hdel,
+      key,
+      field,
+      ...fields
+    )) as number;
   }
   public hexists(key: string, field: string) {
     return this.command(MethodHash.hexists, key, field);

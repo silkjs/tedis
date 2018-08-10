@@ -22,23 +22,41 @@ export interface InterfaceSet {
   sadd(key: string, ...members: Array<string | number>): Promise<number>;
   scard(key: string): Promise<number>;
   sdiff(key: string, ...keys: string[]): Promise<Array<string | number>>;
-  sdiffstore(destination: string, key: string, ...keys: string[]): Promise<number>;
+  sdiffstore(
+    destination: string,
+    key: string,
+    ...keys: string[]
+  ): Promise<number>;
   sinter(key: string, ...keys: string[]): Promise<Array<string | number>>;
-  sinterstore(destination: string, key: string, ...keys: string[]): Promise<number>;
+  sinterstore(
+    destination: string,
+    key: string,
+    ...keys: string[]
+  ): Promise<number>;
   sismember(key: string, member: string): Promise<number>;
-  smembers(key: string): Promise<Array<string|number>>;
+  smembers(key: string): Promise<Array<string | number>>;
   smove(source: string, destination: string, member: string): Promise<number>;
-  spop(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
-  srandmember(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
+  spop(
+    key: string,
+    count?: number
+  ): Promise<string | number | null | Array<string | number>>;
+  srandmember(
+    key: string,
+    count?: number
+  ): Promise<string | number | null | Array<string | number>>;
   srem(key: string, member: string, ...members: string[]): Promise<number>;
   // sscan(): Promise<any>;
-  sunion(key: string, keys: string[]): Promise<Array<string|number>>;
-  sunionstore(destination: string, key: string, keys: string[]): Promise<number>;
+  sunion(key: string, keys: string[]): Promise<Array<string | number>>;
+  sunionstore(
+    destination: string,
+    key: string,
+    keys: string[]
+  ): Promise<number>;
 }
 
 export class RedisSet extends RedisBase implements InterfaceSet {
-  public sadd(key: string, ...members: string[]) {
-    return this.command(MethodSet.sadd, key,  ...members);
+  public async sadd(key: string, ...members: string[]) {
+    return (await this.command(MethodSet.sadd, key, ...members)) as number;
   }
   public scard(key: string) {
     return this.command(MethodSet.scard, key);
