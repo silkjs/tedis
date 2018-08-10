@@ -4,10 +4,7 @@ import { config, sleep } from "../tools";
 let client: Redis;
 
 beforeAll(async () => {
-  client = new Redis({
-    port: config.prot,
-    host: config.host,
-  });
+  client = new Redis(config);
   await sleep(2);
 });
 

@@ -44,7 +44,7 @@ await Key.del("key1", "key2", "key3");
 // 2
 ```
 
-## dump
+<!-- ## dump
 
 用于序列化给定 key ，并返回被序列化的值。
 
@@ -75,7 +75,7 @@ dump(key: string): Promise<null | string>;
 ```ts
 await Key.dump("mykey");
 // "\u0000\xC0\n\t\u0000\xBEm\u0006\x89Z(\u0000\n"
-```
+``` -->
 
 ## exists
 
@@ -176,13 +176,13 @@ redis> EXPIREAT mykey 1293840000
 - 接口：
 
 ```ts
-expireat(key: string, timestamp: string): Promise<number>;
+expireat(key: string, timestamp: number): Promise<number>;
 ```
 
 - 示例：
 
 ```ts
-await Key.expireat("mykey", "1293840000");
+await Key.expireat("mykey", 1293840000);
 // 1
 ```
 
@@ -222,11 +222,11 @@ keys(pattern: string): Promise<string[]>;
 - 示例：
 
 ```ts
-await Key.keys("mykey", "*name*");
+await Key.keys("*name*");
 // ["firstname", "lastname"];
-await Key.keys("mykey", "a??");
+await Key.keys("a??");
 // ["age"];
-await Key.keys("mykey", "*");
+await Key.keys("*");
 // ["firstname", "lastname", "age"];
 ```
 
@@ -368,13 +368,13 @@ redis> PTTL mykey
 - 接口：
 
 ```ts
-pexpireat(key: string, millisecondsTimestamp: string): Promise<number>;
+pexpireat(key: string, millisecondsTimestamp: number): Promise<number>;
 ```
 
 - 示例：
 
 ```ts
-await Key.pexpireat("mykey", "1555555555005");
+await Key.pexpireat("mykey", 1555555555005);
 // 1
 ```
 
@@ -451,7 +451,7 @@ await Key.randomkey();
 
 ## rename
 
-将 key 重命名为 newkey，如果 key 与 newkey 相同，将返回一个错误。如果 newkey 已经存在，则值将被覆盖。
+将 key 重命名为 newkey，当 key 不存在时返回一个错误，如果 newkey 已经存在，则值将被覆盖。在 Redis `>= 3.2.0` 之前，key 与 newkey 相同的情况下将返回一个错误。
 
 #### _Redis_ [+](http://www.redis.cn/commands/rename.html)
 

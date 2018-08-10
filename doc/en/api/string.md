@@ -145,7 +145,7 @@ redis> GET mykey
 - interface:
 
 ```ts
-get(key: string): Promise<null | string>;
+get(key: string): Promise<string | number | null>;
 ```
 
 - example:
@@ -392,17 +392,17 @@ redis> INCRBYFLOAT key2 2.0e2
 - interface:
 
 ```ts
-incrbyfloat(key: string, increment: string): Promise<string>;
+incrbyfloat(key: string, increment: number): Promise<string>;
 ```
 
 - example:
 
 ```ts
-await String.incrbyfloat("key1", "0.1");
+await String.incrbyfloat("key1", 0.1);
 // "10.6"
-await String.incrbyfloat("key1", "-5");
+await String.incrbyfloat("key1", -5);
 // "5.6"
-await String.incrbyfloat("key2", "2.0e2");
+await String.incrbyfloat("key2", 2.0e2);
 // "5200"
 ```
 
@@ -715,7 +715,7 @@ redis> GET mykey
 - interface:
 
 ```ts
-setnx(key: string, value: string): Promise<number>;
+setnx(key: string, value: string): Promise<0 | 1>;
 ```
 
 - example:

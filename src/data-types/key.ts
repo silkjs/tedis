@@ -21,17 +21,17 @@ enum MethodKey {
 
 export interface InterfaceKey {
   del(key: string, ...keys: string[]): Promise<number>;
-  dump(key: string): Promise<null | string>;
+  // dump(key: string): Promise<null | string>;
   exists(key: string, ...keys: string[]): Promise<number>;
   expire(key: string, seconds: number): Promise<number>;
-  expireat(key: string, timestamp: string): Promise<number>;
+  expireat(key: string, timestamp: number): Promise<number>;
   keys(pattern: string): Promise<string[]>;
   // MIGRATE
   move(key: string, db: number): Promise<number>;
   // object
   persist(key: string): Promise<number>;
   pexpire(key: string, milliseconds: number): Promise<number>;
-  pexpireat(key: string, millisecondsTimestamp: string): Promise<number>;
+  pexpireat(key: string, millisecondsTimestamp: number): Promise<number>;
   pttl(key: string): Promise<number>;
   randomkey(): Promise<null | string>;
   rename(key: string, newKey: string): Promise<any>;
@@ -47,52 +47,56 @@ export interface InterfaceKey {
 }
 
 export class RedisKey extends RedisBase implements InterfaceKey {
-  public del(key: string, ...keys: string[]) {
-    return this.command(MethodKey.del, key, ...keys);
+  public async del(key: string, ...keys: string[]) {
+    return (await this.command(MethodKey.del, key, ...keys)) as number;
   }
-  public dump(key: string) {
-    return this.command(MethodKey.dump, key);
+  // public async dump(key: string) {
+  //   return (await this.command(MethodKey.dump, key)) as string | null;
+  // }
+  public async exists(key: string, ...keys: string[]) {
+    return (await this.command(MethodKey.exists, key, ...keys)) as number;
   }
-  public exists(key: string, ...keys: string[]) {
-    return this.command(MethodKey.exists, key, ...keys);
+  public async expire(key: string, seconds: number) {
+    return (await this.command(MethodKey.expire, key, seconds)) as number;
   }
-  public expire(key: string, seconds: number) {
-    return this.command(MethodKey.expire, key, seconds);
+  public async expireat(key: string, timestamp: number) {
+    return (await this.command(MethodKey.expireat, key, timestamp)) as number;
   }
-  public expireat(key: string, timestamp: string) {
-    return this.command(MethodKey.expireat, key, timestamp);
+  public async keys(pattern: string) {
+    return (await this.command(MethodKey.keys, pattern)) as string[];
   }
-  public pexpire(key: string, milliseconds: number) {
-    return this.command(MethodKey.pexpire, key, milliseconds);
+  public async move(key: string, db: number) {
+    return (await this.command(MethodKey.move, key, db)) as number;
   }
-  public pexpireat(key: string, millisecondsTimestamp: string) {
-    return this.command(MethodKey.pexpireat, key, millisecondsTimestamp);
+  public async persist(key: string) {
+    return (await this.command(MethodKey.persist, key)) as number;
   }
-  public keys(pattern: string) {
-    return this.command(MethodKey.keys, pattern);
+  public async pexpire(key: string, milliseconds: number) {
+    return (await this.command(MethodKey.pexpire, key, milliseconds)) as number;
   }
-  public move(key: string, db: number) {
-    return this.command(MethodKey.move, key, db);
+  public async pexpireat(key: string, millisecondsTimestamp: number) {
+    return (await this.command(
+      MethodKey.pexpireat,
+      key,
+      millisecondsTimestamp
+    )) as number;
   }
-  public persist(key: string) {
-    return this.command(MethodKey.persist, key);
+  public async pttl(key: string) {
+    return (await this.command(MethodKey.pttl, key)) as number;
   }
-  public pttl(key: string) {
-    return this.command(MethodKey.pttl, key);
+  public async randomkey() {
+    return (await this.command(MethodKey.randomkey)) as string | null;
   }
-  public ttl(key: string) {
-    return this.command(MethodKey.ttl, key);
+  public async rename(key: string, newKey: string) {
+    return (await this.command(MethodKey.rename, key, newKey)) as string;
   }
-  public randomkey() {
-    return this.command(MethodKey.randomkey);
+  public async renamenx(key: string, newKey: string) {
+    return (await this.command(MethodKey.renamenx, key, newKey)) as 0 | 1;
   }
-  public rename(key: string, newKey: string) {
-    return this.command(MethodKey.rename, key, newKey);
+  public async ttl(key: string) {
+    return (await this.command(MethodKey.ttl, key)) as number;
   }
-  public renamenx(key: string, newKey: string) {
-    return this.command(MethodKey.renamenx, key, newKey);
-  }
-  public type(key: string) {
-    return this.command(MethodKey.type, key);
+  public async type(key: string) {
+    return (await this.command(MethodKey.type, key)) as string;
   }
 }

@@ -1,12 +1,14 @@
-import { Parameters, ProtocolParse } from "./variable";
+import { Parameters, Poptions, ProtocolParse } from "./variable";
 
 export class Protocol {
   public data: ProtocolParse;
   private _result: string[];
   private _end: string;
-  constructor() {
+  private _options: Poptions;
+  constructor(options: Poptions= {debug: false}) {
     this._result = new Array();
     this._end = "";
+    this._options = options;
     this.data = {
       state: true,
       res: {
@@ -19,6 +21,9 @@ export class Protocol {
     const array: string[] = (this._end + data.toString()).split("\r\n");
     this._end = array.pop() as string;
     this._result = this._result.concat(array);
+    if (this._options.debug) {
+      console.log(this._result);
+    }
   }
   public parse() {
     this.data = {
@@ -53,7 +58,7 @@ export class Protocol {
         case ":":
           this.data.res = {
             error: false,
-            data: current.slice(1),
+            data: +current.slice(1),
           };
           this._result.shift();
           break;
@@ -115,6 +120,9 @@ export class Protocol {
           this.data.state = false;
       }
     }
+    if (this._options.debug) {
+      console.log(this.data);
+    }
   }
   public encode(...parameters: Parameters): string {
     const length = parameters.length;
@@ -130,6 +138,9 @@ export class Protocol {
       } else {
         throw new Error("encode ags err");
       }
+    }
+    if (this._options.debug) {
+      console.log(request);
     }
     return request;
   }

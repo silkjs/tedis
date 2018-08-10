@@ -38,15 +38,15 @@ redis> BLPOP list1 list2 0
 
 ```ts
 blpop(
-  keys: string[],
-  timeout?: number,
+  timeout: number,
+  ...keys: string[],
 ): Promise<Array<string | number | null>>;
 ```
 
 - 示例：
 
 ```ts
-await List.blpop(["list1", "list2"], 0);
+await List.blpop(0, "list1", "list2");
 // ["list1", "a"]
 ```
 

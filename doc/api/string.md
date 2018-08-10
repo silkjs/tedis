@@ -145,7 +145,7 @@ redis> GET mykey
 - 接口：
 
 ```ts
-get(key: string): Promise<null | string>;
+get(key: string): Promise<string | number | null>;
 ```
 
 - 示例：
@@ -384,17 +384,17 @@ redis> INCRBYFLOAT key2 2.0e2
 - 接口：
 
 ```ts
-incrbyfloat(key: string, increment: string): Promise<string>;
+incrbyfloat(key: string, increment: number): Promise<string>;
 ```
 
 - 示例：
 
 ```ts
-await String.incrbyfloat("key1", "0.1");
+await String.incrbyfloat("key1", 0.1);
 // "10.6"
-await String.incrbyfloat("key1", "-5");
+await String.incrbyfloat("key1", -5);
 // "5.6"
-await String.incrbyfloat("key2", "2.0e2");
+await String.incrbyfloat("key2", 2.0e2);
 // "5200"
 ```
 
@@ -698,7 +698,7 @@ redis> GET mykey
 - 接口：
 
 ```ts
-setnx(key: string, value: string): Promise<number>;
+setnx(key: string, value: string): Promise<0 | 1>;
 ```
 
 - 示例：
