@@ -40,11 +40,9 @@ describe("Redis Key Test: EXISTS", () => {
 describe("Redis Key Test: EXPIRE", () => {
   it(`mykey expire 1`, async () => {
     expect(await Key.command("SET", "mykey", "Hello")).toBe("OK");
-    expect(await Key.ttl("mykey")).toBe(-1);
+    expect(await Key.command("TTL", "mykey")).toBe(-1);
     expect(await Key.expire("mykey", 1)).toBe(1);
-    expect(await Key.ttl("mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await Key.exists("mykey")).toBe(0);
+    expect(await Key.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key does not exist`, async () => {
     expect(await Key.expire("mykey", 1)).toBe(0);
@@ -54,11 +52,11 @@ describe("Redis Key Test: EXPIRE", () => {
 describe("Redis Key Test: EXPIREAT", () => {
   it(`mykey expireat (Date.now() / 1000).toFixed(0) + 1`, async () => {
     expect(await Key.command("SET", "mykey", "Hello")).toBe("OK");
+    expect(await Key.command("TTL", "mykey")).toBe(-1);
     expect(
       await Key.expireat("mykey", +(Date.now() / 1000).toFixed(0) + 1)
     ).toBe(1);
-    await sleep(2);
-    expect(await Key.exists("mykey")).toBe(0);
+    expect(await Key.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key does not exist`, async () => {
     expect(await Key.expireat("mykey", 1)).toBe(0);
@@ -114,11 +112,9 @@ describe("Redis Key Test: PERSIST", () => {
 describe("Redis Key Test: PEXPIRE", () => {
   it(`pexpire mykey 1000`, async () => {
     expect(await Key.command("SET", "mykey", "Hello")).toBe("OK");
-    expect(await Key.ttl("mykey")).toBe(-1);
+    expect(await Key.command("TTL", "mykey")).toBe(-1);
     expect(await Key.pexpire("mykey", 1000)).toBe(1);
-    expect(await Key.ttl("mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await Key.exists("mykey")).toBe(0);
+    expect(await Key.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key does not exist`, async () => {
     expect(await Key.pexpire("mykey", 1000)).toBe(0);
@@ -128,11 +124,9 @@ describe("Redis Key Test: PEXPIRE", () => {
 describe("Redis Key Test: PEXPIREAT", () => {
   it(`pexpire pexpireat Date.now() + 1000`, async () => {
     expect(await Key.command("SET", "mykey", "Hello")).toBe("OK");
-    expect(await Key.ttl("mykey")).toBe(-1);
+    expect(await Key.command("TTL", "mykey")).toBe(-1);
     expect(await Key.pexpireat("mykey", Date.now() + 1000)).toBe(1);
-    expect(await Key.ttl("mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await Key.exists("mykey")).toBe(0);
+    expect(await Key.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key does not exist`, async () => {
     expect(await Key.pexpireat("mykey", Date.now() + 1000)).toBe(0);

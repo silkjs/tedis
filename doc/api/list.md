@@ -40,7 +40,7 @@ redis> BLPOP list1 list2 0
 blpop(
   timeout: number,
   ...keys: string[],
-): Promise<Array<string | number | null>>;
+): Promise<Array<string | null>>;
 ```
 
 - 示例：
@@ -78,7 +78,7 @@ redis> BRPOP list1 list2 0
 - 接口：
 
 ```ts
-brpop(keys: string[], timeout?: number): Promise<Array<string | number | null>>;
+brpop(timeout: number, ...keys: string[]): Promise<Array<string | null>>;
 ```
 
 - 示例：
@@ -158,7 +158,7 @@ redis> LINDEX mylist 3
 - 接口：
 
 ```ts
-lindex(key: string, index: number): Promise<string | number | null>;
+lindex(key: string, index: number): Promise<string | null>;
 ```
 
 - 示例：
@@ -281,7 +281,7 @@ redis> LRANGE mylist 0 -1
 - 接口：
 
 ```ts
-lpop(key: string): Promise<string | number>;
+lpop(key: string): Promise<string | null>;
 ```
 
 - 示例：
@@ -323,7 +323,7 @@ redis> LRANGE mylist 0 -1
 - 接口：
 
 ```ts
-lpush(key: string, ...values: Array<string | number>): Promise<number>;
+lpush(key: string, value: string | number, ...values: Array<string | number>): Promise<number>;
 ```
 
 - 示例：
@@ -365,7 +365,7 @@ redis> LRANGE myotherlist 0 -1
 - 接口：
 
 ```ts
-lpushx(key: string, value: string): Promise<number>;
+lpushx(key: string, value: string | number): Promise<number>;
 ```
 
 - 示例：
@@ -424,7 +424,7 @@ redis> LRANGE mylist 5 10
 - 接口：
 
 ```ts
-lrange(key: string, start: number, stop: number): Promise<Array<string | number>>;
+lrange(key: string, start: number, stop: number): Promise<string[]>;
 ```
 
 - 示例：
@@ -521,7 +521,7 @@ redis> LRANGE mylist 0 -1
 - 接口：
 
 ```ts
-lset(key: string, index: number, value: string): Promise<any>;
+lset(key: string, index: number, value: string | number): Promise<any>;
 ```
 
 - 示例：
@@ -618,7 +618,7 @@ redis> LRANGE mylist 0 -1
 - 接口：
 
 ```ts
-rpop(key: string): Promise<string | number | null>;
+rpop(key: string): Promise<string | null>;
 ```
 
 - 示例：
@@ -664,7 +664,7 @@ redis> LRANGE myotherlist 0 -1
 - 接口：
 
 ```ts
-rpoplpush(source: string, destination: string): Promise<string | number>;
+rpoplpush(source: string, destination: string): Promise<string | null>;
 ```
 
 - 示例：
@@ -706,7 +706,11 @@ redis> LRANGE mylist 0 -1
 - 接口：
 
 ```ts
-rpush(key: string, ...values: Array<string | number>): Promise<number>;
+rpush(
+  key: string,
+  value: string | number,
+  ...values: Array<string | number>
+): Promise<number>;
 ```
 
 - 示例：
@@ -748,7 +752,7 @@ redis> LRANGE myotherlist 0 -1
 - 接口：
 
 ```ts
-rpushx(key: string, value: string): Promise<number>;
+rpushx(key: string, value: string | number): Promise<number>;
 ```
 
 - 示例：
