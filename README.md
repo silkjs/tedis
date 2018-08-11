@@ -55,35 +55,181 @@ const client = new Redis({
 ### example
 
 ```ts
-// key
+/**
+ * key
+ */
 await client.keys("*");
+// []
 await client.exists("a");
+// 0
 
-// string
-await client.set("string1", "abcdefg");
-await client.get("string1");
+/**
+ * string
+ */
+await client.set("mystring", "hello");
+// "OK"
+await client.get("mystring");
+// "hello"
 
-// hash
-await client.hmset("hash1", {
-  name: "tom",
-  age: 23
+/**
+ * hash
+ */
+await client.hmset("myhash", {
+  name: "tedis",
+  age: 18
 });
-await client.hgetall("hash1");
+// "OK"
+await client.hgetall("myhash");
+// {
+//   "name": "tedis",
+//   "age": "18"
+// }
 
-// list
-await client.lpush("list1", ...["a", "b", "c", "d", 1, 2, 3, 4, 5]);
-await client.llen("list1");
-
-// set
-await client.sadd("set1", ...["a", "b", "c", "d", 1, 2, 3, 4, 5]);
-await client.scard("set1");
-
-// zset
-await client.zadd("zset1", {
-  a: 1,
-  adg: 2,
-  sfa: 3,
-  gfdg: 4
-});
-await client.zcard("zset1");
+/**
+ * list
+ */
+await client.lpush("mylist", "hello", "a", "b", "c", "d", 1, 2, 3, 4);
+// 9
+await client.llen("mylist");
+// 9
 ```
+
+## Type interface
+
+### key
+
+- [del](https://tedis.myour.tech/en/api/key.html#del)
+- dump
+- [exists](https://tedis.myour.tech/en/api/key.html#exists)
+- [expire](https://tedis.myour.tech/en/api/key.html#expire)
+- [expireat](https://tedis.myour.tech/en/api/key.html#expireat)
+- [keys](https://tedis.myour.tech/en/api/key.html#keys)
+- migrate
+- [move](https://tedis.myour.tech/en/api/key.html#move)
+- object
+- [persist](https://tedis.myour.tech/en/api/key.html#persist)
+- [pexpire](https://tedis.myour.tech/en/api/key.html#pexpire)
+- [pexpireat](https://tedis.myour.tech/en/api/key.html#pexpireat)
+- [pttl](https://tedis.myour.tech/en/api/key.html#pttl)
+- [randomkey](https://tedis.myour.tech/en/api/key.html#randomkey)
+- [rename](https://tedis.myour.tech/en/api/key.html#rename)
+- [renamenx](https://tedis.myour.tech/en/api/key.html#renamenx)
+- restore
+- scan
+- sort
+- touch
+- [ttl](https://tedis.myour.tech/en/api/key.html#ttl)
+- [type](https://tedis.myour.tech/en/api/key.html#type)
+- unlink
+- wait
+
+### string
+
+- [append](https://tedis.myour.tech/en/api/string.html#append)
+- bitcount
+- bitfield
+- bitop
+- bitpos
+- [decr](https://tedis.myour.tech/en/api/string.html#decr)
+- [decrby](https://tedis.myour.tech/en/api/string.html#decrby)
+- [get](https://tedis.myour.tech/en/api/string.html#get)
+- [getbit](https://tedis.myour.tech/en/api/string.html#getbit)
+- [getrange](https://tedis.myour.tech/en/api/string.html#getrange)
+- [getset](https://tedis.myour.tech/en/api/string.html#getset)
+- [incr](https://tedis.myour.tech/en/api/string.html#incr)
+- [incrby](https://tedis.myour.tech/en/api/string.html#incrby)
+- [incrbyfloat](https://tedis.myour.tech/en/api/string.html#incrbyfloat)
+- [mget](https://tedis.myour.tech/en/api/string.html#mget)
+- [mset](https://tedis.myour.tech/en/api/string.html#mset)
+- [msetnx](https://tedis.myour.tech/en/api/string.html#msetnx)
+- [psetex](https://tedis.myour.tech/en/api/string.html#psetex)
+- [set](https://tedis.myour.tech/en/api/string.html#set)
+- [setbit](https://tedis.myour.tech/en/api/string.html#setbit)
+- [setex](https://tedis.myour.tech/en/api/string.html#setex)
+- [setnx](https://tedis.myour.tech/en/api/string.html#setnx)
+- [setrange](https://tedis.myour.tech/en/api/string.html#setrange)
+- [strlen](https://tedis.myour.tech/en/api/string.html#strlen)
+
+### hash
+
+- [hdel](https://tedis.myour.tech/en/api/hash.html#hdel)
+- [hexists](https://tedis.myour.tech/en/api/hash.html#hexists)
+- [hget](https://tedis.myour.tech/en/api/hash.html#hget)
+- [hgetall](https://tedis.myour.tech/en/api/hash.html#hgetall)
+- [hincrby](https://tedis.myour.tech/en/api/hash.html#hincrby)
+- [hincrbyfloat](https://tedis.myour.tech/en/api/hash.html#hincrbyfloat)
+- [hkeys](https://tedis.myour.tech/en/api/hash.html#hkeys)
+- [hlen](https://tedis.myour.tech/en/api/hash.html#hlen)
+- [hmget](https://tedis.myour.tech/en/api/hash.html#hmget)
+- [hmset](https://tedis.myour.tech/en/api/hash.html#hmset)
+- hscan
+- [hset](https://tedis.myour.tech/en/api/hash.html#hset)
+- [hsetnx](https://tedis.myour.tech/en/api/hash.html#hsetnx)
+- [hstrlen](https://tedis.myour.tech/en/api/hash.html#hstrlen)
+- [hvals](https://tedis.myour.tech/en/api/hash.html#hvals)
+
+### list
+
+- [blpop](https://tedis.myour.tech/en/api/list.html#blpop)
+- [brpop](https://tedis.myour.tech/en/api/list.html#brpop)
+- [brpoplpush](https://tedis.myour.tech/en/api/list.html#brpoplpush)
+- [lindex](https://tedis.myour.tech/en/api/list.html#lindex)
+- [linsert](https://tedis.myour.tech/en/api/list.html#linsert)
+- [llen](https://tedis.myour.tech/en/api/list.html#llen)
+- [lpop](https://tedis.myour.tech/en/api/list.html#lpop)
+- [lpush](https://tedis.myour.tech/en/api/list.html#lpush)
+- [lpushx](https://tedis.myour.tech/en/api/list.html#lpushx)
+- [lrange](https://tedis.myour.tech/en/api/list.html#lrange)
+- [lrem](https://tedis.myour.tech/en/api/list.html#lrem)
+- [lset](https://tedis.myour.tech/en/api/list.html#lset)
+- [ltrim](https://tedis.myour.tech/en/api/list.html#ltrim)
+- [rpop](https://tedis.myour.tech/en/api/list.html#rpop)
+- [rpoplpush](https://tedis.myour.tech/en/api/list.html#rpoplpush)
+- [rpush](https://tedis.myour.tech/en/api/list.html#rpush)
+- [rpushx](https://tedis.myour.tech/en/api/list.html#rpushx)
+
+### set
+
+- [sadd](https://tedis.myour.tech/en/api/set.html#sadd)
+- [scard](https://tedis.myour.tech/en/api/set.html#scard)
+- [sdiff](https://tedis.myour.tech/en/api/set.html#sdiff)
+- [sdiffstore](https://tedis.myour.tech/en/api/set.html#sdiffstore)
+- [sinter](https://tedis.myour.tech/en/api/set.html#sinter)
+- [sinterstore](https://tedis.myour.tech/en/api/set.html#sinterstore)
+- [sismember](https://tedis.myour.tech/en/api/set.html#sismember)
+- [smembers](https://tedis.myour.tech/en/api/set.html#smembers)
+- [smove](https://tedis.myour.tech/en/api/set.html#smove)
+- [spop](https://tedis.myour.tech/en/api/set.html#spop)
+- [srandmember](https://tedis.myour.tech/en/api/set.html#srandmember)
+- [srem](https://tedis.myour.tech/en/api/set.html#srem)
+- sscan
+- [sunion](https://tedis.myour.tech/en/api/set.html#sunion)
+- [sunionstore](https://tedis.myour.tech/en/api/set.html#sunionstore)
+
+### zset
+
+- bzpopmax
+- bzpopmin
+- [zadd](https://tedis.myour.tech/en/api/zset.html#zadd)
+- [zcard](https://tedis.myour.tech/en/api/zset.html#zcard)
+- [zcount](https://tedis.myour.tech/en/api/zset.html#zcount)
+- [zincrby](https://tedis.myour.tech/en/api/zset.html#zincrby)
+- [zinterstore](https://tedis.myour.tech/en/api/zset.html#zinterstore)
+- [zlexcount](https://tedis.myour.tech/en/api/zset.html#zlexcount)
+- zpopmax
+- zpopmin
+- [zrange](https://tedis.myour.tech/en/api/zset.html#zrange)
+- [zrangebylex](https://tedis.myour.tech/en/api/zset.html#zrangebylex)
+- [zrangebyscore](https://tedis.myour.tech/en/api/zset.html#zrangebyscore)
+- [zrank](https://tedis.myour.tech/en/api/zset.html#zrank)
+- [zrem](https://tedis.myour.tech/en/api/zset.html#zrem)
+- [zremrangebylex](https://tedis.myour.tech/en/api/zset.html#zremrangebylex)
+- [zremrangebyrank](https://tedis.myour.tech/en/api/zset.html#zremrangebyrank)
+- [zremrangebyscore](https://tedis.myour.tech/en/api/zset.html#zremrangebyscore)
+- [zrevrange](https://tedis.myour.tech/en/api/zset.html#zrevrange)
+- zrevrangebylex
+- [zrevrangebyscore](https://tedis.myour.tech/en/api/zset.html#zrevrangebyscore)
+- [zrevrank](https://tedis.myour.tech/en/api/zset.html#zrevrank)
+- zscan
+- [zscore](https://tedis.myour.tech/en/api/zset.html#zscore)
+- [zunionstore](https://tedis.myour.tech/en/api/zset.html#zunionstore)

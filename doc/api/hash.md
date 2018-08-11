@@ -85,7 +85,7 @@ await Hash.hexists("myhash", "field2");
 // 0
 ```
 
-## hexists
+## hget
 
 返回 key 指定的哈希集中该字段所关联的值
 
@@ -110,15 +110,15 @@ redis> HGET myhash field2
 - 接口：
 
 ```ts
-hexists(key: string, field: string): Promise<string | null>;
+hget(key: string, field: string): Promise<string | null>;
 ```
 
 - 示例：
 
 ```ts
-await Hash.hexists("myhash", "field1");
+await Hash.hget("myhash", "field1");
 // "foo"
-await Hash.hexists("myhash", "field2");
+await Hash.hget("myhash", "field2");
 // null
 ```
 
@@ -150,7 +150,7 @@ redis> HGETALL myhash
 - 接口：
 
 ```ts
-hgetall(key: string): Promise<{ [propName: string]: string | number }>;
+hgetall(key: string): Promise<{ [propName: string]: string }>;
 ```
 
 - 示例：
@@ -236,17 +236,17 @@ redis> HINCRBYFLOAT mykey field 2.0e2
 - 接口：
 
 ```ts
-hincrbyfloat(key: string, field: string, increment: string): Promise<string>;
+hincrbyfloat(key: string, field: string, increment: number): Promise<string>;
 ```
 
 - 示例：
 
 ```ts
-await Hash.hincrbyfloat("mykey", "field", "0.1");
+await Hash.hincrbyfloat("mykey", "field", 0.1);
 // "10.6"
-await Hash.hincrbyfloat("mykey", "field", "-5");
+await Hash.hincrbyfloat("mykey", "field", -5);
 // "5.6"
-await Hash.hincrbyfloat("mykey", "field", "2.0e2");
+await Hash.hincrbyfloat("mykey", "field", 2.0e2);
 // "5200"
 ```
 
@@ -348,7 +348,7 @@ redis> HMGET myhash field1 field2 nofield
 - 接口：
 
 ```ts
-hmget(key: string, field: string, ...fields: string[]): Promise<Array<string | number | null>>;
+hmget(key: string, field: string, ...fields: string[]): Promise<Array<string | null>>;
 ```
 
 - 示例：
@@ -426,7 +426,7 @@ redis> HGET myhash field1
 - 接口：
 
 ```ts
-hset(key: string, field: string, value: string | number): Promise<number>;
+hset(key: string, field: string, value: string | number): Promise<0 | 1>;
 ```
 
 - 示例：
@@ -463,7 +463,7 @@ redis> HGET myhash field
 - 接口：
 
 ```ts
-hsetnx(key: string, field: string, value: string): Promise<number>;
+hsetnx(key: string, field: string, value: string): Promise<0 | 1>;
 ```
 
 - 示例：
@@ -542,7 +542,7 @@ redis> HVALS myhash
 - 接口：
 
 ```ts
-hvals(key: string): Promise<Array<string | number>>;
+hvals(key: string): Promise<string[]>;
 ```
 
 - 示例：

@@ -250,16 +250,13 @@ describe("Redis String Test: MSETNX", () => {
 describe("Redis String Test: PSETEX", () => {
   it(`key not exists`, async () => {
     expect(await String.psetex("mykey", 1000, "Hello")).toBe("OK");
-    expect(await String.command("PTTL", "mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await String.get("mykey")).toBeNull();
+    expect(await String.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key exists`, async () => {
     expect(await String.command("SET", "mykey", "abc")).toBe("OK");
+    expect(await String.command("TTL", "mykey")).toBe(-1);
     expect(await String.psetex("mykey", 1000, "Hello")).toBe("OK");
-    expect(await String.command("PTTL", "mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await String.get("mykey")).toBeNull();
+    expect(await String.command("TTL", "mykey")).not.toBe(-1);
   });
 });
 
@@ -290,16 +287,13 @@ describe("Redis String Test: SETBIT", () => {
 describe("Redis String Test: SETEX", () => {
   it(`key not exists`, async () => {
     expect(await String.setex("mykey", 1, "Hello")).toBe("OK");
-    expect(await String.command("PTTL", "mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await String.get("mykey")).toBeNull();
+    expect(await String.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key exists`, async () => {
     expect(await String.set("mykey", "abc")).toBe("OK");
+    expect(await String.command("TTL", "mykey")).toBe(-1);
     expect(await String.setex("mykey", 1, "Hello")).toBe("OK");
-    expect(await String.command("PTTL", "mykey")).not.toBe(-1);
-    await sleep(2);
-    expect(await String.get("mykey")).toBeNull();
+    expect(await String.command("TTL", "mykey")).not.toBe(-1);
   });
 });
 

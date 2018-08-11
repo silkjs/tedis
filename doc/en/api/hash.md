@@ -85,7 +85,7 @@ await Hash.hexists("myhash", "field2");
 // 0
 ```
 
-## hexists
+## hget
 
 Returns the value associated with field in the hash stored at key.
 
@@ -110,15 +110,15 @@ redis> HGET myhash field2
 - interface:
 
 ```ts
-hexists(key: string, field: string): Promise<string | null>;
+hget(key: string, field: string): Promise<string | null>;
 ```
 
 - example:
 
 ```ts
-await Hash.hexists("myhash", "field1");
+await Hash.hget("myhash", "field1");
 // "foo"
-await Hash.hexists("myhash", "field2");
+await Hash.hget("myhash", "field2");
 // null
 ```
 
@@ -150,7 +150,7 @@ redis> HGETALL myhash
 - interface:
 
 ```ts
-hgetall(key: string): Promise<{ [propName: string]: string | number }>;
+hgetall(key: string): Promise<{ [propName: string]: string }>;
 ```
 
 - example:
@@ -238,17 +238,17 @@ redis> HINCRBYFLOAT mykey field 2.0e2
 - interface:
 
 ```ts
-hincrbyfloat(key: string, field: string, increment: string): Promise<string>;
+hincrbyfloat(key: string, field: string, increment: number): Promise<string>;
 ```
 
 - example:
 
 ```ts
-await Hash.hincrbyfloat("mykey", "field", "0.1");
+await Hash.hincrbyfloat("mykey", "field", 0.1);
 // "10.6"
-await Hash.hincrbyfloat("mykey", "field", "-5");
+await Hash.hincrbyfloat("mykey", "field", -5);
 // "5.6"
-await Hash.hincrbyfloat("mykey", "field", "2.0e2");
+await Hash.hincrbyfloat("mykey", "field", 2.0e2);
 // "5200"
 ```
 
@@ -352,7 +352,7 @@ redis> HMGET myhash field1 field2 nofield
 - interface:
 
 ```ts
-hmget(key: string, field: string, ...fields: string[]): Promise<Array<string | number | null>>;
+hmget(key: string, field: string, ...fields: string[]): Promise<Array<string | null>>;
 ```
 
 - example:
@@ -430,7 +430,7 @@ redis> HGET myhash field1
 - interface:
 
 ```ts
-hset(key: string, field: string, value: string | number): Promise<number>;
+hset(key: string, field: string, value: string | number): Promise<0 | 1>;
 ```
 
 - example:
@@ -467,7 +467,7 @@ redis> HGET myhash field
 - interface:
 
 ```ts
-hsetnx(key: string, field: string, value: string): Promise<number>;
+hsetnx(key: string, field: string, value: string): Promise<0 | 1>;
 ```
 
 - example:
@@ -546,7 +546,7 @@ redis> HVALS myhash
 - interface:
 
 ```ts
-hvals(key: string): Promise<Array<string | number>>;
+hvals(key: string): Promise<string[]>;
 ```
 
 - example:
