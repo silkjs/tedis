@@ -1,5 +1,5 @@
-import { RedisKey } from "../src/data-types/key";
-import { config, sleep } from "../tools";
+import { config, sleep } from "../../tools";
+import { RedisKey } from "./key";
 
 let Key: RedisKey;
 

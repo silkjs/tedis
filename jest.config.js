@@ -6,7 +6,7 @@ module.exports = {
   collectCoverage: true,
   globals: {
     "ts-jest": {
-      "tsConfigFile": "test/tsconfig.spec.json"
+      "tsConfigFile": "tsconfig.spec.json"
     }
   },
   moduleFileExtensions: [

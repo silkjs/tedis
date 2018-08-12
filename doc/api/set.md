@@ -43,7 +43,11 @@ redis> SMEMBERS myset
 - 接口：
 
 ```ts
-sadd(key: string, ...members: Array<string | number>): Promise<number>;
+sadd(
+  key: string,
+  member: string | number,
+  ...members: Array<string | number>
+): Promise<number>;
 ```
 
 - 示例：
@@ -126,7 +130,7 @@ redis> SDIFF key1 key2
 - 接口：
 
 ```ts
-sdiff(key: string, ...keys: string[]): Promise<Array<string | number>>;
+sdiff(key: string, anotherkey: string, ...keys: string[]): Promise<string[]>;
 ```
 
 - 示例：
@@ -174,7 +178,12 @@ redis> SMEMBERS key
 - 接口：
 
 ```ts
-sdiffstore(destination: string, key: string, ...keys: string[]): Promise<number>;
+sdiffstore(
+  destination: string,
+  key: string,
+  anotherkey: string,
+  ...keys: string[]
+): Promise<number>;
 ```
 
 - 示例：
@@ -217,7 +226,7 @@ redis> SINTER key1 key2
 - 接口：
 
 ```ts
-sinter(key: string, ...keys: string[]): Promise<Array<string | number>>;
+sinter(key: string, anotherkey: string, ...keys: string[]): Promise<string[]>;
 ```
 
 - 示例：
@@ -263,7 +272,12 @@ redis> SMEMBERS key
 - 接口：
 
 ```ts
-sinterstore(destination: string, key: string, ...keys: string[]): Promise<number>;
+sinterstore(
+  destination: string,
+  key: string,
+  anotherkey: string,
+  ...keys: string[]
+): Promise<number>;
 ```
 
 - 示例：
@@ -300,7 +314,7 @@ redis> SISMEMBER myset "two"
 - 接口：
 
 ```ts
-sismember(key: string, member: string): Promise<number>;
+sismember(key: string, member: string | number): Promise<number>;
 ```
 
 - 示例：
@@ -338,7 +352,7 @@ redis> SMEMBERS myset
 - 接口：
 
 ```ts
-smembers(key: string): Promise<Array<string|number>>;
+smembers(key: string): Promise<string[]>;
 ```
 
 - 示例：
@@ -386,7 +400,11 @@ redis> SMEMBERS myotherset
 - 接口：
 
 ```ts
-smove(source: string, destination: string, member: string): Promise<number>;
+smove(
+  source: string,
+  destination: string,
+  member: string | number
+): Promise<number>;
 ```
 
 - 示例：
@@ -438,7 +456,8 @@ redis> SMEMBERS myset
 - 接口：
 
 ```ts
-spop(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
+spop(key: string, count: number): Promise<string[]>;
+spop(key: string): Promise<string | null>;
 ```
 
 - 示例：
@@ -486,7 +505,8 @@ redis> SRANDMEMBER myset -5
 - 接口：
 
 ```ts
-srandmember(key: string, count?: number): Promise<string|number|null|Array<string|number>>;
+srandmember(key: string, count: number): Promise<string[]>;
+srandmember(key: string): Promise<string | null>;
 ```
 
 - 示例：
@@ -537,7 +557,11 @@ redis> SMEMBERS myset
 - 接口：
 
 ```ts
-srem(key: string, member: string, ...members: string[]): Promise<number>;
+srem(
+  key: string,
+  member: string | number,
+  ...members: Array<string | number>
+): Promise<number>;
 ```
 
 - 示例：
@@ -586,7 +610,7 @@ redis> SUNION key1 key2
 - 接口：
 
 ```ts
-sunion(key: string, keys: string[]): Promise<Array<string|number>>;
+sunion(key: string, anotherkey: string, ...keys: string[]): Promise<string[]>;
 ```
 
 - 示例：
@@ -636,7 +660,12 @@ redis> SMEMBERS key
 - 接口：
 
 ```ts
-sunionstore(destination: string, key: string, keys: string[]): Promise<number>;
+sunionstore(
+  destination: string,
+  key: string,
+  anotherkey: string,
+  ...keys: string[]
+): Promise<number>;
 ```
 
 - 示例：

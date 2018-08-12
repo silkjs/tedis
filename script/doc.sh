@@ -2,7 +2,7 @@
 
 set -e
 
-vuepress build doc
+npx vuepress build doc
 
 cd doc/.vuepress/dist
 
@@ -15,5 +15,3 @@ git add -A
 git commit -m 'deploy'
 
 git push -f https://github.com/myour-cc/tedis.git master:gh-pages
-
-cd -

@@ -1,4 +1,5 @@
 import { RedisBase } from "../common/base";
+import { Array2Object } from "../common/global";
 
 enum MethodHash {
   hdel = "HDEL",
@@ -60,13 +61,11 @@ export class RedisHash extends RedisBase implements InterfaceHash {
   public async hget(key: string, field: string) {
     return (await this.command(MethodHash.hget, key, field)) as string | null;
   }
-  public async hgetall(key: string) {
-    const res = (await this.command(MethodHash.hgetall, key)) as string[];
-    const obj: { [propName: string]: string } = {};
-    for (let i = 0, count = res.length; i < count; i++) {
-      obj[res[i]] = res[++i];
-    }
-    return obj;
+  public async hgetall(key: string): Promise<{ [propName: string]: string }> {
+    return Array2Object((await this.command(
+      MethodHash.hgetall,
+      key
+    )) as string[]);
   }
   public async hincrby(key: string, field: string, increment: number) {
     return (await this.command(
