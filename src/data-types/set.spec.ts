@@ -46,7 +46,7 @@ describe("Redis List Test: SDIFF", () => {
   it(`key exists`, async () => {
     expect(await Set.command("SADD", "key1", "a", "b", "c")).toBe(3);
     expect(await Set.command("SADD", "key2", "c", "d", "e")).toBe(3);
-    expect(await Set.sdiff("key1", "key2")).toEqual(["b", "a"]);
+    expect((await Set.sdiff("key1", "key2")).sort()).toEqual(["b", "a"].sort());
   });
 });
 
@@ -99,9 +99,7 @@ describe("Redis List Test: SMEMBERS", () => {
   });
   it(`key exists`, async () => {
     expect(await Set.command("SADD", "myset", "a", "b", "c", 2018)).toBe(4);
-    expect(["2018", "c", "b", "a"]).toEqual(
-      expect.arrayContaining(await Set.smembers("myset"))
-    );
+    expect((await Set.smembers("myset")).sort()).toEqual(["2018", "c", "b", "a"].sort());
   });
 });
 
