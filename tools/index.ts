@@ -1,4 +1,4 @@
-import { Options } from "../src/common/variable";
+import { Options } from "src/common/global";
 
 export function sleep(seconds: number): Promise<void> {
   return new Promise((resolve, reject) => {

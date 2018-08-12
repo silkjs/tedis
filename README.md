@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://tedis.myour.tech" target="_blank" rel="noopener noreferrer"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png" alt="tedis logo"></a>
+  <a href="https://tedis.myour.tech/en" target="_blank" rel="noopener noreferrer"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png" alt="tedis logo"></a>
 </p>
 
 <p align="center">
@@ -21,9 +21,9 @@
 
 ## Introduction
 
-### what is tedis
+### What is tedis
 
-`Tedis` write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
+Tedis write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
 
 ### Installation
 
@@ -52,7 +52,7 @@ const client = new Redis({
 });
 ```
 
-### example
+### Example
 
 ```ts
 /**

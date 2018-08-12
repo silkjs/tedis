@@ -1,5 +1,5 @@
-import { RedisHash } from "../src/data-types/hash";
-import { config, sleep } from "../tools";
+import { config, sleep } from "../../tools";
+import { RedisHash } from "./hash";
 
 let Hash: RedisHash;
 

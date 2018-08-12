@@ -1,5 +1,6 @@
-import { RedisList } from "../src/data-types/list";
-import { config, sleep } from "../tools";
+import { config, sleep } from "../../tools";
+import { RedisList } from "./list";
+
 let List: RedisList;
 
 beforeAll(async () => {

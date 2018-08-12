@@ -1,5 +1,5 @@
 import { InterfaceBase, RedisBase } from "./common/base";
-import { Options } from "./common/variable";
+import { Options } from "./common/global";
 import { InterfaceHash, RedisHash } from "./data-types/hash";
 import { InterfaceKey, RedisKey } from "./data-types/key";
 import { InterfaceList, RedisList } from "./data-types/list";

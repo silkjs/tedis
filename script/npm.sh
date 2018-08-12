@@ -9,5 +9,3 @@ npm run pkg:build
 npm run pkg:test
 
 npm publish --access public
-
-cd -

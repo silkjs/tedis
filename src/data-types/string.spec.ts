@@ -1,5 +1,5 @@
-import { RedisString } from "../src/data-types/string";
-import { config, sleep } from "../tools";
+import { config, sleep } from "../../tools";
+import { RedisString } from "./string";
 
 let String: RedisString;
 

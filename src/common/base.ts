@@ -1,13 +1,13 @@
 import net from "net";
+import { Options, Parameters } from "./global";
 import { Protocol } from "./protocol";
-import { Options, Parameters } from "./variable";
 
 type callback = (err: any, res: any) => void;
 
 export interface InterfaceBase {
   command(...parameters: Parameters): Promise<any>;
   close(): void;
-  on(type: string, listener: () => void): void;
+  // on(type: string, listener: () => void): void;
 }
 export class RedisBase implements InterfaceBase {
   private _socket: net.Socket;
@@ -15,31 +15,29 @@ export class RedisBase implements InterfaceBase {
   private _callbacks: callback[];
   constructor(options: Options) {
     this._socket = net.createConnection(options);
-    this._protocol = new Protocol({
-      debug: options.debug,
-    });
+    this._protocol = new Protocol();
     this._callbacks = [];
-    this._socket.on("timeout", () => {
-      // console.log("socket timeout");
-      this._socket.end();
-    });
-    this._socket.on("connect", () => {
-      // console.log("socket connect");
-    });
     this._socket.on("data", (buf) => {
       // console.log("socket data");
       this.data(buf);
     });
-    this._socket.on("end", () => {
-      // console.log("socket end");
-    });
-    this._socket.on("close", () => {
-      // console.log("socket close");
-    });
+    // this._socket.on("timeout", () => {
+    //   // console.log("socket timeout");
+    //   this._socket.end();
+    // });
+    // this._socket.on("connect", () => {
+    //   // console.log("socket connect");
+    // });
+    // this._socket.on("end", () => {
+    //   // console.log("socket end");
+    // });
+    // this._socket.on("close", () => {
+    //   // console.log("socket close");
+    // });
   }
-  public on(type: string, listener: () => void) {
-    //
-  }
+  // public on(type: string, listener: () => void) {
+  //   //
+  // }
   public close() {
     this._socket.end();
   }

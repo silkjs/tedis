@@ -83,7 +83,32 @@ redis> ZRANGE myzset 0 -1 WITHSCORES
 - interface:
 
 ```ts
-zadd(key: string, objMS: { [propName: string]: number }): Promise<number>;
+zadd(
+  key: string,
+  objMS: { [propName: string]: number },
+  options?: {
+    nxxx?: "NX" | "XX";
+    ch?: "CH";
+  }
+): Promise<number>;
+zadd(
+  key: string,
+  objMS: { [propName: string]: number },
+  options?: {
+    nxxx?: "NX" | "XX";
+    ch?: "CH";
+    incr?: "INCR";
+  }
+): Promise<string | null>;
+zadd(
+  key: string,
+  objMS: { [propName: string]: number },
+  options?: {
+    nxxx?: "NX" | "XX";
+    ch?: "CH";
+    incr?: "INCR";
+  }
+): Promise<any>;
 ```
 
 - example:
@@ -350,7 +375,19 @@ redis> ZRANGE myzset -2 -1
 - interface:
 
 ```ts
-zrange(key: string, start: number, stop: number, withscores?: boolean): Promise<string[]>;
+zrange(key: string, start: number, stop: number): Promise<string[]>;
+zrange(
+  key: string,
+  start: number,
+  stop: number,
+  withscores: "WITHSCORES"
+): Promise<{ [propName: string]: string }>;
+zrange(
+  key: string,
+  start: number,
+  stop: number,
+  withscores?: "WITHSCORES"
+): Promise<any>;
 ```
 
 - example:
@@ -400,7 +437,15 @@ redis> ZRANGEBYLEX myzset [aaa (g
 - interface:
 
 ```ts
-zrangebylex(key: string, min: string, max: string, limit?: boolean, offset?: number, count?: number): Promise<string[]>;
+zrangebylex(
+  key: string,
+  min: string,
+  max: string,
+  options?: {
+    offset: number;
+    count: number;
+  }
+): Promise<string[]>;
 ```
 
 - example:
@@ -456,11 +501,32 @@ zrangebyscore(
   key: string,
   min: string,
   max: string,
-  withscores?: boolean,
-  limit?: boolean,
-  offset?: number,
-  count?: number
+  withscores: false,
+  options?: {
+    offset: number;
+    count: number;
+  }
 ): Promise<string[]>;
+zrangebyscore(
+  key: string,
+  min: string,
+  max: string,
+  withscores: true,
+  options?: {
+    offset: number;
+    count: number;
+  }
+): Promise<{ [propName: string]: string }>;
+zrangebyscore(
+  key: string,
+  min: string,
+  max: string,
+  withscores: boolean,
+  options?: {
+    offset: number;
+    count: number;
+  }
+): Promise<any>;
 ```
 
 - example:
@@ -736,12 +802,19 @@ redis> ZREVRANGE myzset -2 -1
 - interface:
 
 ```ts
+zrevrange(key: string, start: number, stop: number): Promise<string[]>;
 zrevrange(
   key: string,
   start: number,
   stop: number,
-  withscores?: boolean
-): Promise<string[]|{[propName: string]: number}>;
+  withscores: "WITHSCORES"
+): Promise<{ [propName: string]: string }>;
+zrevrange(
+  key: string,
+  start: number,
+  stop: number,
+  withscores?: "WITHSCORES"
+): Promise<any>;
 ```
 
 - example:
@@ -793,7 +866,41 @@ redis> ZREVRANGEBYSCORE myzset (2 (1
 - interface:
 
 ```ts
-zrevrangebyscore(key: string, min: string, max: string): Promise<string[]|{[propName: string]: number}>;
+zrevrangebyscore(
+  key: string,
+  max: string,
+  min: string,
+  options?: {
+    limit?: {
+      offset: number;
+      count: number;
+    };
+  }
+): Promise<string[]>;
+zrevrangebyscore(
+  key: string,
+  max: string,
+  min: string,
+  options?: {
+    withscores: "WITHSCORES";
+    limit?: {
+      offset: number;
+      count: number;
+    };
+  }
+): Promise<{ [propName: string]: string }>;
+zrevrangebyscore(
+  key: string,
+  max: string,
+  min: string,
+  options?: {
+    limit?: {
+      offset: number;
+      count: number;
+    };
+    withscores?: "WITHSCORES";
+  }
+): Promise<any>;
 ```
 
 - example:
@@ -875,7 +982,7 @@ redis> ZSCORE myzset "one"
 - interface:
 
 ```ts
-zscore(key: string, member: string): Promise<string>;
+zscore(key: string, member: string): Promise<string | null>;
 ```
 
 - example:
