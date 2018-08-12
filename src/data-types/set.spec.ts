@@ -99,7 +99,9 @@ describe("Redis List Test: SMEMBERS", () => {
   });
   it(`key exists`, async () => {
     expect(await Set.command("SADD", "myset", "a", "b", "c", 2018)).toBe(4);
-    expect(await Set.smembers("myset")).toEqual(["2018", "c", "b", "a"]);
+    expect(["2018", "c", "b", "a"]).toEqual(
+      expect.arrayContaining(await Set.smembers("myset"))
+    );
   });
 });
 
