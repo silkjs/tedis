@@ -16,4 +16,5 @@ tools
 docker-compose.yml
 jest.config.js
 tsconfig.json
+tsconfig.spec.json
 tslint.json

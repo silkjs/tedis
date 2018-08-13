@@ -1,0 +1,21 @@
+{
+  "name": "demo-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "start": "node build/tedis.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tedis": "0.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^10.5.8",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.1"
+  }
+}

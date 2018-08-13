@@ -1,7 +1,7 @@
 export interface Options {
   host: string;
   port: number;
-  debug: boolean;
+  debug?: boolean;
 }
 
 export interface Poptions {
