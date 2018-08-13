@@ -56,6 +56,14 @@ const client = new Redis({
 
 ```ts
 /**
+ * core
+ */
+await client.command("SET", "key1", "Hello");
+// "OK"
+await client.command("SET", "key2", "World");
+// "OK"
+
+/**
  * key
  */
 await client.keys("*");

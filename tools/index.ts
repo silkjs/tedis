@@ -11,5 +11,4 @@ export function sleep(seconds: number): Promise<void> {
 export const config: Options = {
   port: 6379,
   host: "127.0.0.1",
-  debug: false,
 };
