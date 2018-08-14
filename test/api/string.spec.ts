@@ -1,11 +1,10 @@
+import { Tedis } from "../../src/main";
 import { config, sleep } from "../../tools/index";
-import { RedisString } from "./string";
 
-let String: RedisString;
+const String: Tedis = new Tedis(config);
 
 beforeAll(async () => {
-  String = new RedisString(config);
-  await sleep(2);
+  // await sleep(2);
 });
 
 beforeEach(async () => {
@@ -13,7 +12,8 @@ beforeEach(async () => {
   await String.command("FLUSHDB");
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await String.command("FLUSHDB");
   String.close();
 });
 

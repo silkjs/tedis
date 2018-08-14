@@ -1,5 +1,5 @@
-import { RedisBase } from "../core/base";
-import { Array2Object } from "../util/global";
+import { Base } from "../core/base";
+import { Array2Object } from "../util/tools";
 
 enum MethodHash {
   hdel = "HDEL",
@@ -46,79 +46,72 @@ export interface InterfaceHash {
   hvals(key: string): Promise<string[]>;
 }
 
-export class RedisHash extends RedisBase implements InterfaceHash {
-  public async hdel(key: string, field: string, ...fields: string[]) {
-    return (await this.command(
-      MethodHash.hdel,
-      key,
-      field,
-      ...fields
-    )) as number;
+export class RedisHash extends Base implements InterfaceHash {
+  public hdel(
+    key: string,
+    field: string,
+    ...fields: string[]
+  ): Promise<number> {
+    return this.command(MethodHash.hdel, key, field, ...fields);
   }
-  public async hexists(key: string, field: string) {
-    return (await this.command(MethodHash.hexists, key, field)) as number;
+  public hexists(key: string, field: string): Promise<number> {
+    return this.command(MethodHash.hexists, key, field);
   }
-  public async hget(key: string, field: string) {
-    return (await this.command(MethodHash.hget, key, field)) as string | null;
+  public hget(key: string, field: string): Promise<string | null> {
+    return this.command(MethodHash.hget, key, field);
   }
   public async hgetall(key: string): Promise<{ [propName: string]: string }> {
-    return Array2Object((await this.command(
-      MethodHash.hgetall,
-      key
-    )) as string[]);
+    return Array2Object(await this.command(MethodHash.hgetall, key));
   }
-  public async hincrby(key: string, field: string, increment: number) {
-    return (await this.command(
-      MethodHash.hincrby,
-      key,
-      field,
-      increment
-    )) as number;
+  public hincrby(
+    key: string,
+    field: string,
+    increment: number
+  ): Promise<number> {
+    return this.command(MethodHash.hincrby, key, field, increment);
   }
-  public async hincrbyfloat(key: string, field: string, increment: number) {
-    return (await this.command(
-      MethodHash.hincrbyfloat,
-      key,
-      field,
-      increment
-    )) as string;
+  public hincrbyfloat(
+    key: string,
+    field: string,
+    increment: number
+  ): Promise<string> {
+    return this.command(MethodHash.hincrbyfloat, key, field, increment);
   }
-  public async hkeys(key: string) {
-    return (await this.command(MethodHash.hkeys, key)) as string[];
+  public hkeys(key: string): Promise<string[]> {
+    return this.command(MethodHash.hkeys, key);
   }
-  public async hlen(key: string) {
-    return (await this.command(MethodHash.hlen, key)) as number;
+  public hlen(key: string): Promise<number> {
+    return this.command(MethodHash.hlen, key);
   }
-  public async hmget(key: string, field: string, ...fields: string[]) {
-    return (await this.command(
-      MethodHash.hmget,
-      key,
-      field,
-      ...fields
-    )) as Array<string | null>;
+  public hmget(
+    key: string,
+    field: string,
+    ...fields: string[]
+  ): Promise<Array<string | null>> {
+    return this.command(MethodHash.hmget, key, field, ...fields);
   }
-  public async hmset(
+  public hmset(
     key: string,
     hash: {
       [propName: string]: string | number;
     }
-  ) {
+  ): Promise<any> {
     const arrayFV = new Array();
     (Reflect.ownKeys(hash) as string[]).forEach((field) => {
       arrayFV.push(field, hash[field]);
     });
-    return (await this.command(MethodHash.hmset, key, ...arrayFV)) as 0 | 1;
+    return this.command(MethodHash.hmset, key, ...arrayFV);
   }
-  public async hset(key: string, field: string, value: string) {
-    return (await this.command(MethodHash.hset, key, field, value)) as 0 | 1;
+  public hset(key: string, field: string, value: string): Promise<0 | 1> {
+    return this.command(MethodHash.hset, key, field, value);
   }
-  public hsetnx(key: string, field: string, value: string) {
+  public hsetnx(key: string, field: string, value: string): Promise<0 | 1> {
     return this.command(MethodHash.hsetnx, key, field, value);
   }
-  public hstrlen(key: string, field: string) {
+  public hstrlen(key: string, field: string): Promise<number> {
     return this.command(MethodHash.hstrlen, key, field);
   }
-  public hvals(key: string) {
+  public hvals(key: string): Promise<string[]> {
     return this.command(MethodHash.hvals, key);
   }
 }

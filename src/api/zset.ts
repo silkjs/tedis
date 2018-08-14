@@ -1,5 +1,5 @@
-import { RedisBase } from "../core/base";
-import { Array2Object } from "../util/global";
+import { Base } from "../core/base";
+import { Array2Object } from "../util/tools";
 
 enum MethodZset {
   // bzpopmax
@@ -190,7 +190,7 @@ export interface InterfaceZset {
   ): Promise<number>;
 }
 
-export class RedisZset extends RedisBase implements InterfaceZset {
+export class RedisZset extends Base implements InterfaceZset {
   public zadd(
     key: string,
     objMS: { [propName: string]: number },

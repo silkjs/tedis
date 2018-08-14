@@ -1,5 +1,3 @@
-import { Options } from "src/util/global";
-
 export function sleep(seconds: number): Promise<void> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -8,7 +6,7 @@ export function sleep(seconds: number): Promise<void> {
   });
 }
 
-export const config: Options = {
+export const config = {
   port: 6379,
   host: "127.0.0.1",
 };

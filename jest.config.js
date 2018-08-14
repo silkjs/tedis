@@ -2,6 +2,7 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
+  bail: true,
   coverageDirectory: "coverage",
   collectCoverage: true,
   globals: {

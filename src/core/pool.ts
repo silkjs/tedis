@@ -1,96 +1,121 @@
-import { createConnection } from "net";
-import { Connection } from "./connection";
+import { v4 as uuidv4 } from "uuid";
+import { Tedis } from "./tedis";
 
 export interface InterfacePool {
-  command(...parameters: Array<string | number>): Promise<any>;
   release(): void;
+  getTedis(): void;
+  putTedis(conn: Tedis): void;
 }
 
-export class Pool implements InterfacePool {
-  private connection_pool: Connection[];
+export class TedisPool implements InterfacePool {
+  private connection_pool: Tedis[];
+  private cushion_list: {
+    index: string[];
+    callback: {
+      [propName: string]: (name: string, res: Tedis) => void;
+    };
+  };
   private min_conn: number;
   private max_conn: number;
   private act_conn: number;
   private host: string;
   private port: number;
-  private passworld: string | null;
-  constructor(options: {
-    min_conn?: number;
-    max_conn?: number;
-    host?: string;
-    port?: number;
-    passworld?: string;
-  }) {
+  private password?: string;
+  constructor(
+    options: {
+      min_conn?: number;
+      max_conn?: number;
+      host?: string;
+      port?: number;
+      password?: string;
+    } = {}
+  ) {
     this.connection_pool = [];
+    this.cushion_list = {
+      index: [],
+      callback: {},
+    };
     this.min_conn = options.min_conn || 1;
     this.max_conn = options.max_conn || 10;
     this.act_conn = 0;
     this.host = options.host || "127.0.0.1";
     this.port = options.port || 6379;
-    this.passworld = options.passworld || null;
+    this.password = options.password;
     this.init();
-  }
-  public async command(...parameters: Array<string | number>) {
-    const conn = await this.getConnection();
-    const timer = setTimeout(() => {
-      this.closeConnection(conn);
-      return Promise.reject("timeout");
-    }, 1000 * 20);
-
-    const res = await conn.exec(...parameters);
-    clearTimeout(timer);
-    this.putConnection(conn);
-    return res;
   }
   public release() {
     this.connection_pool.forEach((conn) => {
       this.closeConnection(conn);
     });
   }
-  private async getConnection() {
+  public async getTedis() {
     const conn = this.connection_pool.shift();
     if ("undefined" !== typeof conn) {
       return conn;
     } else if (this.act_conn < this.max_conn) {
       return await this.newConnection();
     } else {
-      throw new Error("meiy");
+      return new Promise<Tedis>((resolve, reject) => {
+        const key = uuidv4();
+        const timer = setTimeout(() => {
+          const index = this.cushion_list.index.findIndex((value) => {
+            return value === key;
+          });
+          this.cushion_list.index.splice(index, 1);
+          Reflect.deleteProperty(this.cushion_list.callback, key);
+          reject("timeout, the connection pool is full");
+        }, 1000 * 20);
+
+        if (Reflect.has(this.cushion_list.callback, key)) {
+          clearTimeout(timer);
+          reject("timeout, the connection pool is full");
+        }
+
+        this.cushion_list.index.push(key);
+        this.cushion_list.callback[key] = (name: string, res: Tedis) => {
+          clearTimeout(timer);
+          console.log("通过缓冲");
+          Reflect.deleteProperty(this.cushion_list.callback, name);
+          resolve(res);
+        };
+      });
     }
   }
-  private putConnection(conn: Connection) {
-    this.connection_pool.push(conn);
+  public putTedis(conn: Tedis) {
+    if (this.cushion_list.index.length > 0) {
+      const name = this.cushion_list.index.shift() as string;
+      this.cushion_list.callback[name](name, conn);
+    } else {
+      this.connection_pool.push(conn);
+    }
   }
   private newConnection() {
-    return new Promise<Connection>((resolve, reject) => {
+    return new Promise<Tedis>((resolve, reject) => {
       if (this.connection_pool.length >= this.max_conn) {
         reject("The connection pool is full");
       }
-      const conn = new Connection(
-        createConnection(
-          {
-            host: this.host,
-            port: this.port,
-          },
-          () => {
-            conn.error = (err) => {
-              console.log(err);
-            };
-            this.act_conn++;
-            resolve(conn);
-          }
-        ),
-        (err): void => {
-          reject(err);
-        },
-        this.passworld
-      );
+      const conn = new Tedis({
+        host: this.host,
+        port: this.port,
+        password: this.password,
+      });
+      conn.ready = () => {
+        conn.error = (err) => {
+          console.log(err);
+        };
+        this.act_conn++;
+        resolve(conn);
+      };
+      conn.error = (err) => {
+        reject(err);
+      };
     });
   }
-  private closeConnection(conn: Connection) {
-    conn.end();
+  private closeConnection(conn: Tedis) {
+    conn.close();
     this.act_conn--;
   }
   private async init() {
-    this.putConnection(await this.newConnection());
+    this.putTedis(await this.newConnection());
   }
 }

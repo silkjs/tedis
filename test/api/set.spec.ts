@@ -1,11 +1,10 @@
+import { Tedis } from "../../src/main";
 import { config, sleep } from "../../tools/index";
-import { RedisSet } from "./set";
 
-let Set: RedisSet;
+const Set: Tedis = new Tedis(config);
 
 beforeAll(async () => {
-  Set = new RedisSet(config);
-  await sleep(2);
+  // await sleep(2);
 });
 
 beforeEach(async () => {
@@ -13,7 +12,8 @@ beforeEach(async () => {
   await Set.command("FLUSHDB");
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await Set.command("FLUSHDB");
   Set.close();
 });
 

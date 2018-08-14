@@ -1,67 +1,81 @@
-import net from "net";
-import { Options, Parameters } from "../util/global";
+import { createConnection, Socket } from "net";
+// core
 import { Protocol } from "./protocol";
 
-type callback = (err: any, res: any) => void;
+type callback = (err: boolean, res: any) => void;
 
 export interface InterfaceBase {
-  command(...parameters: Parameters): Promise<any>;
+  ready: () => void;
+  error: (error: Error) => void;
+  timeout: () => void;
+  command(...parameters: Array<string | number>): Promise<any>;
   close(): void;
-  // on(type: string, listener: () => void): void;
 }
-export class RedisBase implements InterfaceBase {
-  private _socket: net.Socket;
-  private _protocol: Protocol;
-  private _callbacks: callback[];
-  constructor(options: Options) {
-    this._socket = net.createConnection(options);
-    this._protocol = new Protocol();
-    this._callbacks = [];
-    this._socket.on("data", (buf) => {
-      // console.log("socket data");
-      this.data(buf);
+
+export class Base implements InterfaceBase {
+  private socket: Socket;
+  private protocol: Protocol;
+  private callbacks: callback[];
+  constructor(
+    options: { host?: string; port?: number; password?: string } = {}
+  ) {
+    this.socket = createConnection({
+      host: options.host || "127.0.0.1",
+      port: options.port || 6379,
     });
-    // this._socket.on("timeout", () => {
-    //   // console.log("socket timeout");
-    //   this._socket.end();
-    // });
-    // this._socket.on("connect", () => {
-    //   // console.log("socket connect");
-    // });
-    // this._socket.on("end", () => {
-    //   // console.log("socket end");
-    // });
-    // this._socket.on("close", () => {
-    //   // console.log("socket close");
-    // });
+    this.protocol = new Protocol();
+    this.callbacks = [];
+    this.init();
+
+    if ("string" === typeof options.password) {
+      this.auth(options.password);
+    }
   }
-  // public on(type: string, listener: () => void) {
-  //   //
-  // }
-  public close() {
-    this._socket.end();
+  public timeout: () => void = () => {
+    console.log("timeout");
   }
-  public command(...parameters: Parameters): Promise<any> {
+  public error: (err: Error) => void = (err) => {
+    console.log(err);
+  }
+  public ready: () => void = () => {
+    // console.log("ready");
+  }
+  public command(...parameters: Array<string | number>): Promise<any> {
     return new Promise((resolve, reject) => {
-      this._callbacks.push((err: any, res: any) => {
+      this.callbacks.push((err, res) => {
         err ? reject(res) : resolve(res);
       });
-      const str = this._protocol.encode(...parameters);
-      this._socket.write(str);
+      this.socket.write(this.protocol.encode(...parameters));
     });
   }
-  private data(data: Buffer) {
-    this._protocol.write(data);
-
-    while (true) {
-      this._protocol.parse();
-      if (!this._protocol.data.state) {
-        break;
+  public close() {
+    this.socket.end();
+  }
+  private auth(password: string) {
+    return this.command("AUTH", password);
+  }
+  private init() {
+    this.socket.once("connect", () => {
+      this.ready();
+    });
+    this.socket.on("error", (err) => {
+      this.error(err);
+    });
+    this.socket.on("timeout", () => {
+      this.timeout();
+    });
+    this.socket.on("data", (data) => {
+      this.protocol.write(data);
+      while (true) {
+        this.protocol.parse();
+        if (!this.protocol.data.state) {
+          break;
+        }
+        (this.callbacks.shift() as callback)(
+          this.protocol.data.res.error,
+          this.protocol.data.res.data
+        );
       }
-      (this._callbacks.shift() as callback)(
-        this._protocol.data.res.error,
-        this._protocol.data.res.data
-      );
-    }
+    });
   }
 }

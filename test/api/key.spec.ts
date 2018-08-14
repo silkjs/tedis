@@ -1,10 +1,9 @@
+import { Tedis } from "../../src/main";
 import { config, sleep } from "../../tools/index";
-import { RedisKey } from "./key";
 
-let Key: RedisKey;
+const Key: Tedis = new Tedis(config);
 
 beforeAll(async () => {
-  Key = new RedisKey(config);
   await sleep(2);
 });
 
@@ -13,7 +12,8 @@ beforeEach(async () => {
   await Key.command("FLUSHDB");
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await Key.command("FLUSHDB");
   Key.close();
 });
 

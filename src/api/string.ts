@@ -1,4 +1,4 @@
-import { RedisBase } from "../core/base";
+import { Base } from "../core/base";
 
 enum MethodString {
   set = "SET",
@@ -50,7 +50,7 @@ export interface InterfaceString {
   strlen(key: string): Promise<number>;
 }
 
-export class RedisString extends RedisBase implements InterfaceString {
+export class RedisString extends Base implements InterfaceString {
   public async append(key: string, value: string) {
     return (await this.command(MethodString.append, key, value)) as number;
   }

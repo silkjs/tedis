@@ -1,5 +1,4 @@
-import { RedisBase } from "../core/base";
-
+import { Base } from "../core/base";
 enum MethodSet {
   sadd = "SADD",
   scard = "SCARD",
@@ -67,7 +66,7 @@ export interface InterfaceSet {
   ): Promise<number>;
 }
 
-export class RedisSet extends RedisBase implements InterfaceSet {
+export class RedisSet extends Base implements InterfaceSet {
   public sadd(
     key: string,
     member: string | number,
