@@ -1,4 +1,4 @@
-import { config, sleep } from "../../tools";
+import { config, sleep } from "../../tools/index";
 import { RedisString } from "./string";
 
 let String: RedisString;

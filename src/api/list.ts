@@ -1,4 +1,4 @@
-import { RedisBase } from "../common/base";
+import { RedisBase } from "../core/base";
 
 enum MethodList {
   blpop = "BLPOP",

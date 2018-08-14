@@ -1,5 +1,5 @@
 import net from "net";
-import { Options, Parameters } from "./global";
+import { Options, Parameters } from "../util/global";
 import { Protocol } from "./protocol";
 
 type callback = (err: any, res: any) => void;

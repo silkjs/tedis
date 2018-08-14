@@ -1,4 +1,4 @@
-import { config, sleep } from "../../tools";
+import { config, sleep } from "../../tools/index";
 import { RedisKey } from "./key";
 
 let Key: RedisKey;

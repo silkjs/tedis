@@ -1,5 +1,5 @@
-import { RedisBase } from "../common/base";
-import { Array2Object } from "../common/global";
+import { RedisBase } from "../core/base";
+import { Array2Object } from "../util/global";
 
 enum MethodZset {
   // bzpopmax

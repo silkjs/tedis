@@ -1,4 +1,4 @@
-import { config, sleep } from "../../tools";
+import { config, sleep } from "../../tools/index";
 import { RedisSet } from "./set";
 
 let Set: RedisSet;

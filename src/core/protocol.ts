@@ -1,4 +1,4 @@
-import { Parameters, ProtocolParse } from "./global";
+import { Parameters, ProtocolParse } from "../util/global";
 
 export class Protocol {
   public data: ProtocolParse;

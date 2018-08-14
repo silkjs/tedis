@@ -1,11 +1,11 @@
-import { InterfaceBase, RedisBase } from "./common/base";
-import { Options } from "./common/global";
-import { InterfaceHash, RedisHash } from "./data-types/hash";
-import { InterfaceKey, RedisKey } from "./data-types/key";
-import { InterfaceList, RedisList } from "./data-types/list";
-import { InterfaceSet, RedisSet } from "./data-types/set";
-import { InterfaceString, RedisString } from "./data-types/string";
-import { InterfaceZset, RedisZset } from "./data-types/zset";
+import { InterfaceHash, RedisHash } from "./api/hash";
+import { InterfaceKey, RedisKey } from "./api/key";
+import { InterfaceList, RedisList } from "./api/list";
+import { InterfaceSet, RedisSet } from "./api/set";
+import { InterfaceString, RedisString } from "./api/string";
+import { InterfaceZset, RedisZset } from "./api/zset";
+import { InterfaceBase, RedisBase } from "./core/base";
+import { Options } from "./util/global";
 
 interface InterfaceRedis
   extends InterfaceBase,
