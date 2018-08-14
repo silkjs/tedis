@@ -1,11 +1,12 @@
-import { Tedis } from "tedis";
+import { TedisPool } from "tedis";
 
-const client = new Tedis({
+const pool = new TedisPool({
   port: 6379,
   host: "127.0.0.1",
 });
 
 setTimeout(async () => {
+  const client = await pool.getTedis();
   let res;
   /**
    * base
@@ -45,7 +46,7 @@ setTimeout(async () => {
    */
   res = await client.hmset("myhash", {
     name: "tedis",
-    age: 18
+    age: 18,
   });
   console.log(res);
   // "OK"
@@ -85,7 +86,7 @@ setTimeout(async () => {
   res = await client.zadd("myzset", {
     one: 1,
     two: 2,
-    three: 3
+    three: 3,
   });
   console.log(res);
   // 3
@@ -94,5 +95,6 @@ setTimeout(async () => {
   // 3
 
   // close
-  client.close();
+  pool.putTedis(client);
+  pool.release();
 }, 3000);

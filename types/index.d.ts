@@ -1,5 +1,12 @@
 export class Tedis {
+
+  ////////////////////////////////////////////////////////////////////////////////////////////  base
+  public ready: () => void;
+  public error: (error: Error) => void;
+  public timeout: () => void;
   constructor(options?: { host?: string; port?: number; password?: string });
+  public command(...parameters: Array<string | number>): Promise<any>;
+  public close(): void;
 
   ////////////////////////////////////////////////////////////////////////////////////////////  key
   public del(key: string, ...keys: string[]): Promise<number>;

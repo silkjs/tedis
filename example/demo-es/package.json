@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "tedis": "0.0.6"
+    "tedis": "^0.1.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
