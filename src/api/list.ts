@@ -1,5 +1,4 @@
-import { RedisBase } from "../common/base";
-
+import { Base } from "../core/base";
 enum MethodList {
   blpop = "BLPOP",
   brpop = "BRPOP",
@@ -57,7 +56,7 @@ export interface InterfaceList {
   rpushx(key: string, value: string | number): Promise<number>;
 }
 
-export class RedisList extends RedisBase implements InterfaceList {
+export class RedisList extends Base implements InterfaceList {
   public blpop(
     timeout: number,
     ...keys: string[]

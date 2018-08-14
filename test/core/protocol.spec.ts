@@ -1,4 +1,4 @@
-import { Protocol } from "./protocol";
+import { Protocol } from "../../src/core/protocol";
 
 let protocol: Protocol;
 

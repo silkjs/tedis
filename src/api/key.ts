@@ -1,5 +1,4 @@
-import { RedisBase } from "../common/base";
-
+import { Base } from "../core/base";
 enum MethodKey {
   del = "DEL",
   dump = "DUMP",
@@ -46,7 +45,7 @@ export interface InterfaceKey {
   // wait
 }
 
-export class RedisKey extends RedisBase implements InterfaceKey {
+export class RedisKey extends Base implements InterfaceKey {
   public async del(key: string, ...keys: string[]) {
     return (await this.command(MethodKey.del, key, ...keys)) as number;
   }

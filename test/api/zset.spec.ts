@@ -1,11 +1,10 @@
-import { config, sleep } from "../../tools";
-import { RedisZset } from "./zset";
+import { Tedis } from "../../src/main";
+import { config, sleep } from "../../tools/index";
 
-let Zset: RedisZset;
+const Zset: Tedis = new Tedis(config);
 
 beforeAll(async () => {
-  Zset = new RedisZset(config);
-  await sleep(2);
+  // await sleep(2);
 });
 
 beforeEach(async () => {
@@ -13,7 +12,8 @@ beforeEach(async () => {
   await Zset.command("FLUSHDB");
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await Zset.command("FLUSHDB");
   Zset.close();
 });
 

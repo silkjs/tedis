@@ -36,20 +36,51 @@ yarn add tedis
 > commonjs
 
 ```js
-const { Redis } = require("tedis");
+const { Tedis, TedisPool } = require("tedis");
 ```
 
 > typescript
 
 ```ts
-import { Redis } from "tedis";
+import { Tedis, TedisPool } from "tedis";
 ```
 
 ```ts
-const client = new Redis({
+// no auth
+const tedis = new Tedis({
   port: 6379,
   host: "127.0.0.1"
 });
+
+// auth
+const tedis = new Tedis({
+  port: 6379,
+  host: "127.0.0.1",
+  password: "your_password"
+});
+```
+
+### TedisPool
+
+```ts
+// no auth
+const pool = new TedisPool({
+  port: 6379,
+  host: "127.0.0.1"
+});
+
+// auth
+const pool = new TedisPool({
+  port: 6379,
+  host: "127.0.0.1",
+  password: "your_password"
+});
+```
+
+```ts
+const tedis = await pool.getTedis();
+// ... do some commands
+pool.putTedis(tedis)
 ```
 
 ### Example
@@ -58,36 +89,36 @@ const client = new Redis({
 /**
  * core
  */
-await client.command("SET", "key1", "Hello");
+await tedis.command("SET", "key1", "Hello");
 // "OK"
-await client.command("SET", "key2", "World");
+await tedis.command("SET", "key2", "World");
 // "OK"
 
 /**
  * key
  */
-await client.keys("*");
+await tedis.keys("*");
 // []
-await client.exists("a");
+await tedis.exists("a");
 // 0
 
 /**
  * string
  */
-await client.set("mystring", "hello");
+await tedis.set("mystring", "hello");
 // "OK"
-await client.get("mystring");
+await tedis.get("mystring");
 // "hello"
 
 /**
  * hash
  */
-await client.hmset("myhash", {
+await tedis.hmset("myhash", {
   name: "tedis",
   age: 18
 });
 // "OK"
-await client.hgetall("myhash");
+await tedis.hgetall("myhash");
 // {
 //   "name": "tedis",
 //   "age": "18"
@@ -96,9 +127,9 @@ await client.hgetall("myhash");
 /**
  * list
  */
-await client.lpush("mylist", "hello", "a", "b", "c", "d", 1, 2, 3, 4);
+await tedis.lpush("mylist", "hello", "a", "b", "c", "d", 1, 2, 3, 4);
 // 9
-await client.llen("mylist");
+await tedis.llen("mylist");
 // 9
 ```
 

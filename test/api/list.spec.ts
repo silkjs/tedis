@@ -1,11 +1,10 @@
-import { config, sleep } from "../../tools";
-import { RedisList } from "./list";
+import { Tedis } from "../../src/main";
+import { config, sleep } from "../../tools/index";
 
-let List: RedisList;
+const List: Tedis = new Tedis(config);
 
 beforeAll(async () => {
-  List = new RedisList(config);
-  await sleep(2);
+  // await sleep(2);
 });
 
 beforeEach(async () => {
@@ -13,7 +12,8 @@ beforeEach(async () => {
   await List.command("FLUSHDB");
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await List.command("FLUSHDB");
   List.close();
 });
 

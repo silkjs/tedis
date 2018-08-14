@@ -1,7 +1,11 @@
-import { Parameters, ProtocolParse } from "./global";
-
 export class Protocol {
-  public data: ProtocolParse;
+  public data: {
+    state: boolean;
+    res: {
+      error: boolean;
+      data: any;
+    };
+  };
   private _result: string[];
   private _end: string;
   constructor() {
@@ -108,7 +112,7 @@ export class Protocol {
       }
     }
   }
-  public encode(...parameters: Parameters): string {
+  public encode(...parameters: Array<string | number>): string {
     const length = parameters.length;
     let parameter: any;
     let request = `*${length}\r\n`;
