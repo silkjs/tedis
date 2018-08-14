@@ -1,6 +1,6 @@
-import { Redis } from "tedis";
+import { Tedis } from "tedis";
 
-const client = new Redis({
+const client = new Tedis({
   port: 6379,
   host: "127.0.0.1",
 });
