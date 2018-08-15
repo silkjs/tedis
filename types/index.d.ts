@@ -1,7 +1,7 @@
 export class Tedis {
-
   ////////////////////////////////////////////////////////////////////////////////////////////  base
   public id: string;
+  constructor(options?: { host?: string; port?: number; password?: string });
   constructor(options?: { host?: string; port?: number; password?: string });
   public command(...parameters: Array<string | number>): Promise<any>;
   public close(): void;
@@ -340,7 +340,7 @@ export class TedisPool {
     min_conn?: number;
     max_conn?: number;
   });
-  public getTedis(): Tedis;
+  public getTedis(): Promise<Tedis>;
   public putTedis(tedis: Tedis): void;
   public release(): void;
 }

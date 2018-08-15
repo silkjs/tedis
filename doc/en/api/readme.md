@@ -1,9 +1,21 @@
 ---
 prev: false
-next: ./key
+next: ./base
 ---
 
 # Type interface
+
+## base
+
+- [command](/en/api/base.md#command)
+- [on](/en/api/base.md#on)
+- [close](/en/api/base.md#close)
+
+## pool
+
+- [getTedis](/en/api/pool.md#getTedis)
+- [putTedis](/en/api/pool.md#putTedis)
+- [release](/en/api/pool.md#release)
 
 ## key
 

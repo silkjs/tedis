@@ -1,9 +1,9 @@
 import { Tedis } from "./tedis";
 
 export interface InterfacePool {
-  release(): void;
-  getTedis(): void;
+  getTedis(): Promise<Tedis>;
   putTedis(conn: Tedis): void;
+  release(): void;
 }
 
 type Cushion = (conn: Tedis) => void;
