@@ -3,7 +3,7 @@ meta:
   - name: description
     content: tedis for nodejs
   - name: keywords
-    content: tedis redis typescript async
+    content: tedis redis typescript async promise
 prev: false
 next: false
 ---
@@ -63,6 +63,7 @@ _Tedis_
 | host?     | string | 127.0.0.1 |
 | port?     | number | 6379      |
 | password? | string |           |
+| timeour?  | number |           |
 
 ```ts
 const tedis = new Tedis({
@@ -81,6 +82,7 @@ _TedisPool_
 | password? | string |           |
 | min_conn? | number | 1         |
 | max_conn? | number | 10        |
+| timeour?  | number |           |
 
 ```ts
 const tedispool = new TedisPool({

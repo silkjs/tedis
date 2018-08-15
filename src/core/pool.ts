@@ -20,11 +20,11 @@ export class TedisPool implements InterfacePool {
   private timeout?: number;
   constructor(
     options: {
-      min_conn?: number;
-      max_conn?: number;
       host?: string;
       port?: number;
       password?: string;
+      min_conn?: number;
+      max_conn?: number;
       timeout?: number;
     } = {}
   ) {

@@ -1,11 +1,11 @@
 {
   "name": "tedis",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "build/main.js",
   "typings": "types/index.d.ts",
   "scripts": {
     "doc:dev": "vuepress dev doc",
-    "pkg:build": "npx tsc -b src/tsconfig.app.json",
+    "pkg:build": "tsc -b src/tsconfig.app.json",
     "pkg:test": "jest",
     "upload:doc": "chmod +x ./script/doc.sh && ./script/doc.sh",
     "upload:npm": "chmod +x ./script/npm.sh && ./script/npm.sh",

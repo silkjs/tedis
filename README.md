@@ -80,7 +80,7 @@ const pool = new TedisPool({
 ```ts
 const tedis = await pool.getTedis();
 // ... do some commands
-pool.putTedis(tedis)
+pool.putTedis(tedis);
 ```
 
 ### Example
@@ -134,6 +134,18 @@ await tedis.llen("mylist");
 ```
 
 ## Type interface
+
+## base
+
+- [command](https://tedis.myour.tech/en/api/base.md#command)
+- [on](https://tedis.myour.tech/en/api/base.md#on)
+- [close](https://tedis.myour.tech/en/api/base.md#close)
+
+## pool
+
+- [getTedis](https://tedis.myour.tech/en/api/pool.md#getTedis)
+- [putTedis](https://tedis.myour.tech/en/api/pool.md#putTedis)
+- [release](https://tedis.myour.tech/en/api/pool.md#release)
 
 ### key
 

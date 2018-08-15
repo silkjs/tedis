@@ -1,8 +1,12 @@
 export class Tedis {
   ////////////////////////////////////////////////////////////////////////////////////////////  base
   public id: string;
-  constructor(options?: { host?: string; port?: number; password?: string });
-  constructor(options?: { host?: string; port?: number; password?: string });
+  constructor(options?: {
+    host?: string;
+    port?: number;
+    password?: string;
+    timeout?: number;
+  });
   public command(...parameters: Array<string | number>): Promise<any>;
   public close(): void;
   public on(event: "connect" | "timeout", listener: () => void): void;
@@ -46,12 +50,18 @@ export class Tedis {
   public decrby(key: string, decrement: number): Promise<number>;
   public get(key: string): Promise<string | number | null>;
   public getbit(key: string, offset: number): Promise<0 | 1>;
-  public getrange(key: string, [start, end]?: [number, number]): Promise<string>;
+  public getrange(
+    key: string,
+    [start, end]?: [number, number]
+  ): Promise<string>;
   public getset(key: string, value: string): Promise<string | null>;
   public incr(key: string): Promise<number>;
   public incrby(key: string, increment: number): Promise<number>;
   public incrbyfloat(key: string, increment: number): Promise<string>;
-  public mget(key: string, ...keys: string[]): Promise<Array<string | number | null>>;
+  public mget(
+    key: string,
+    ...keys: string[]
+  ): Promise<Array<string | number | null>>;
   public mset(objKv: { [propName: string]: string }): Promise<string>;
   public msetnx(objKv: { [propName: string]: string }): Promise<number>;
   public psetex(key: string, milliseconds: number, value: string): Promise<any>;
@@ -67,8 +77,16 @@ export class Tedis {
   public hexists(key: string, field: string): Promise<number>;
   public hget(key: string, field: string): Promise<string | null>;
   public hgetall(key: string): Promise<{ [propName: string]: string }>;
-  public hincrby(key: string, field: string, increment: number): Promise<number>;
-  public hincrbyfloat(key: string, field: string, increment: number): Promise<string>;
+  public hincrby(
+    key: string,
+    field: string,
+    increment: number
+  ): Promise<number>;
+  public hincrbyfloat(
+    key: string,
+    field: string,
+    increment: number
+  ): Promise<string>;
   public hkeys(key: string): Promise<string[]>;
   public hlen(key: string): Promise<number>;
   public hmget(
@@ -83,14 +101,24 @@ export class Tedis {
     }
   ): Promise<any>;
   // hscan
-  public hset(key: string, field: string, value: string | number): Promise<0 | 1>;
+  public hset(
+    key: string,
+    field: string,
+    value: string | number
+  ): Promise<0 | 1>;
   public hsetnx(key: string, field: string, value: string): Promise<0 | 1>;
   public hstrlen(key: string, field: string): Promise<number>;
   public hvals(key: string): Promise<string[]>;
 
   ////////////////////////////////////////////////////////////////////////////////////////////  list
-  public blpop(timeout: number, ...keys: string[]): Promise<Array<string | null>>;
-  public brpop(timeout: number, ...keys: string[]): Promise<Array<string | null>>;
+  public blpop(
+    timeout: number,
+    ...keys: string[]
+  ): Promise<Array<string | null>>;
+  public brpop(
+    timeout: number,
+    ...keys: string[]
+  ): Promise<Array<string | null>>;
   public brpoplpush(
     source: string,
     destination: string,
@@ -131,14 +159,22 @@ export class Tedis {
     ...members: Array<string | number>
   ): Promise<number>;
   public scard(key: string): Promise<number>;
-  public sdiff(key: string, anotherkey: string, ...keys: string[]): Promise<string[]>;
+  public sdiff(
+    key: string,
+    anotherkey: string,
+    ...keys: string[]
+  ): Promise<string[]>;
   public sdiffstore(
     destination: string,
     key: string,
     anotherkey: string,
     ...keys: string[]
   ): Promise<number>;
-  public sinter(key: string, anotherkey: string, ...keys: string[]): Promise<string[]>;
+  public sinter(
+    key: string,
+    anotherkey: string,
+    ...keys: string[]
+  ): Promise<string[]>;
   public sinterstore(
     destination: string,
     key: string,
@@ -164,7 +200,11 @@ export class Tedis {
     ...members: Array<string | number>
   ): Promise<number>;
   // sscan(): Promise<any>;
-  public sunion(key: string, anotherkey: string, ...keys: string[]): Promise<string[]>;
+  public sunion(
+    key: string,
+    anotherkey: string,
+    ...keys: string[]
+  ): Promise<string[]>;
   public sunionstore(
     destination: string,
     key: string,
@@ -203,7 +243,11 @@ export class Tedis {
   ): any;
   public zcard(key: string): Promise<number>;
   public zcount(key: string, min: string, max: string): Promise<number>;
-  public zincrby(key: string, increment: number, member: string): Promise<string>;
+  public zincrby(
+    key: string,
+    increment: number,
+    member: string
+  ): Promise<string>;
   public zinterstore(
     destination: string,
     objectKW: { [PropName: string]: number },
@@ -270,10 +314,22 @@ export class Tedis {
     }
   ): Promise<any>;
   public zrank(key: string, member: string): Promise<number | null>;
-  public zrem(key: string, member: string, ...members: string[]): Promise<number>;
+  public zrem(
+    key: string,
+    member: string,
+    ...members: string[]
+  ): Promise<number>;
   public zremrangebylex(key: string, min: string, max: string): Promise<number>;
-  public zremrangebyrank(key: string, start: number, stop: number): Promise<number>;
-  public zremrangebyscore(key: string, min: string, max: string): Promise<number>;
+  public zremrangebyrank(
+    key: string,
+    start: number,
+    stop: number
+  ): Promise<number>;
+  public zremrangebyscore(
+    key: string,
+    min: string,
+    max: string
+  ): Promise<number>;
   public zrevrange(key: string, start: number, stop: number): Promise<string[]>;
   public zrevrange(
     key: string,
@@ -339,6 +395,7 @@ export class TedisPool {
     password?: string;
     min_conn?: number;
     max_conn?: number;
+    timeout?: number;
   });
   public getTedis(): Promise<Tedis>;
   public putTedis(tedis: Tedis): void;
