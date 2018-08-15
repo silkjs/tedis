@@ -21,6 +21,11 @@ interface InterfaceRedis
 
 export class Tedis extends Mixins<
   new (
-    options?: { host?: string; port?: number; password?: string }
+    options?: {
+      host?: string;
+      port?: number;
+      password?: string;
+      timeout?: number;
+    }
   ) => InterfaceRedis
 >(Base, [RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisZset]) {}

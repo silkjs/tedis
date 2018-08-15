@@ -16,3 +16,6 @@ services:
       - "6379:6379"
     volumes:
       - volume-redis:/data
+    environment:
+      REDIS_PASSWORD: tedis_love_you
+    command: ["sh", "-c", 'exec redis-server --requirepass "$$REDIS_PASSWORD"']

@@ -25,7 +25,12 @@ export class Base implements InterfaceBase {
   private handle_error: (err: Error) => void;
   private handle_close: (had_error: boolean) => void;
   constructor(
-    options: { host?: string; port?: number; password?: string } = {}
+    options: {
+      host?: string;
+      port?: number;
+      password?: string;
+      timeout?: number;
+    } = {}
   ) {
     this.id = uuidv4();
     this.socket = createConnection({
@@ -48,6 +53,9 @@ export class Base implements InterfaceBase {
     };
     this.init();
 
+    if ("number" === typeof options.timeout) {
+      this.socket.setTimeout(options.timeout);
+    }
     if ("string" === typeof options.password) {
       this.auth(options.password);
     }

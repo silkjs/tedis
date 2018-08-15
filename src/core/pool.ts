@@ -17,6 +17,7 @@ export class TedisPool implements InterfacePool {
   private host: string;
   private port: number;
   private password?: string;
+  private timeout?: number;
   constructor(
     options: {
       min_conn?: number;
@@ -24,6 +25,7 @@ export class TedisPool implements InterfacePool {
       host?: string;
       port?: number;
       password?: string;
+      timeout?: number;
     } = {}
   ) {
     this.connection_pool = [];
@@ -34,6 +36,7 @@ export class TedisPool implements InterfacePool {
     this.host = options.host || "127.0.0.1";
     this.port = options.port || 6379;
     this.password = options.password;
+    this.timeout = options.timeout;
     this.init();
   }
   public release() {
@@ -79,6 +82,7 @@ export class TedisPool implements InterfacePool {
         host: this.host,
         port: this.port,
         password: this.password,
+        timeout: this.timeout,
       });
       conn.on("connect", () => {
         conn.on("error", (err) => {
