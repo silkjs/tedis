@@ -2,7 +2,7 @@
 
 set -e
 
-npx vuepress build doc
+vuepress build doc
 
 cd doc/.vuepress/dist
 
