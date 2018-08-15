@@ -1,12 +1,14 @@
 export class Tedis {
-
   ////////////////////////////////////////////////////////////////////////////////////////////  base
-  public ready: () => void;
-  public error: (error: Error) => void;
-  public timeout: () => void;
+  public id: string;
+  constructor(options?: { host?: string; port?: number; password?: string });
   constructor(options?: { host?: string; port?: number; password?: string });
   public command(...parameters: Array<string | number>): Promise<any>;
   public close(): void;
+  public on(event: "connect" | "timeout", listener: () => void): void;
+  public on(event: "close", listener: (had_error: boolean) => void): void;
+  public on(event: "error", listener: (err: Error) => void): void;
+  public on(event: string, listener: (...args: any[]) => void): void;
 
   ////////////////////////////////////////////////////////////////////////////////////////////  key
   public del(key: string, ...keys: string[]): Promise<number>;
@@ -338,7 +340,7 @@ export class TedisPool {
     min_conn?: number;
     max_conn?: number;
   });
-  public getTedis(): Tedis;
+  public getTedis(): Promise<Tedis>;
   public putTedis(tedis: Tedis): void;
   public release(): void;
 }

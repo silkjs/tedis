@@ -57,7 +57,7 @@ export interface InterfaceZset {
       ch?: "CH";
       incr?: "INCR";
     }
-  ): any;
+  ): Promise<any>;
   zcard(key: string): Promise<number>;
   zcount(key: string, min: string, max: string): Promise<number>;
   zincrby(key: string, increment: number, member: string): Promise<string>;

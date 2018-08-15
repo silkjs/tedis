@@ -1,5 +1,5 @@
 ---
-prev: ./
+prev: ./base
 next: ./string
 ---
 

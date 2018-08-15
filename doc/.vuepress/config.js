@@ -92,6 +92,8 @@ module.exports = {
         sidebar: {
           "/api/": [
             "",
+            "base",
+            "pool",
             "key",
             "string",
             "hash",
@@ -118,6 +120,8 @@ module.exports = {
         sidebar: {
           "/en/api/": [
             "",
+            "base",
+            "pool",
             "key",
             "string",
             "hash",
