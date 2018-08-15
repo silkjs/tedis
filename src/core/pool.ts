@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import { Tedis } from "./tedis";
 
 export interface InterfacePool {
@@ -7,14 +6,11 @@ export interface InterfacePool {
   putTedis(conn: Tedis): void;
 }
 
+type Cushion = (conn: Tedis) => void;
+
 export class TedisPool implements InterfacePool {
   private connection_pool: Tedis[];
-  private cushion_list: {
-    index: string[];
-    callback: {
-      [propName: string]: (name: string, res: Tedis) => void;
-    };
-  };
+  private cushion_list: Cushion[];
   private min_conn: number;
   private max_conn: number;
   private act_conn: number;
@@ -31,10 +27,7 @@ export class TedisPool implements InterfacePool {
     } = {}
   ) {
     this.connection_pool = [];
-    this.cushion_list = {
-      index: [],
-      callback: {},
-    };
+    this.cushion_list = [];
     this.min_conn = options.min_conn || 1;
     this.max_conn = options.max_conn || 10;
     this.act_conn = 0;
@@ -45,7 +38,7 @@ export class TedisPool implements InterfacePool {
   }
   public release() {
     this.connection_pool.forEach((conn) => {
-      this.closeConnection(conn);
+      conn.close();
     });
   }
   public async getTedis() {
@@ -56,35 +49,23 @@ export class TedisPool implements InterfacePool {
       return await this.newConnection();
     } else {
       return new Promise<Tedis>((resolve, reject) => {
-        const key = uuidv4();
         const timer = setTimeout(() => {
-          const index = this.cushion_list.index.findIndex((value) => {
-            return value === key;
-          });
-          this.cushion_list.index.splice(index, 1);
-          Reflect.deleteProperty(this.cushion_list.callback, key);
+          this.cushion_list.shift();
           reject("timeout, the connection pool is full");
         }, 1000 * 20);
 
-        if (Reflect.has(this.cushion_list.callback, key)) {
+        this.cushion_list.push((res: Tedis) => {
           clearTimeout(timer);
-          reject("timeout, the connection pool is full");
-        }
-
-        this.cushion_list.index.push(key);
-        this.cushion_list.callback[key] = (name: string, res: Tedis) => {
-          clearTimeout(timer);
-          console.log("通过缓冲");
-          Reflect.deleteProperty(this.cushion_list.callback, name);
+          this.cushion_list.shift();
           resolve(res);
-        };
+        });
       });
     }
   }
   public putTedis(conn: Tedis) {
-    if (this.cushion_list.index.length > 0) {
-      const name = this.cushion_list.index.shift() as string;
-      this.cushion_list.callback[name](name, conn);
+    const callback = this.cushion_list.shift();
+    if ("undefined" !== typeof callback) {
+      callback(conn);
     } else {
       this.connection_pool.push(conn);
     }
@@ -99,21 +80,37 @@ export class TedisPool implements InterfacePool {
         port: this.port,
         password: this.password,
       });
-      conn.ready = () => {
-        conn.error = (err) => {
+      conn.on("connect", () => {
+        conn.on("error", (err) => {
           console.log(err);
-        };
+        });
+        conn.on("close", (had_error: boolean) => {
+          this.closeConnection(conn);
+        });
+        conn.on("timeout", () => {
+          this.miniConnection(conn);
+        });
         this.act_conn++;
         resolve(conn);
-      };
-      conn.error = (err) => {
+      });
+      conn.on("error", (err) => {
         reject(err);
-      };
+      });
     });
   }
   private closeConnection(conn: Tedis) {
-    conn.close();
+    const index = this.connection_pool.findIndex((item) => {
+      return item.id === conn.id;
+    });
+    if (-1 !== index) {
+      this.connection_pool.splice(index, 1);
+    }
     this.act_conn--;
+  }
+  private miniConnection(conn: Tedis) {
+    if (this.min_conn < this.act_conn) {
+      conn.close();
+    }
   }
   private async init() {
     this.putTedis(await this.newConnection());

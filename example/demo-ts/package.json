@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tedis": "^0.1.0"
+    "tedis": "^0.1.1"
   },
   "devDependencies": {
     "@types/node": "^10.7.0",

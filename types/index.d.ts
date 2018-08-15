@@ -1,12 +1,14 @@
 export class Tedis {
 
   ////////////////////////////////////////////////////////////////////////////////////////////  base
-  public ready: () => void;
-  public error: (error: Error) => void;
-  public timeout: () => void;
+  public id: string;
   constructor(options?: { host?: string; port?: number; password?: string });
   public command(...parameters: Array<string | number>): Promise<any>;
   public close(): void;
+  public on(event: "connect" | "timeout", listener: () => void): void;
+  public on(event: "close", listener: (had_error: boolean) => void): void;
+  public on(event: "error", listener: (err: Error) => void): void;
+  public on(event: string, listener: (...args: any[]) => void): void;
 
   ////////////////////////////////////////////////////////////////////////////////////////////  key
   public del(key: string, ...keys: string[]): Promise<number>;
