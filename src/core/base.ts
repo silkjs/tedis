@@ -20,12 +20,17 @@ export class Base implements InterfaceBase {
   private socket: Socket;
   private protocol: Protocol;
   private callbacks: callback[];
-  private handle_connect: () => void;
-  private handle_timeout: () => void;
-  private handle_error: (err: Error) => void;
-  private handle_close: (had_error: boolean) => void;
+  private handle_connect?: () => void;
+  private handle_timeout?: () => void;
+  private handle_error?: (err: Error) => void;
+  private handle_close?: (had_error: boolean) => void;
   constructor(
-    options: { host?: string; port?: number; password?: string } = {}
+    options: {
+      host?: string;
+      port?: number;
+      password?: string;
+      timeout?: number;
+    } = {}
   ) {
     this.id = uuidv4();
     this.socket = createConnection({
@@ -34,20 +39,11 @@ export class Base implements InterfaceBase {
     });
     this.protocol = new Protocol();
     this.callbacks = [];
-    this.handle_connect = () => {
-      console.log("connect");
-    };
-    this.handle_timeout = () => {
-      console.log("timeout");
-    };
-    this.handle_error = (err: Error) => {
-      console.log(err);
-    };
-    this.handle_close = (had_error: boolean) => {
-      console.log("close with error: ", had_error);
-    };
     this.init();
 
+    if ("number" === typeof options.timeout) {
+      this.socket.setTimeout(options.timeout);
+    }
     if ("string" === typeof options.password) {
       this.auth(options.password);
     }
@@ -84,21 +80,38 @@ export class Base implements InterfaceBase {
         throw new Error("event not found");
     }
   }
-  private auth(password: string) {
-    return this.command("AUTH", password);
+  private async auth(password: string) {
+    try {
+      return await this.command("AUTH", password);
+    } catch (error) {
+      this.socket.emit("error", error);
+      this.socket.end();
+    }
   }
   private init() {
     this.socket.on("connect", () => {
-      this.handle_connect();
+      if ("function" === typeof this.handle_connect) {
+        this.handle_connect();
+      }
     });
     this.socket.on("timeout", () => {
-      this.handle_timeout();
+      if ("function" === typeof this.handle_timeout) {
+        this.handle_timeout();
+      } else {
+        this.close();
+      }
     });
     this.socket.on("error", (err) => {
-      this.handle_error(err);
+      if ("function" === typeof this.handle_error) {
+        this.handle_error(err);
+      } else {
+        console.log("error:", err);
+      }
     });
     this.socket.on("close", (had_error: boolean) => {
-      this.handle_close(had_error);
+      if ("function" === typeof this.handle_close) {
+        this.handle_close(had_error);
+      }
     });
     this.socket.on("data", (data) => {
       this.protocol.write(data);

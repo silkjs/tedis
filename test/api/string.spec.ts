@@ -1,10 +1,11 @@
-import { Tedis } from "../../src/main";
-import { config, sleep } from "../../tools/index";
+import { Tedis, TedisPool } from "../../src/main";
+import { config } from "../../tools/index";
 
-const String: Tedis = new Tedis(config);
+const Pool = new TedisPool(config);
+let String: Tedis;
 
 beforeAll(async () => {
-  // await sleep(2);
+  String = await Pool.getTedis();
 });
 
 beforeEach(async () => {

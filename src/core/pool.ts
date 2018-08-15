@@ -17,6 +17,7 @@ export class TedisPool implements InterfacePool {
   private host: string;
   private port: number;
   private password?: string;
+  private timeout?: number;
   constructor(
     options: {
       min_conn?: number;
@@ -24,6 +25,7 @@ export class TedisPool implements InterfacePool {
       host?: string;
       port?: number;
       password?: string;
+      timeout?: number;
     } = {}
   ) {
     this.connection_pool = [];
@@ -34,7 +36,7 @@ export class TedisPool implements InterfacePool {
     this.host = options.host || "127.0.0.1";
     this.port = options.port || 6379;
     this.password = options.password;
-    this.init();
+    this.timeout = options.timeout;
   }
   public release() {
     this.connection_pool.forEach((conn) => {
@@ -72,13 +74,12 @@ export class TedisPool implements InterfacePool {
   }
   private newConnection() {
     return new Promise<Tedis>((resolve, reject) => {
-      if (this.connection_pool.length >= this.max_conn) {
-        reject("The connection pool is full");
-      }
+      this.act_conn++;
       const conn = new Tedis({
         host: this.host,
         port: this.port,
         password: this.password,
+        timeout: this.timeout,
       });
       conn.on("connect", () => {
         conn.on("error", (err) => {
@@ -90,10 +91,10 @@ export class TedisPool implements InterfacePool {
         conn.on("timeout", () => {
           this.miniConnection(conn);
         });
-        this.act_conn++;
         resolve(conn);
       });
       conn.on("error", (err) => {
+        this.act_conn--;
         reject(err);
       });
     });
@@ -111,8 +112,5 @@ export class TedisPool implements InterfacePool {
     if (this.min_conn < this.act_conn) {
       conn.close();
     }
-  }
-  private async init() {
-    this.putTedis(await this.newConnection());
   }
 }
