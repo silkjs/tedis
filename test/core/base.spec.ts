@@ -21,7 +21,7 @@ describe("core base", () => {
     ).rejects.toThrow(Error);
     Base.close();
   });
-  it(`on timeout error`, async () => {
+  it(`on default -> error and timeout`, async () => {
     const Base: Tedis = new Tedis({
       port: 6377,
       timeout: 1,
@@ -29,11 +29,22 @@ describe("core base", () => {
     await expect(
       new Promise((resolve, reject) => {
         Base.on("close", () => {
-          setTimeout(() => {
-            reject("test");
-          }, 2000);
+          reject("error");
         });
       })
-    ).rejects.toBe("test");
+    ).rejects.toBe("error");
+  });
+  it(`on error with auth`, async () => {
+    const Base: Tedis = new Tedis({
+      password: "6377",
+    });
+    await expect(
+      new Promise((resolve, reject) => {
+        Base.on("error", (err) => {
+          reject("error");
+        });
+      })
+    ).rejects.toBe("error");
+    Base.close();
   });
 });
