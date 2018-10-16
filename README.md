@@ -137,15 +137,15 @@ await tedis.llen("mylist");
 
 ## base
 
-- [command](https://tedis.myour.tech/en/api/base.md#command)
-- [on](https://tedis.myour.tech/en/api/base.md#on)
-- [close](https://tedis.myour.tech/en/api/base.md#close)
+- [command](https://tedis.myour.tech/en/api/base.html#command)
+- [on](https://tedis.myour.tech/en/api/base.html#on)
+- [close](https://tedis.myour.tech/en/api/base.html#close)
 
 ## pool
 
-- [getTedis](https://tedis.myour.tech/en/api/pool.md#getTedis)
-- [putTedis](https://tedis.myour.tech/en/api/pool.md#putTedis)
-- [release](https://tedis.myour.tech/en/api/pool.md#release)
+- [getTedis](https://tedis.myour.tech/en/api/pool.html#getTedis)
+- [putTedis](https://tedis.myour.tech/en/api/pool.html#putTedis)
+- [release](https://tedis.myour.tech/en/api/pool.html#release)
 
 ### key
 
