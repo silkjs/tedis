@@ -1,6 +1,6 @@
 {
   "name": "tedis",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "build/main.js",
   "typings": "types/index.d.ts",
   "scripts": {
@@ -43,7 +43,7 @@
     "@types/node": "^10.5.8",
     "@types/uuid": "^3.4.3",
     "codecov": "^3.0.4",
-    "eslint": "^5.3.0",
+    "eslint": "^5.13.0",
     "husky": "^0.14.3",
     "jest": "^23.5.0",
     "lint-staged": "^7.2.0",
