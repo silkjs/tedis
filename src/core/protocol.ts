@@ -115,14 +115,15 @@ export class Protocol {
   public encode(...parameters: Array<string | number>): string {
     const length = parameters.length;
     let parameter: any;
+
     let request = `*${length}\r\n`;
     for (let i = 0; i < length; i++) {
       parameter = parameters[i];
       if (typeof parameter === "string") {
-        request += `$${parameter.length}\r\n${parameter}\r\n`;
+        request += `$${Buffer.byteLength(parameter)}\r\n${parameter}\r\n`;
       } else if (typeof parameter === "number") {
         parameter = parameter.toString();
-        request += `$${parameter.length}\r\n${parameter}\r\n`;
+        request += `$${Buffer.byteLength(parameter)}\r\n${parameter}\r\n`;
       } else {
         throw new Error("encode ags err");
       }

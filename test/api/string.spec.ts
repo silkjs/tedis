@@ -76,6 +76,16 @@ describe("Redis String Test: DECRBY", () => {
   });
 });
 
+describe("Redis Chinese String Test", () => {
+  it(`key not exists`, async () => {
+    expect(await String.get("你好")).toBeNull();
+  });
+  it(`the value stored at key is a string`, async () => {
+    expect(await String.command("SET", "你好", "世界！")).toBe("OK");
+    expect(await String.get("你好")).toBe("世界！");
+  });
+});
+
 describe("Redis String Test: GET", () => {
   it(`key not exists`, async () => {
     expect(await String.get("mykey")).toBeNull();

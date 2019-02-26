@@ -1,5 +1,5 @@
 import { TedisPool } from "../../src/main";
-import { config, sleep } from "../../tools";
+import { sleep } from "../../tools";
 
 describe("core base", () => {
   it(`on error`, async () => {
