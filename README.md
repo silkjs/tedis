@@ -23,7 +23,7 @@
 
 ### What is tedis
 
-Tedis write with typescript, it's the client of redis for nodejs, support asycn with ts and commonjs
+Tedis write with typescript, it's the client of redis for nodejs, support async with ts and commonjs
 
 ### Installation
 
