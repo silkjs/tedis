@@ -50,7 +50,7 @@ module.exports = {
     lineNumbers: false
   },
   themeConfig: {
-    repo: "myour-cc/tedis",
+    repo: "silkjs/tedis",
     docsDir: "doc",
     docsBranch: "master",
     editLinks: true,

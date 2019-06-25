@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/myour-cc/tedis.git"
+    "url": "git+https://github.com/silkjs/tedis.git"
   },
   "description": "redis client for node.js with typescript and async",
   "keywords": [
@@ -32,9 +32,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/myour-cc/tedis/issues"
+    "url": "https://github.com/silkjs/tedis/issues"
   },
-  "homepage": "https://github.com/myour-cc/tedis#readme",
+  "homepage": "https://github.com/silkjs/tedis#readme",
   "dependencies": {
     "uuid": "^3.3.2"
   },
