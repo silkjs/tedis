@@ -1,7 +1,36 @@
-.idea
-.vscode
+# compiled output
+/dist
+/build
+
+# dependencies
+/node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# misc
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+package-lock.json
+testem.log
+/typings
+
+# System Files
 .DS_Store
-coverage
-node_modules
-build
-dist
+Thumbs.db
