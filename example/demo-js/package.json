@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tedis": "^0.1.5"
+    "tedis": "^0.1.7"
   },
   "devDependencies": {
-    "eslint": "^5.13.0"
+    "eslint": "^6.0.1"
   }
 }
