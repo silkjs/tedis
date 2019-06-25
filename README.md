@@ -3,18 +3,18 @@
 </p>
 
 <p align="center">
-  <a href="https://travis-ci.org/myour-cc/tedis"><img src="https://img.shields.io/travis/myour-cc/tedis.svg" alt="travis"></a>
-  <a href="https://github.com/myour-cc/tedis/issues"><img src="https://img.shields.io/github/issues-raw/myour-cc/tedis.svg" alt="issues"></a>
-  <a href="https://github.com/myour-cc/tedis"><img src="https://img.shields.io/github/license/myour-cc/tedis.svg" alt="license"></a>
+  <a href="https://travis-ci.org/silkjs/tedis"><img src="https://img.shields.io/travis/silkjs/tedis.svg" alt="travis"></a>
+  <a href="https://github.com/silkjs/tedis/issues"><img src="https://img.shields.io/github/issues-raw/silkjs/tedis.svg" alt="issues"></a>
+  <a href="https://github.com/silkjs/tedis"><img src="https://img.shields.io/github/license/silkjs/tedis.svg" alt="license"></a>
   <a href="https://www.npmjs.com/package/tedis"><img src="https://img.shields.io/npm/v/tedis.svg" alt="package"></a>
-  <a href='https://codecov.io/gh/myour-cc/tedis'><img src='https://img.shields.io/codecov/c/github/myour-cc/tedis.svg' alt='Coverage Status' /></a>
-  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/tag/myour-cc/tedis.svg" alt="tag"></a>
+  <a href='https://codecov.io/gh/silkjs/tedis'><img src='https://img.shields.io/codecov/c/github/silkjs/tedis.svg' alt='Coverage Status' /></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/tag/silkjs/tedis.svg" alt="tag"></a>
   <br>
-  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/issues-pr/myour-cc/tedis.svg" alt="pr"></a>
-  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/release/myour-cc/tedis.svg" alt="release"></a>
-  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/top/myour-cc/tedis.svg" alt="languages"></a>
-  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/code-size/myour-cc/tedis.svg" alt="size"></a>
-  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/last-commit/myour-cc/tedis.svg" alt="commit"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/issues-pr/silkjs/tedis.svg" alt="pr"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/release/silkjs/tedis.svg" alt="release"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/top/silkjs/tedis.svg" alt="languages"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/languages/code-size/silkjs/tedis.svg" alt="size"></a>
+  <a href="javascript:void(0)" ><img src="https://img.shields.io/github/last-commit/silkjs/tedis.svg" alt="commit"></a>
 </p>
 
 <h2 align="center">Supporting Tedis</h2>
