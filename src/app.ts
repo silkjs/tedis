@@ -1,3 +1,4 @@
+import { Protocol } from "./core/protocol";
 import { Tedis } from "./main";
 
 const client = new Tedis({
@@ -7,6 +8,12 @@ const client = new Tedis({
 });
 
 setTimeout(async () => {
+  const protocol = new Protocol();
+
+  protocol.write(Buffer.from(`$9\r\nhello\r\nworld\r\n`));
+  protocol.parse();
+  console.log(protocol.data);
+
   let res: any;
   res = await client.command("INFO", "STATS");
   console.log(res);

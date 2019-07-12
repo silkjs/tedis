@@ -60,7 +60,7 @@ describe("parse", () => {
     });
   });
   it(`$ array`, () => {
-    protocol.write(Buffer.from(`$9\r\nhello\r\nworld!`));
+    protocol.write(Buffer.from(`$9\r\nhello\r\nworld!\r\n`));
     protocol.parse();
     expect(protocol.data).toEqual({
       state: false,
