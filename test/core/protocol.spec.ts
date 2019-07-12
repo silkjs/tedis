@@ -59,6 +59,17 @@ describe("parse", () => {
       },
     });
   });
+  it(`$ array`, () => {
+    protocol.write(Buffer.from(`$9\r\nhello\r\nworld!\r\n`));
+    protocol.parse();
+    expect(protocol.data).toEqual({
+      state: true,
+      res: {
+        error: false,
+        data: ["hello", "world!"],
+      },
+    });
+  });
   it(`* incomplete`, () => {
     protocol.write(Buffer.from(`*3\r\n$1\r\nhello`));
     protocol.parse();
