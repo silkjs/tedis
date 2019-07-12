@@ -1,4 +1,4 @@
-import { Tedis } from "tedis";
+import { Tedis } from "./main";
 
 const client = new Tedis({
   port: 6379,
@@ -7,7 +7,9 @@ const client = new Tedis({
 });
 
 setTimeout(async () => {
-  let res;
+  let res: any;
+  res = await client.command("INFO", "STATS");
+  console.log(res);
   /**
    * base
    */
@@ -18,9 +20,6 @@ setTimeout(async () => {
   console.log(res);
   // "OK"
   res = await client.command("SET", "key2", "World");
-  console.log(res);
-  // "OK"
-  res = await client.command("INFO", "STATS");
   console.log(res);
   // "OK"
 

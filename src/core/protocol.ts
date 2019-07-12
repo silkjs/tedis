@@ -62,18 +62,32 @@ export class Protocol {
           this._result.shift();
           break;
         case "$":
-          if (-1 === parseInt(current.slice(1), 10)) {
+          const size = parseInt(current.slice(1), 10);
+          this._result.shift();
+          if (-1 === size) {
             this.data.res = {
               error: false,
               data: null,
             };
-            this._result.shift();
           } else {
-            this._result.shift();
-            this.data.res = {
-              error: false,
-              data: this._result.shift(),
-            };
+            const res = this._result.shift() as string;
+            let ls = Buffer.byteLength(res);
+            if (ls === size) {
+              this.data.res = {
+                error: false,
+                data: res,
+              };
+            } else {
+              this.data.res = {
+                error: false,
+                data: [res],
+              };
+              do {
+                const str = this._result.shift() as string;
+                this.data.res.data.push(str);
+                ls += Buffer.byteLength(str);
+              } while (this._result.length > 0);
+            }
           }
           break;
         case "*":
