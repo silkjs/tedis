@@ -63,7 +63,7 @@ describe("parse", () => {
     protocol.write(Buffer.from(`$9\r\nhello\r\nworld!\r\n`));
     protocol.parse();
     expect(protocol.data).toEqual({
-      state: false,
+      state: true,
       res: {
         error: false,
         data: ["hello", "world!"],
