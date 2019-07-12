@@ -84,8 +84,10 @@ export class Protocol {
               };
               do {
                 const str = this._result.shift() as string;
-                this.data.res.data.push(str);
-                ls += Buffer.byteLength(str);
+                if (Buffer.byteLength(str) > 0) {
+                  this.data.res.data.push(str);
+                  ls += Buffer.byteLength(str);
+                }
               } while (this._result.length > 0);
             }
           }
