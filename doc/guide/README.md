@@ -14,7 +14,7 @@ next: false
 
 All the functions of Tedis are written and implemented by typescript. Finally, native javascript code is generated, supporting javascript (commonjs) and typescript calls. The project's adoption of typescript has many benefits, not only facilitating the development and maintenance of source code, but also providing type files, enabling users to have a more friendly development experience and higher development efficiency under editor prompts.
 
-## future
+## feature
 
 - _types_: with typescript, providing both type checking and editor code hints.
 - _async_: Use promise, async to keep you out of the hell of pullbacks and make logical writing more intuitive.
