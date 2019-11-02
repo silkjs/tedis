@@ -5,20 +5,20 @@ next: ./hash
 
 # string
 
-::: tip 说明
-本节示例中的 `String` 为 Tedis 实例对象，演示部分省略了外部的 async 函数层
+::: tip
+This section of sample `String` as Tedis instance object, demonstration part omitted async function of the external layer
 :::
 
 ## append
 
-如果 key 已经存在，并且值为字符串，那么这个命令会把 value 追加到原来值（value）的结尾。如果 key 不存在，那么它将首先创建一个空字符串的 key，再执行追加操作
+If key already exists and is a string, this command appends the value at the end of the string. If key does not exist it is created and set as an empty string, so APPEND will be similar to SET in this special case.
 
-#### _Redis_ [+](http://www.redis.cn/commands/append.html)
+#### _Redis_ [+](https://redis.io/commands/append)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：返回 append 后字符串值（value）的长度。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: the length of the string after the append operation.
+- examples:
 
 ```bash
 redis> EXISTS mykey
@@ -33,13 +33,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 append(key: string, value: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.append("mykey", "Hello");
@@ -50,14 +50,14 @@ await String.append("mykey", " World");
 
 ## decr
 
-对 key 对应的数字做减 1 操作。如果 key 不存在，那么在操作之前，这个 key 对应的值会被置为 0。如果 key 有一个错误类型的 value 或者是一个不能表示成数字的字符串，就返回错误。这个操作最大支持在 64 位有符号的整型数字。
+Decrements the number stored at key by one. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_ [+](http://www.redis.cn/commands/decr.html)
+#### _Redis_ [+](https://redis.io/commands/decr)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：减小之后的 value
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of key after the decrement
+- examples:
 
 ```bash
 redis> SET key1 "10"
@@ -72,13 +72,13 @@ ERR ERR value is not an integer or out of range
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 decr(key: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.decr("key1");
@@ -89,14 +89,14 @@ await String.decr("key2");
 
 ## decrby
 
-将 key 对应的数字减 decrement。如果 key 不存在，操作之前，key 就会被置为 0。如果 key 的 value 类型错误或者是个不能表示成数字的字符串，就返回错误。这个操作最多支持 64 位有符号的正型数字。
+Decrements the number stored at key by decrement. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_ [+](http://www.redis.cn/commands/decrby.html)
+#### _Redis_ [+](https://redis.io/commands/decrby)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：减小之后的 value
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of key after the decrement
+- examples:
 
 ```bash
 redis> SET mykey "10"
@@ -107,13 +107,13 @@ redis> DECRBY mykey 3
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 decrby(key: string, decrement: number): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.decrby("mykey", 3);
@@ -122,14 +122,14 @@ await String.decrby("mykey", 3);
 
 ## get
 
-返回 key 的 value。如果 key 不存在，返回特殊值 nil。如果 key 的 value 不是 string，就返回错误，因为 GET 只处理 string 类型的 values。
+Get the value of key. If the key does not exist the special value nil is returned. An error is returned if the value stored at key is not a string, because GET only handles string values.
 
-#### _Redis_ [+](http://www.redis.cn/commands/get.html)
+#### _Redis_ [+](https://redis.io/commands/get)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：key 对应的 value，不存在的时候返回 nil
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of key, or nil when key does not exist.
+- examples:
 
 ```bash
 redis> GET nonexisting
@@ -142,13 +142,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 get(key: string): Promise<string | number | null>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.get("nonexisting");
@@ -159,14 +159,16 @@ await String.get("mykey");
 
 ## getbit
 
-返回 key 对应的 string 在 offset 处的 bit 值 当 offset 超出了字符串长度的时候，这个字符串就被假定为由 0 比特填充的连续空间。当 key 不存在的时候，它就认为是一个空字符串，所以 offset 总是超出范围，然后 value 也被认为是由 0 比特填充的连续空间。到内存分配。
+Returns the bit value at offset in the string value stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/getbit.html)
+When offset is beyond the string length, the string is assumed to be a contiguous space with 0 bits. When key does not exist it is assumed to be an empty string, so offset is always out of range and the value is also assumed to be a contiguous space with 0 bits.
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：在 offset 处的 bit 值
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/getbit)
+
+- available: `>= 2.2.0`
+- complexity: `O(1)`
+- return: the bit value stored at offset.
+- examples:
 
 ```bash
 redis> SETBIT mykey 7 1
@@ -181,13 +183,13 @@ redis> GETBIT mykey 100
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 getbit(key: string, offset: number): Promise<0 | 1>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.getbit("mykey", 0);
@@ -200,18 +202,20 @@ await String.getbit("mykey", 100);
 
 ## getrange
 
-::: warning 警告
-这个命令是被改成 GETRANGE 的，在小于 2.0 的 Redis 版本中叫 SUBSTR。
+::: warning
+this command was renamed to GETRANGE, it is called SUBSTR in Redis versions <= 2.0.
 :::
 
-返回 key 对应的字符串 value 的子串，这个子串是由 start 和 end 位移决定的（两者都在 string 内）。可以用负的位移来表示从 string 尾部开始数的下标。所以-1 就是最后一个字符，-2 就是倒数第二个，以此类推。这个函数处理超出范围的请求时，都把结果限制在 string 内。
+Returns the substring of the string value stored at key, determined by the offsets start and end (both are inclusive). Negative offsets can be used in order to provide an offset starting from the end of the string. So -1 means the last character, -2 the penultimate and so forth.
 
-#### _Redis_ [+](http://www.redis.cn/commands/getrange.html)
+The function handles out of range requests by limiting the resulting range to the actual length of the string.
 
-- 可用版本：`>= 2.4.0`
-- 算法复杂度：`O(N)`
-- 返回值：被截取的字串
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/getrange)
+
+- available: `>= 2.4.0`
+- complexity: `O(N)`
+- return: substring
+- examples:
 
 ```bash
 redis> SET mykey "This is a string"
@@ -228,20 +232,20 @@ redis> GETRANGE mykey 10 100
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 getrange(key: string, [start, end]?: [number, number]): Promise<string>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.getrange("mykey", [0, 3]);
 // "This"
 await String.getrange("mykey", [-3, -1]);
 // "ing"
-await String.getrange("mykey"); // 相当于 await String.getrange("mykey", [0, -1]);
+await String.getrange("mykey"); // Equal await String.getrange("mykey", [0, -1]);
 // "This is a string"
 await String.getrange("mykey", [10, 100]);
 // "string"
@@ -249,14 +253,14 @@ await String.getrange("mykey", [10, 100]);
 
 ## getset
 
-自动将 key 对应到 value 并且返回原来 key 对应的 value。如果 key 存在但是对应的 value 不是字符串，就返回错误。
+Atomically sets key to value and returns the old value stored at key. Returns an error when key exists but does not hold a string value.
 
-#### _Redis_ [+](http://www.redis.cn/commands/getset.html)
+#### _Redis_ [+](https://redis.io/commands/getset)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：对应 key 的旧 value，key 不存在时返回 nil
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the old value stored at key, or nil when key did not exist.
+- examples:
 
 ```bash
 redis> SET mykey "Hello"
@@ -269,13 +273,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 getset(key: string, value: string): Promise<null | string>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.getset("mykey", "World");
@@ -284,14 +288,18 @@ await String.getset("mykey", "World");
 
 ## incr
 
-对存储在指定 key 的数值执行原子的加 1 操作。如果指定的 key 不存在，那么在执行 incr 操作之前，会先将它的值设定为 0。如果指定的 key 中存储的值不是字符串类型或者存储的字符串类型不能表示为一个整数，那么执行这个命令时服务器会返回一个错误。这个操作仅限于 64 位的有符号整型数据。
+Increments the number stored at key by one. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_ [+](http://www.redis.cn/commands/incr.html)
+Note: this is a string operation because Redis does not have a dedicated integer type. The string stored at the key is interpreted as a base-10 64 bit signed integer to execute the operation.
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：执行操作后 key 对应的 value。
-- 指令案例：
+Redis stores integers in their integer representation, so for string values that actually hold an integer, there is no overhead for storing the string representation of the integer.
+
+#### _Redis_ [+](https://redis.io/commands/incr)
+
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of key after the increment
+- examples:
 
 ```bash
 redis> SET mykey "10"
@@ -304,13 +312,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 incr(key: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.incr("mykey");
@@ -319,14 +327,14 @@ await String.incr("mykey");
 
 ## incrby
 
-将 key 对应的数字加 decrement。如果 key 不存在，操作之前，key 就会被置为 0。如果 key 的 value 类型错误或者是个不能表示成数字的字符串，就返回错误。这个操作最多支持 64 位有符号的正型数字。
+Increments the number stored at key by increment. If the key does not exist, it is set to 0 before performing the operation. An error is returned if the key contains a value of the wrong type or contains a string that can not be represented as integer. This operation is limited to 64 bit signed integers.
 
-#### _Redis_ [+](http://www.redis.cn/commands/incrby.html)
+#### _Redis_ [+](https://redis.io/commands/incrby)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：执行操作后 key 对应的 value。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of key after the increment
+- examples:
 
 ```bash
 redis> SET mykey "10"
@@ -337,13 +345,13 @@ redis> INCRBY mykey 5
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 incrby(key: string, increment: number): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.incrby("mykey", 5);
@@ -352,19 +360,19 @@ await String.incrby("mykey", 5);
 
 ## incrbyfloat
 
-通过指定浮点数来增长对应 key 的 value，当 key 不存在时，先将其值设为 0 再操作，下面任一情况都会返回错误：
+Increment the string representing a floating point number stored at key by the specified increment. By using a negative increment value, the result is that the value stored at the key is decremented (by the obvious properties of addition). If the key does not exist, it is set to 0 before performing the operation. An error is returned if one of the following conditions occur:
 
-- key 包含非法值(不是一个 string)
-- 当前的 key 或者相加后的值不能解析为一个双精度的浮点值(超出精度范围了)
+- The key contains a value of the wrong type (not a string).
+- The current key content or the specified increment are not parsable as a double precision floating point number.
 
-如果操作命令成功，相加后的值将替换原值存储在对应的键值上，并以 string 的类型返回。string 中已存的值或者相加参数可以任意选用指数符号，但相加计算的结果会以科学计数法的格式存储。无论各计算的内部精度如何，输出精度都固定为小数点后 17 位。
+If the command is successful the new incremented value is stored as the new value of the key (replacing the old one), and returned to the caller as a string.
 
-#### _Redis_ [+](http://www.redis.cn/commands/incrbyfloat.html)
+#### _Redis_ [+](https://redis.io/commands/incrbyfloat)
 
-- 可用版本：`>= 2.6.0`
-- 算法复杂度：`O(1)`
-- 返回值：当前 key 增加 increment 后的值
-- 指令案例：
+- available: `>= 2.6.0`
+- complexity: `O(1)`
+- return: the value of key after the increment.
+- examples:
 
 ```bash
 redis> SET key1 10.50
@@ -381,13 +389,13 @@ redis> INCRBYFLOAT key2 2.0e2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 incrbyfloat(key: string, increment: number): Promise<string>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.incrbyfloat("key1", 0.1);
@@ -400,14 +408,14 @@ await String.incrbyfloat("key2", 2.0e2);
 
 ## mget
 
-返回所有指定的 key 的 value。对于每个不对应 string 或者不存在的 key，都返回特殊值 nil。正因为此，这个操作从来不会失败。
+Returns the values of all specified keys. For every key that does not hold a string value or does not exist, the special value nil is returned. Because of this, the operation never fails.
 
-#### _Redis_ [+](http://www.redis.cn/commands/mget.html)
+#### _Redis_ [+](https://redis.io/commands/mget)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：指定的 key 对应的 values 的 list
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: list of values at the specified keys.
+- examples:
 
 ```bash
 redis> SET key1 "Hello"
@@ -422,13 +430,13 @@ redis> MGET key1 key2 nonexisting
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 mget(key: string, ...keys: string[]): Promise<Array<string | number | null>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.mget("key1", "key2", "nonexisting");
@@ -437,16 +445,16 @@ await String.mget("key1", "key2", "nonexisting");
 
 ## mset
 
-批量设置 key-value 数据。MSET 会用新的 value 替换已经存在的 value，就像普通的 SET 命令一样。如果你不想覆盖已经存在的 values，请参看命令 MSETNX。
+Sets the given keys to their respective values. MSET replaces existing values with new values, just as regular SET. See MSETNX if you don't want to overwrite existing values.
 
-MSET 是原子的，所以所有给定的 keys 是一次性 set 的。客户端不可能看到这种一部分 keys 被更新而另外的没有改变的情况。
+MSET is atomic, so all given keys are set at once. It is not possible for clients to see that some of the keys were updated while others are unchanged.
 
-#### _Redis_ [+](http://www.redis.cn/commands/mset.html)
+#### _Redis_ [+](https://redis.io/commands/mset)
 
-- 可用版本：`>= 1.0.1`
-- 算法复杂度：`O(N)`
-- 返回值：总是 OK，因为 MSET 不会失败。
-- 指令案例：
+- available: `>= 1.0.1`
+- complexity: `O(N)`
+- return: always OK since MSET can't fail.
+- examples:
 
 ```bash
 redis> MSET key1 "Hello" key2 "World"
@@ -459,13 +467,13 @@ redis> GET key2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 mset(objKV: { [propName: string]: string }): Promise<string>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.mset({
@@ -479,16 +487,20 @@ await String.mget("key1", "key2");
 
 ## msetnx
 
-批量设置 key-value 数据。只要有一个 key 已经存在，MSETNX 一个操作都不会执行。 由于这种特性，MSETNX 可以实现要么所有的操作都成功，要么一个都不执行，这样可以用来设置不同的 key，来表示一个唯一的对象的不同字段。
+Sets the given keys to their respective values. MSETNX will not perform any operation at all even if just a single key already exists.
 
-MSETNX 是原子的，所以所有给定的 keys 是一次性 set 的。客户端不可能看到这种一部分 keys 被更新而另外的没有改变的情况。
+Because of this semantic MSETNX can be used in order to set different keys representing different fields of an unique logic object in a way that ensures that either all the fields or none at all are set.
 
-#### _Redis_ [+](http://www.redis.cn/commands/msetnx.html)
+MSETNX is atomic, so all given keys are set at once. It is not possible for clients to see that some of the keys were updated while others are unchanged.
 
-- 可用版本：`>= 1.0.1`
-- 算法复杂度：`O(N)`
-- 返回值：如果所有的 key 被 set 则返回`1`，如果没有 key 被 set(至少其中有一个 key 是存在的)则返回`0`
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/msetnx)
+
+- available: `>= 1.0.1`
+- complexity: `O(N)`
+- return:
+  - 1 if the all the keys were set.
+  - 0 if no key was set (at least one key already existed).
+- examples:
 
 ```bash
 redis> MSETNX key1 "Hello" key2 "there"
@@ -503,13 +515,13 @@ redis> MGET key1 key2 key3
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 msetnx(objKv: { [propName: string]: string }): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.msetnx({
@@ -528,14 +540,14 @@ await String.mget("key1", "key2", "key3");
 
 ## psetex
 
-设置 key-value 的同时以毫秒为单位设置 key 的生存时间。
+PSETEX works exactly like SETEX with the sole difference that the expire time is specified in milliseconds instead of seconds.
 
-#### _Redis_ [+](http://www.redis.cn/commands/psetex.html)
+#### _Redis_ [+](https://redis.io/commands/psetex)
 
-- 可用版本：`>= 2.6.0`
-- 算法复杂度：`O(1)`
-- 返回值：设置成功时返回 OK 。
-- 指令案例：
+- available: `>= 2.6.0`
+- complexity: `O(1)`
+- return: OK
+- examples:
 
 ```bash
 redis> PSETEX mykey 1000 "Hello"
@@ -548,13 +560,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 psetex(key: string, milliseconds: number, value: string): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.psetex("mykey", 1000, "Hello");
@@ -563,21 +575,22 @@ await String.psetex("mykey", 1000, "Hello");
 
 ## set
 
-将键 key 设定为指定的“字符串”值。如果 key 已经保存了一个值，那么这个操作会直接覆盖原来的值，并且忽略原始类型。当 set 命令执行成功之后，之前设置的过期时间都将失效
+Set key to hold the string value. If key already holds a value, it is overwritten, regardless of its type. Any previous time to live associated with the key is discarded on successful SET operation.
 
-从 2.6.12 版本开始，redis 为 SET 命令增加了一系列选项：
+Options
+Starting with Redis 2.6.12 SET supports a set of options that modify its behavior:
 
-- EX seconds – 设置键 key 的过期时间，单位时秒
-- PX milliseconds – 设置键 key 的过期时间，单位时毫秒
-- NX – 只有键 key 不存在的时候才会设置 key 的值
-- XX – 只有键 key 存在的时候才会设置 key 的值
+- EX seconds -- Set the specified expire time, in seconds.
+- PX milliseconds -- Set the specified expire time, in milliseconds.
+- NX -- Only set the key if it does not already exist.
+- XX -- Only set the key if it already exist.
 
-#### _Redis_ [+](http://www.redis.cn/commands/set.html)
+#### _Redis_ [+](https://redis.io/commands/set)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：如果 SET 命令正常执行那么回返回 OK
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: OK if SET was executed correctly. Null reply: a Null Bulk Reply is returned if the SET operation was not performed because the user specified the NX or XX option but the condition was not met.
+- examples:
 
 ```bash
 redis> SET mykey "Hello"
@@ -588,13 +601,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 set(key: string, value: string): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.set("mykey", "hello");
@@ -603,14 +616,16 @@ await String.set("mykey", "hello");
 
 ## setbit
 
-设置或者清空 key 的 value(字符串)在 offset 处的 bit 值。那个位置的 bit 要么被设置，要么被清空，这个由 value（只能是 0 或者 1）来决定。当 key 不存在的时候，就创建一个新的字符串 value。要确保这个字符串大到在 offset 处有 bit 值。参数 offset 需要大于等于 0，并且小于 2^32(限制 bitmap 大小为 512MB)。当 key 对应的字符串增大的时候，新增的部分 bit 值都是设置为 0。
+Sets or clears the bit at offset in the string value stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/setbit.html)
+The bit is either set or cleared depending on value, which can be either 0 or 1. When key does not exist, a new string value is created. The string is grown to make sure it can hold a bit at offset. The offset argument is required to be greater than or equal to 0, and smaller than 2^32 (this limits bitmaps to 512MB). When the string at key is grown, added bits are set to 0.
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：在 offset 处原来的 bit 值
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/setbit)
+
+- available: `>= 2.2.0`
+- complexity: `O(1)`
+- return: the original bit value stored at offset.
+- examples:
 
 ```bash
 redis> SETBIT mykey 7 1
@@ -623,13 +638,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 setbit(key: string, offset: number, value: 0 | 1): Promise<0 | 1>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.setbit("mykey", 7, 1);
@@ -640,14 +655,14 @@ await String.setbit("mykey", 7, 0);
 
 ## setex
 
-设置 key 对应字符串 value，并且设置 key 在给定的 seconds 时间之后超时过期。
+Set key to hold the string value and set key to timeout after a given number of seconds.
 
-#### _Redis_ [+](http://www.redis.cn/commands/setex.html)
+#### _Redis_ [+](https://redis.io/commands/setex)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值："OK"
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: "OK"
+- examples:
 
 ```bash
 redis> SETEX mykey 10 "Hello"
@@ -660,13 +675,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 setex(key: string, seconds: number, value: string): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.setex("mykey", 10, "Hello");
@@ -675,14 +690,16 @@ await String.setex("mykey", 10, "Hello");
 
 ## setnx
 
-将 key 设置值为 value，如果 key 不存在，这种情况下等同 SET 命令。 当 key 存在时，什么也不做。
+Set key to hold string value if key does not exist. In that case, it is equal to SET. When key already holds a value, no operation is performed. SETNX is short for "SET if Not eXists".
 
-#### _Redis_ [+](http://www.redis.cn/commands/setnx.html)
+#### _Redis_ [+](https://redis.io/commands/setnx)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：设置成功返回 1，失败返回 0
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return:
+  - 1 if the key was set
+  - 0 if the key was not set
+- examples:
 
 ```bash
 redis> SETNX mykey "Hello"
@@ -695,13 +712,13 @@ redis> GET mykey
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 setnx(key: string, value: string): Promise<0 | 1>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.setnx("mykey", "hello");
@@ -712,14 +729,14 @@ await String.setnx("mykey", "world");
 
 ## setrange
 
-这个命令的作用是覆盖 key 对应的 string 的一部分，从指定的 offset 处开始，覆盖 value 的长度。如果 offset 比当前 key 对应 string 还要长，那这个 string 后面就补 0 以达到 offset。不存在的 keys 被认为是空字符串，所以这个命令可以确保 key 有一个足够大的字符串，能在 offset 处设置 value。
+Overwrites part of the string stored at key, starting at the specified offset, for the entire length of value. If the offset is larger than the current length of the string at key, the string is padded with zero-bytes to make offset fit. Non-existing keys are considered as empty strings, so this command will make sure it holds a string large enough to be able to set value at offset.
 
-#### _Redis_ [+](http://www.redis.cn/commands/setrange.html)
+#### _Redis_ [+](https://redis.io/commands/setrange)
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：执行操作后 value 的长度
-- 指令案例：
+- available: `>= 2.2.0`
+- complexity: `O(1)`
+- return:th e length of the string after it was modified by the command.
+- examples:
 
 ```bash
 redis> SET key1 "Hello World"
@@ -736,13 +753,13 @@ redis> GET key2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 setrange(key: string, offset: number, value: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.setrange("key1", 6, "Redis");
@@ -753,14 +770,14 @@ await String.setrange("key2", 6, "Redis");
 
 ## strlen
 
-返回 key 的 string 类型 value 的长度。如果 key 对应的非 string 类型，就返回错误。
+Returns the length of the string value stored at key. An error is returned when key holds a non-string value.
 
-#### _Redis_ [+](http://www.redis.cn/commands/strlen.html)
+#### _Redis_ [+](https://redis.io/commands/strlen)
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：key 对应的字符串 value 的长度，或者 0（key 不存在）
-- 指令案例：
+- available: `>= 2.2.0`
+- complexity: `O(1)`
+- return: the length of the string at key, or 0 when key does not exist.
+- examples:
 
 ```bash
 redis> SET mykey "Hello world"
@@ -773,13 +790,13 @@ redis> STRLEN nonexisting
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 strlen(key: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await String.strlen("mykey");

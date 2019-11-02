@@ -5,21 +5,21 @@ next: ./key
 
 # pool
 
-::: tip 说明
-本节示例中的 `tedisPool` 为 TedisPool 实例对象，演示部分省略了外部的 async 函数层
+::: tip
+This section of sample `tedisPool` as TedisPool instance object, demonstration part omitted async function of the external layer
 :::
 
 ## getTedis
 
-从连接池中获取 Tedis 实例
+Get the Tedis instance from the connection pool
 
-- 接口
+- interface
 
 ```ts
 getTedis(): Promise<Tedis>;
 ```
 
-- 示例
+- example
 
 ```ts
 const tedis = await tedisPool.getTedis();
@@ -27,15 +27,15 @@ const tedis = await tedisPool.getTedis();
 
 ## putTedis
 
-归还实例到连接池
+Return an instance to the connection pool
 
-- 接口
+- interface
 
 ```ts
 putTedis(conn: Tedis): void;
 ```
 
-- 示例
+- example
 
 ```ts
 tedisPool.putTedis(tedis);
@@ -43,15 +43,15 @@ tedisPool.putTedis(tedis);
 
 ## release
 
-释放所有实例
+Release all instances
 
-- 接口
+- interface
 
 ```ts
 release(): void;
 ```
 
-- 示例
+- example
 
 ```ts
 tedisPool.release();

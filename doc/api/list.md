@@ -5,22 +5,22 @@ next: ./set
 
 # list
 
-::: tip 说明
-本节示例中的 `Lsit` 为 Tedis 实例对象，演示部分省略了外部的 async 函数层
+::: tip
+This section of sample `List` as Tedis instance object, demonstration part omitted async function of the external layer
 :::
 
 ## blpop
 
-BLPOP 是阻塞式列表的弹出原语。它是命令 LPOP 的阻塞版本，这是因为当给定列表内没有任何元素可供弹出的时候，连接将被 BLPOP 命令阻塞。当给定多个 key 参数时，按参数 key 的先后顺序依次检查各个列表，弹出第一个非空列表的头元素。
+BLPOP is a blocking list pop primitive. It is the blocking version of LPOP because it blocks the connection when there are no elements to pop from any of the given lists. An element is popped from the head of the first list that is non-empty, with the given keys being checked in the order that they are given.
 
-#### _Redis_ [+](http://www.redis.cn/commands/blpop.html)
+#### _Redis_ [+](https://redis.io/commands/blpop)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 当没有元素的时候会弹出一个 nil 的多批量值，并且 timeout 过期。
-  - 当有元素弹出时会返回一个双元素的多批量值，其中第一个元素是弹出元素的 key，第二个元素是 value。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return:
+  - A nil multi-bulk when no element could be popped and the timeout expired.
+  - A two-element multi-bulk with the first element being the name of the key where an element was popped and the second element being the value of the popped element.
+- examples:
 
 ```bash
 redis> DEL list1 list2
@@ -34,7 +34,7 @@ redis> BLPOP list1 list2 0
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 blpop(
@@ -43,7 +43,7 @@ blpop(
 ): Promise<Array<string | null>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.blpop(0, "list1", "list2");
@@ -52,16 +52,16 @@ await List.blpop(0, "list1", "list2");
 
 ## brpop
 
-BRPOP 是一个阻塞的列表弹出原语，它是 RPOP 的阻塞版本，因为这个命令会在给定 list 无法弹出任何元素的时候阻塞连接。该命令会按照给出的 key 顺序查看 list，并在找到的第一个非空 list 的尾部弹出一个元素。
+BRPOP is a blocking list pop primitive. It is the blocking version of RPOP because it blocks the connection when there are no elements to pop from any of the given lists. An element is popped from the tail of the first list that is non-empty, with the given keys being checked in the order that they are given.
 
-#### _Redis_ [+](http://www.redis.cn/commands/brpop.html)
+#### _Redis_ [+](https://redis.io/commands/brpop)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 当没有元素可以被弹出时返回一个 nil 的多批量值，并且 timeout 过期。
-  - 当有元素弹出时会返回一个双元素的多批量值，其中第一个元素是弹出元素的 key，第二个元素是 value。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return:
+  - A nil multi-bulk when no element could be popped and the timeout expired.
+  - A two-element multi-bulk with the first element being the name of the key where an element was popped and the second element being the value of the popped element.
+- examples:
 
 ```bash
 redis> DEL list1 list2
@@ -75,13 +75,13 @@ redis> BRPOP list1 list2 0
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 brpop(timeout: number, ...keys: string[]): Promise<Array<string | null>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.brpop(["list1", "list2", 0]);
@@ -90,14 +90,14 @@ await List.brpop(["list1", "list2", 0]);
 
 ## brpoplpush
 
-BRPOPLPUSH 是 RPOPLPUSH 的阻塞版本。当 source 包含元素的时候，这个命令表现得跟 RPOPLPUSH 一模一样。当 source 是空的时候，Redis 将会阻塞这个连接，直到另一个客户端 push 元素进入或者达到 timeout 时限。timeout 为 0 能用于无限期阻塞客户端
+BRPOPLPUSH is the blocking variant of RPOPLPUSH. When source contains elements, this command behaves exactly like RPOPLPUSH. When used inside a MULTI/EXEC block, this command behaves exactly like RPOPLPUSH. When source is empty, Redis will block the connection until another client pushes to it or until timeout is reached. A timeout of zero can be used to block indefinitely.
 
-#### _Redis_ [+](http://www.redis.cn/commands/brpoplpush.html)
+#### _Redis_ [+](https://redis.io/commands/brpoplpush)
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：元素从 source 中弹出来，并压入 destination 中。如果达到 timeout 时限，会返回一个空的多批量回复(nil-reply)。
-- 指令案例：
+- available: `>= 2.2.0`
+- complexity: `O(1)`
+- return: the element being popped from source and pushed to destination. If timeout is reached, a Null reply is returned.
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -113,7 +113,7 @@ redis> BRPOPLPUSH mylist reciver 500
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 brpoplpush(
@@ -123,7 +123,7 @@ brpoplpush(
 ): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.brpoplpush("mylist", "reciver", 500);
@@ -131,14 +131,16 @@ await List.brpoplpush("mylist", "reciver", 500);
 
 ## lindex
 
-返回列表里的元素的索引 index 存储在 key 里面。下标是从 0 开始索引的，所以 0 是表示第一个元素， 1 表示第二个元素，并以此类推。负数索引用于指定从列表尾部开始索引的元素。在这种方法下，-1 表示最后一个元素，-2 表示倒数第二个元素，并以此往前推。当 key 位置的值不是一个列表的时候，会返回一个 error。
+Returns the element at index index in the list stored at key. The index is zero-based, so 0 means the first element, 1 the second element and so on. Negative indices can be used to designate elements starting at the tail of the list. Here, -1 means the last element, -2 means the penultimate and so forth.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lindex.html)
+When the value at key is not a list, an error is returned.
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：请求的对应元素，或者当 index 超过范围的时候返回 nil。
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/lindex)
+
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the requested element, or nil when index is out of range.
+- examples:
 
 ```bash
 redis> LPUSH mylist "World"
@@ -155,13 +157,13 @@ redis> LINDEX mylist 3
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lindex(key: string, index: number): Promise<string | null>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lindex("mylist", 0);
@@ -174,14 +176,18 @@ await List.lindex("mylist", 3);
 
 ## linsert
 
-把 value 插入存于 key 的列表中在基准值 pivot 的前面或后面。当 key 不存在时，这个 list 会被看作是空 list，任何操作都不会发生。当 key 存在，但保存的不是一个 list 的时候，会返回 error。
+Inserts value in the list stored at key either before or after the reference value pivot.
 
-#### _Redis_ [+](http://www.redis.cn/commands/linsert.html)
+When key does not exist, it is considered an empty list and no operation is performed.
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(N)`
-- 返回值：经过插入操作后的 list 长度，或者当 pivot 值找不到的时候返回 -1。
-- 指令案例：
+An error is returned when key exists but does not hold a list value.
+
+#### _Redis_ [+](https://redis.io/commands/linsert)
+
+- available: `>= 2.2.0`
+- complexity: `O(N)`
+- return: the length of the list after the insert operation, or -1 when the value pivot was not found.
+- examples:
 
 ```bash
 redis> RPUSH mylist "Hello"
@@ -198,7 +204,7 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 linsert(
@@ -209,7 +215,7 @@ linsert(
 ): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.linsert("mylist", "BEFORE", "World", "There");
@@ -218,14 +224,14 @@ await List.linsert("mylist", "BEFORE", "World", "There");
 
 ## llen
 
-返回存储在 key 里的 list 的长度。如果 key 不存在，那么就被看作是空 list，并且返回长度为 0。当存储在 key 里的值不是一个 list 的话，会返回 error。
+Returns the length of the list stored at key. If key does not exist, it is interpreted as an empty list and 0 is returned. An error is returned when the value stored at key is not a list.
 
-#### _Redis_ [+](http://www.redis.cn/commands/llen.html)
+#### _Redis_ [+](https://redis.io/commands/llen)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：key 对应的 list 的长度。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the length of the list at key.
+- examples:
 
 ```bash
 redis> LPUSH mylist "World"
@@ -238,13 +244,13 @@ redis> LLEN mylist
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 llen(key: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.llen("mylist");
@@ -253,14 +259,14 @@ await List.llen("mylist");
 
 ## lpop
 
-移除并且返回 key 对应的 list 的第一个元素。
+Removes and returns the first element of the list stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lpop.html)
+#### _Redis_ [+](https://redis.io/commands/lpop)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：返回第一个元素的值，或者当 key 不存在时返回 nil。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of the first element, or nil when key does not exist.
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -278,13 +284,13 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lpop(key: string): Promise<string | null>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lpop("mylist");
@@ -293,20 +299,20 @@ await List.lpop("mylist");
 
 ## lpush
 
-将所有指定的值插入到存于 key 的列表的头部。如果 key 不存在，那么在进行 push 操作前会创建一个空列表。如果 key 对应的值不是一个 list 的话，那么会返回一个错误。
+Insert all the specified values at the head of the list stored at key. If key does not exist, it is created as empty list before performing the push operations. When key holds a value that is not a list, an error is returned.
 
-可以使用一个命令把多个元素 push 进入列表，只需在命令末尾加上多个指定的参数。元素是从最左端的到最右端的、一个接一个被插入到 list 的头部。所以对于这个命令例子 LPUSH mylist a b c，返回的列表是 c 为第一个元素，b 为第二个元素，a 为第三个元素。
+It is possible to push multiple elements using a single command call just specifying multiple arguments at the end of the command. Elements are inserted one after the other to the head of the list, from the leftmost element to the rightmost element. So for instance the command LPUSH mylist a b c will result into a list containing c as first element, b as second element and a as third element.
 
-历史
+History
 
-- `>= 2.4`: 接受多个 value 参数。版本老于 2.4 的 Redis 只能每条命令 push 一个值。
+- `>= 2.4`: Accepts multiple value arguments. In Redis versions older than 2.4 it was possible to push a single value per command.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lpush.html)
+#### _Redis_ [+](https://redis.io/commands/lpush)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：在 push 操作后的 list 长度。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the length of the list after the push operations.
+- examples:
 
 ```bash
 redis> LPUSH mylist "world"
@@ -320,13 +326,13 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lpush(key: string, value: string | number, ...values: Array<string | number>): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lpush("mylist", "world");
@@ -337,14 +343,14 @@ await List.lpush("mylist", "hello");
 
 ## lpushx
 
-只有当 key 已经存在并且存着一个 list 的时候，在这个 key 下面的 list 的头部插入 value。与 LPUSH 相反，当 key 不存在的时候不会进行任何操作。
+Inserts value at the head of the list stored at key, only if key already exists and holds a list. In contrary to LPUSH, no operation will be performed when key does not yet exist.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lpushx.html)
+#### _Redis_ [+](https://redis.io/commands/lpushx)
 
-- 可用版本：`>= 2.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：在 push 操作后的 list 长度。
-- 指令案例：
+- available: `>= 2.2.0`
+- complexity: `O(1)`
+- return: the length of the list after the push operation.
+- examples:
 
 ```bash
 redis> LPUSH mylist "World"
@@ -362,13 +368,13 @@ redis> LRANGE myotherlist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lpushx(key: string, value: string | number): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lpushx("mylist", "Hello");
@@ -379,24 +385,24 @@ await List.lpushx("myotherlist", "Hello");
 
 ## lrange
 
-返回存储在 key 的列表里指定范围内的元素。start 和 end 偏移量都是基于 0 的下标，即 list 的第一个元素下标是 0（list 的表头），第二个元素下标是 1，以此类推。
+Returns the specified elements of the list stored at key. The offsets start and stop are zero-based indexes, with 0 being the first element of the list (the head of the list), 1 being the next element and so on.
 
-偏移量也可以是负数，表示偏移量是从 list 尾部开始计数。 例如， -1 表示列表的最后一个元素，-2 是倒数第二个，以此类推。
+These offsets can also be negative numbers indicating offsets starting at the end of the list. For example, -1 is the last element of the list, -2 the penultimate, and so on.
 
-**在不同编程语言里，关于求范围函数的一致性**
+**Consistency with range functions in various programming languages**
 
-需要注意的是，如果你有一个 list，里面的元素是从 0 到 100，那么 LRANGE list 0 10 这个命令会返回 11 个元素，即最右边的那个元素也会被包含在内。 在你所使用的编程语言里，这一点可能是也可能不是跟那些求范围有关的函数都是一致的（像 Ruby 的 Range.new，Array#slice 或者 Python 的 range() 函数）。
+Note that if you have a list of numbers from 0 to 100, LRANGE list 0 10 will return 11 elements, that is, the rightmost item is included. This may or may not be consistent with behavior of range-related functions in your programming language of choice (think Ruby's Range.new, Array#slice or Python's range() function).
 
-**超过范围的下标**
+**Out-of-range indexes**
 
-当下标超过 list 范围的时候不会产生 error。如果 start 比 list 的尾部下标大的时候，会返回一个空列表。如果 stop 比 list 的实际尾部大的时候，Redis 会当它是最后一个元素的下标。
+Out of range indexes will not produce an error. If start is larger than the end of the list, an empty list is returned. If stop is larger than the actual end of the list, Redis will treat it like the last element of the list.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lrange.html)
+#### _Redis_ [+](https://redis.io/commands/lrange)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(S+N)`
-- 返回值：指定范围里的列表元素。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(S+N)`
+- return: list of elements in the specified range.
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -421,13 +427,13 @@ redis> LRANGE mylist 5 10
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lrange(key: string, start: number, stop: number): Promise<string[]>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lrange("mylist", 0, 0);
@@ -442,20 +448,22 @@ await List.lrange("mylist", 5, 10);
 
 ## lrem
 
-从存于 key 的列表里移除前 count 次出现的值为 value 的元素。这个 count 参数通过下面几种方式影响这个操作：
+Removes the first count occurrences of elements equal to value from the list stored at key. The count argument influences the operation in the following ways:
 
-- count > 0: 从头往尾移除值为 value 的元素。
-- count < 0: 从尾往头移除值为 value 的元素。
-- count = 0: 移除所有值为 value 的元素。
+- count > 0: Remove elements equal to value moving from head to tail.
+- count < 0: Remove elements equal to value moving from tail to head.
+- count = 0: Remove all elements equal to value.
 
-比如，`LREM list -2 “hello”` 会从存于 list 的列表里移除最后两个出现的 “hello”。需要注意的是，如果 list 里没有存在 key 就会被当作空 list 处理，所以当 key 不存在的时候，这个命令会返回 0。
+For example, LREM list -2 "hello" will remove the last two occurrences of "hello" in the list stored at list.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lrem.html)
+Note that non-existing keys are treated like empty lists, so when key does not exist, the command will always return 0.
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：被移除的元素个数。
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/lrem)
+
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: the number of removed elements.
+- examples:
 
 ```bash
 redis> RPUSH mylist "hello"
@@ -475,13 +483,13 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lrem(key: string, count: number, value: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lrem("mylist", -2, "hello");
@@ -490,14 +498,16 @@ await List.lrem("mylist", -2, "hello");
 
 ## lset
 
-设置 index 位置的 list 元素的值为 value。更多关于 index 参数的信息，详见 LINDEX。当 index 超出范围时会返回一个 error。
+Sets the list element at index to value. For more information on the index argument, see LINDEX.
 
-#### _Redis_ [+](http://www.redis.cn/commands/lset.html)
+An error is returned for out of range indexes.
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值："OK"
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/lset)
+
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: "OK"
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -518,13 +528,13 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 lset(key: string, index: number, value: string | number): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.lset("mylist", 0, "four");
@@ -535,29 +545,29 @@ await List.lset("mylist", -2, "five");
 
 ## ltrim
 
-修剪(trim)一个已存在的 list，这样 list 就会只包含指定范围的指定元素。start 和 stop 都是由 0 开始计数的，这里的 0 是列表里的第一个元素（表头），1 是第二个元素，以此类推。
+Trim an existing list so that it will contain only the specified range of elements specified. Both start and stop are zero-based indexes, where 0 is the first element of the list (the head), 1 the next element and so on.
 
-例如：`LTRIM foobar 0 2` 将会对存储在 foobar 的列表进行修剪，只保留列表里的前 3 个元素。
+For example: LTRIM foobar 0 2 will modify the list stored at foobar so that only the first three elements of the list will remain.
 
-start 和 end 也可以用负数来表示与表尾的偏移量，比如 -1 表示列表里的最后一个元素，-2 表示倒数第二个，等等。
+start and end can also be negative numbers indicating offsets from the end of the list, where -1 is the last element of the list, -2 the penultimate element and so on.
 
-超过范围的下标并不会产生错误：如果 start 超过列表尾部，或者 start > end，结果会是列表变成空表（即该 key 会被移除）。如果 end 超过列表尾部，Redis 会将其当作列表的最后一个元素。
+Out of range indexes will not produce an error: if start is larger than the end of the list, or start > end, the result will be an empty list (which causes key to be removed). If end is larger than the end of the list, Redis will treat it like the last element of the list.
 
-LTRIM 的一个常见用法是和 LPUSH / RPUSH 一起使用。例如：
+A common use of LTRIM is together with LPUSH / RPUSH. For example:
 
 ```bash
 LPUSH mylist someelement
 LTRIM mylist 0 99
 ```
 
-这一对命令会将一个新的元素 push 进列表里，并保证该列表不会增长到超过 100 个元素。这个是很有用的，比如当用 Redis 来存储日志。需要特别注意的是，当用这种方式来使用 LTRIM 的时候，操作的复杂度是 O(1) ，因为平均情况下，每次只有一个元素会被移除。
+This pair of commands will push a new element on the list, while making sure that the list will not grow larger than 100 elements. This is very useful when using Redis to store logs for example. It is important to note that when used in this way LTRIM is an O(1) operation because in the average case just one element is removed from the tail of the list.
 
-#### _Redis_ [+](http://www.redis.cn/commands/ltrim.html)
+#### _Redis_ [+](https://redis.io/commands/ltrim)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(N)`
-- 返回值："OK"
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(N)`
+- return: "OK"
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -575,13 +585,13 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 ltrim(key: string, start: number, stop: number): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.ltrim("mylist", 1, -1);
@@ -590,14 +600,14 @@ await List.ltrim("mylist", 1, -1);
 
 ## rpop
 
-移除并返回存于 key 的 list 的最后一个元素。
+Removes and returns the last element of the list stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/rpop.html)
+#### _Redis_ [+](https://redis.io/commands/rpop)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：最后一个元素的值，或者当 key 不存在的时候返回 nil。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the value of the last element, or nil when key does not exist.
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -615,13 +625,13 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 rpop(key: string): Promise<string | null>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.rpop("mylist");
@@ -630,18 +640,18 @@ await List.rpop("mylist");
 
 ## rpoplpush
 
-原子性地返回并移除存储在 source 的列表的最后一个元素（列表尾部元素），并把该元素放入存储在 destination 的列表的第一个元素位置（列表头部）。
+Atomically returns and removes the last element (tail) of the list stored at source, and pushes the element at the first element (head) of the list stored at destination.
 
-例如：假设 source 存储着列表 a,b,c，destination 存储着列表 x,y,z。执行 RPOPLPUSH 得到的结果是 source 保存着列表 a,b ，而 destination 保存着列表 c,x,y,z。
+For example: consider source holding the list a,b,c, and destination holding the list x,y,z. Executing RPOPLPUSH results in source holding a,b and destination holding c,x,y,z.
 
-如果 source 不存在，那么会返回 nil 值，并且不会执行任何操作。如果 source 和 destination 是同样的，那么这个操作等同于移除列表最后一个元素并且把该元素放在列表头部，所以这个命令也可以当作是一个旋转列表的命令。
+If source does not exist, the value nil is returned and no operation is performed. If source and destination are the same, the operation is equivalent to removing the last element from the list and pushing it as first element of the list, so it can be considered as a list rotation command.
 
-#### _Redis_ [+](http://www.redis.cn/commands/rpoplpush.html)
+#### _Redis_ [+](https://redis.io/commands/rpoplpush)
 
-- 可用版本：`>= 1.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：被移除和放入的元素
-- 指令案例：
+- available: `>= 1.2.0`
+- complexity: `O(1)`
+- return: the element being popped and pushed.
+- examples:
 
 ```bash
 redis> RPUSH mylist "one"
@@ -661,13 +671,13 @@ redis> LRANGE myotherlist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 rpoplpush(source: string, destination: string): Promise<string | null>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.rpoplpush("mylist", "myotherlist");
@@ -676,20 +686,20 @@ await List.rpoplpush("mylist", "myotherlist");
 
 ## rpush
 
-向存于 key 的列表的尾部插入所有指定的值。如果 key 不存在，那么会创建一个空的列表然后再进行 push 操作。当 key 保存的不是一个列表，那么会返回一个错误。
+Insert all the specified values at the tail of the list stored at key. If key does not exist, it is created as empty list before performing the push operation. When key holds a value that is not a list, an error is returned.
 
-可以使用一个命令把多个元素打入队列，只需要在命令后面指定多个参数。元素是从左到右一个接一个从列表尾部插入。比如命令 RPUSH mylist a b c 会返回一个列表，其第一个元素是 a，第二个元素是 b，第三个元素是 c。
+It is possible to push multiple elements using a single command call just specifying multiple arguments at the end of the command. Elements are inserted one after the other to the tail of the list, from the leftmost element to the rightmost element. So for instance the command RPUSH mylist a b c will result into a list containing a as first element, b as second element and c as third element.
 
-**历史**
+**History**
 
-`>=2.4`: 接受多个 value 参数。在老于 2.4 的 Redis 版本中，一条命令只能 push 单一个值。
+`>= 2.4`: Accepts multiple value arguments. In Redis versions older than 2.4 it was possible to push a single value per command.
 
-#### _Redis_ [+](http://www.redis.cn/commands/rpush.html)
+#### _Redis_ [+](https://redis.io/commands/rpush)
 
-- 可用版本：`>= 1.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：在 push 操作后的列表长度。
-- 指令案例：
+- available: `>= 1.0.0`
+- complexity: `O(1)`
+- return: the length of the list after the push operation.
+- examples:
 
 ```bash
 redis> RPUSH mylist "hello"
@@ -703,7 +713,7 @@ redis> LRANGE mylist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 rpush(
@@ -713,7 +723,7 @@ rpush(
 ): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.rpush("mylist", "hello");
@@ -724,14 +734,14 @@ await List.rpush("mylist", "world");
 
 ## rpushx
 
-将值 value 插入到列表 key 的表尾, 当且仅当 key 存在并且是一个列表。和 RPUSH 命令相反, 当 key 不存在时，RPUSHX 命令什么也不做。
+Inserts value at the tail of the list stored at key, only if key already exists and holds a list. In contrary to RPUSH, no operation will be performed when key does not yet exist.
 
-#### _Redis_ [+](http://www.redis.cn/commands/rpushx.html)
+#### _Redis_ [+](https://redis.io/commands/rpushx)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：RPUSHX 命令执行之后，表的长度。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: the length of the list after the push operation.
+- examples:
 
 ```bash
 redis> RPUSH mylist "Hello"
@@ -749,13 +759,13 @@ redis> LRANGE myotherlist 0 -1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 rpushx(key: string, value: string | number): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await List.rpushx("mylist", "World");

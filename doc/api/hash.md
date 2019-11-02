@@ -5,20 +5,20 @@ next: ./list
 
 # hash
 
-::: tip 说明
-本节示例中的 `Hash` 为 Tedis 实例对象，演示部分省略了外部的 async 函数层
+::: tip
+This section of sample `Hash` as Tedis instance object, demonstration part omitted async function of the external layer
 :::
 
 ## hdel
 
-从 key 指定的哈希集中移除指定的域。在哈希集中不存在的域将被忽略。如果 key 指定的哈希集不存在，它将被认为是一个空的哈希集，该命令将返回 0。
+Removes the specified fields from the hash stored at key. Specified fields that do not exist within this hash are ignored. If key does not exist, it is treated as an empty hash and this command returns 0.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hdel.html)
+#### _Redis_ [+](https://redis.io/commands/hdel)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：返回从哈希集中成功移除的域的数量，不包括指出但不存在的那些域
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(N)`
+- return: the number of fields that were removed from the hash, not including specified but non existing fields.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "foo"
@@ -31,13 +31,13 @@ redis> HDEL myhash field2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hdel(key: string, field: string, ...fields: string[]): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hdel("myhash", "field1");
@@ -48,16 +48,16 @@ await Hash.hdel("myhash", "field2");
 
 ## hexists
 
-desc
+Returns if field is an existing field in the hash stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hexists.html)
+#### _Redis_ [+](https://redis.io/commands/hexists)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 1 hash 里面包含该 field。
-  - 0 hash 里面不包含该 field 或者 key 不存在。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return:
+  - 1 if the hash contains field.
+  - 0 if the hash does not contain field, or key does not exist.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "foo"
@@ -70,13 +70,13 @@ redis> HEXISTS myhash field2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hexists(key: string, field: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hexists("myhash", "field1");
@@ -87,14 +87,14 @@ await Hash.hexists("myhash", "field2");
 
 ## hget
 
-返回 key 指定的哈希集中该字段所关联的值
+Returns the value associated with field in the hash stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hget.html)
+#### _Redis_ [+](https://redis.io/commands/hget)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：该字段所关联的值。当字段不存在或者 key 不存在时返回 nil。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: the value associated with field, or nil when field is not present in the hash or key does not exist.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "foo"
@@ -107,13 +107,13 @@ redis> HGET myhash field2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hget(key: string, field: string): Promise<string | null>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hget("myhash", "field1");
@@ -124,14 +124,14 @@ await Hash.hget("myhash", "field2");
 
 ## hgetall
 
-返回 key 指定的哈希集中所有的字段和值。返回值中，每个字段名的下一个是它的值，所以返回值的长度是哈希集大小的两倍
+Returns all fields and values of the hash stored at key. In the returned value, every field name is followed by its value, so the length of the reply is twice the size of the hash.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hgetall.html)
+#### _Redis_ [+](https://redis.io/commands/hgetall)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：哈希集中字段和值的列表，当 key 指定的哈希集不存在时返回空列表。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(N)`
+- return: list of fields and their values stored in the hash, or an empty list when key does not exist.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "Hello"
@@ -147,13 +147,13 @@ redis> HGETALL myhash
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hgetall(key: string): Promise<{ [propName: string]: string }>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hgetall("myhash");
@@ -165,14 +165,16 @@ await Hash.hgetall("myhash");
 
 ## hincrby
 
-增加 key 指定的哈希集中指定字段的数值。如果 key 不存在，会创建一个新的哈希集并与 key 关联。如果字段不存在，则字段的值在该操作执行前被设置为 0。HINCRBY 支持的值的范围限定在 64 位 有符号整数
+Increments the number stored at field in the hash stored at key by increment. If key does not exist, a new key holding a hash is created. If field does not exist the value is set to 0 before the operation is performed.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hincrby.html)
+The range of values supported by HINCRBY is limited to 64 bit signed integers.
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：增值操作执行后的该字段的值。
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/hincrby)
+
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: the value at field after the increment operation.
+- examples:
 
 ```bash
 redis> HSET myhash field 5
@@ -187,13 +189,13 @@ redis> HINCRBY myhash field -10
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hincrby(key: string, field: string, increment: number): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hincrby("myhash", "field", 1);
@@ -206,17 +208,17 @@ await Hash.hincrby("myhash", "field", -10);
 
 ## hincrbyfloat
 
-为指定 key 的 hash 的 field 字段值执行 float 类型的 increment 加。如果 field 不存在，则在执行该操作前设置为 0。如果出现下列情况之一，则返回错误：
+Increment the specified field of a hash stored at key, and representing a floating point number, by the specified increment. If the increment value is negative, the result is to have the hash field value decremented instead of incremented. If the field does not exist, it is set to 0 before performing the operation. An error is returned if one of the following conditions occur:
 
-- field 的值包含的类型错误(不是字符串)。
-- 当前 field 或者 increment 不能解析为一个 float 类型。
+- The field contains a value of the wrong type (not a string).
+- The current field content or the specified increment are not parsable as a double precision floating point number.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hincrbyfloat.html)
+#### _Redis_ [+](https://redis.io/commands/hincrbyfloat)
 
-- 可用版本：`>= 2.6.0`
-- 算法复杂度：`O(1)`
-- 返回值：field 执行 increment 加后的值
-- 指令案例：
+- available: `>= 2.6.0`
+- complexity: `O(1)`
+- return: the value of field after the increment.
+- examples:
 
 ```bash
 redis> HSET mykey field 10.50
@@ -233,13 +235,13 @@ redis> HINCRBYFLOAT mykey field 2.0e2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hincrbyfloat(key: string, field: string, increment: number): Promise<string>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hincrbyfloat("mykey", "field", 0.1);
@@ -252,14 +254,14 @@ await Hash.hincrbyfloat("mykey", "field", 2.0e2);
 
 ## hkeys
 
-返回 key 指定的哈希集中所有字段的名字。
+Returns all field names in the hash stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hkeys.html)
+#### _Redis_ [+](https://redis.io/commands/hkeys)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：哈希集中的字段列表，当 key 指定的哈希集不存在时返回空列表。
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(N)`
+- return: list of fields in the hash, or an empty list when key does not exist.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "Hello"
@@ -273,13 +275,13 @@ redis> HKEYS myhash
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hkeys(key: string): Promise<string[]>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hkeys("myhash");
@@ -288,14 +290,14 @@ await Hash.hkeys("myhash");
 
 ## hlen
 
-返回 key 指定的哈希集包含的字段的数量。
+Returns the number of fields contained in the hash stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hlen.html)
+#### _Redis_ [+](https://redis.io/commands/hlen)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：哈希集中字段的数量，当 key 指定的哈希集不存在时返回 0
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: number of fields in the hash, or 0 when key does not exist.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "Hello"
@@ -308,13 +310,13 @@ redis> HLEN myhash
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hlen(key: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hlen("myhash");
@@ -323,14 +325,16 @@ await Hash.hlen("myhash");
 
 ## hmget
 
-返回 key 指定的哈希集中指定字段的值。对于哈希集中不存在的每个字段，返回 nil 值。因为不存在的 keys 被认为是一个空的哈希集，对一个不存在的 key 执行 HMGET 将返回一个只含有 nil 值的列表
+Returns the values associated with the specified fields in the hash stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hmget.html)
+For every field that does not exist in the hash, a nil value is returned. Because non-existing keys are treated as empty hashes, running HMGET against a non-existing key will return a list of nil values.
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：含有给定字段及其值的列表，并保持与请求相同的顺序。
-- 指令案例：
+#### _Redis_ [+](https://redis.io/commands/hmget)
+
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return: list of values associated with the given fields, in the same order as they are requested.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "Hello"
@@ -345,13 +349,13 @@ redis> HMGET myhash field1 field2 nofield
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hmget(key: string, field: string, ...fields: string[]): Promise<Array<string | null>>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hmget("myhash", "field1", "field2", "nofield");
@@ -360,14 +364,14 @@ await Hash.hmget("myhash", "field1", "field2", "nofield");
 
 ## hmset
 
-设置 key 指定的哈希集中指定字段的值。该命令将重写所有在哈希集中存在的字段。如果 key 指定的哈希集不存在，会创建一个新的哈希集并与 key 关联
+Sets the specified fields to their respective values in the hash stored at key. This command overwrites any specified fields already existing in the hash. If key does not exist, a new key holding a hash is created.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hmset.html)
+#### _Redis_ [+](https://redis.io/commands/hmset)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(N)`
-- 返回值："OK"
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(N)`
+- return: "OK"
+- examples:
 
 ```bash
 redis> HMSET myhash field1 "Hello" field2 "World"
@@ -380,7 +384,7 @@ redis> HGET myhash field2
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hmset(
@@ -391,7 +395,7 @@ hmset(
 ): Promise<any>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hmset("myhash", {
@@ -403,16 +407,16 @@ await Hash.hmset("myhash", {
 
 ## hset
 
-设置 key 指定的哈希集中指定字段的值。如果 key 指定的哈希集不存在，会创建一个新的哈希集并与 key 关联。如果字段在哈希集中存在，它将被重写。
+Sets field in the hash stored at key to value. If key does not exist, a new key holding a hash is created. If field already exists in the hash, it is overwritten.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hset.html)
+#### _Redis_ [+](https://redis.io/commands/hset)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 1 如果 field 是一个新的字段
-  - 0 如果 field 原来在 map 里面已经存在
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return:
+  - 1 if field is a new field in the hash and value was set.
+  - 0 if field already exists in the hash and the value was updated.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "Hello"
@@ -423,13 +427,13 @@ redis> HGET myhash field1
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hset(key: string, field: string, value: string | number): Promise<0 | 1>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hset("myhash", "field1", "Hello");
@@ -438,16 +442,16 @@ await Hash.hset("myhash", "field1", "Hello");
 
 ## hsetnx
 
-只在 key 指定的哈希集中不存在指定的字段时，设置字段的值。如果 key 指定的哈希集不存在，会创建一个新的哈希集并与 key 关联。如果字段已存在，该操作无效果。
+Sets field in the hash stored at key to value, only if field does not yet exist. If key does not exist, a new key holding a hash is created. If field already exists, this operation has no effect.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hsetnx.html)
+#### _Redis_ [+](https://redis.io/commands/hsetnx)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(1)`
-- 返回值：
-  - 1：如果字段是个新的字段，并成功赋值
-  - 0：如果哈希集中已存在该字段，没有操作被执行
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(1)`
+- return:
+  - 1 if field is a new field in the hash and value was set.
+  - 0 if field already exists in the hash and no operation was performed.
+- examples:
 
 ```bash
 redis> HSETNX myhash field "Hello"
@@ -460,13 +464,13 @@ redis> HGET myhash field
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hsetnx(key: string, field: string, value: string): Promise<0 | 1>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hsetnx("myhash", "field", "Hello");
@@ -477,14 +481,14 @@ await Hash.hsetnx("myhash", "field", "World");
 
 ## hstrlen
 
-返回 hash 指定 field 的 value 的字符串长度，如果 hash 或者 field 不存在，返回 0
+Returns the string length of the value associated with field in the hash stored at key. If the key or the field do not exist, 0 is returned.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hstrlen.html)
+#### _Redis_ [+](https://redis.io/commands/hstrlen)
 
-- 可用版本：`>= 3.2.0`
-- 算法复杂度：`O(1)`
-- 返回值：返回 hash 指定 field 的 value 的字符串长度，如果 hash 或者 field 不存在，返回 0
-- 指令案例：
+- available: `>= 3.2.0`
+- complexity: `O(1)`
+- return: the string length of the value associated with field, or zero when field is not present in the hash or key does not exist at all.
+- examples:
 
 ```bash
 redis> HMSET myhash f1 HelloWorld f2 99 f3 -256
@@ -499,13 +503,13 @@ redis> HSTRLEN myhash f3
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hstrlen(key: string, field: string): Promise<number>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hstrlen("myhash", "f1");
@@ -518,14 +522,14 @@ await Hash.hstrlen("myhash", "f3");
 
 ## hvals
 
-返回 key 指定的哈希集中所有字段的值。
+Returns all values in the hash stored at key.
 
-#### _Redis_ [+](http://www.redis.cn/commands/hvals.html)
+#### _Redis_ [+](https://redis.io/commands/hvals)
 
-- 可用版本：`>= 2.0.0`
-- 算法复杂度：`O(N)`
-- 返回值：
-- 指令案例：
+- available: `>= 2.0.0`
+- complexity: `O(N)`
+- return: list of values in the hash, or an empty list when key does not exist.
+- examples:
 
 ```bash
 redis> HSET myhash field1 "Hello"
@@ -539,13 +543,13 @@ redis> HVALS myhash
 
 #### _Tedis_
 
-- 接口：
+- interface:
 
 ```ts
 hvals(key: string): Promise<string[]>;
 ```
 
-- 示例：
+- example:
 
 ```ts
 await Hash.hvals("myhash");

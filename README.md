@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://tedis.myour.tech/en" target="_blank" rel="noopener noreferrer"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png" alt="tedis logo"></a>
+  <a href="https://tedis.silkjs.org/" target="_blank" rel="noopener noreferrer"><img src="./doc/.vuepress/public/icons/android-chrome-192x192.png" alt="tedis logo"></a>
 </p>
 
 <p align="center">

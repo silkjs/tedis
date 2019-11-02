@@ -6,7 +6,7 @@ vuepress build doc
 
 cd doc/.vuepress/dist
 
-echo 'tedis.myour.tech' > CNAME
+echo 'tedis.silkjs.org' > CNAME
 
 ls -all
 

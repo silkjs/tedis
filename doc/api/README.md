@@ -1,4 +1,9 @@
 ---
+meta:
+  - name: description
+    content: tedis for nodejs
+  - name: keywords
+    content: tedis redis typescript async
 prev: false
 next: ./base
 ---
