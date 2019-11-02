@@ -5,21 +5,21 @@ next: ./pool
 
 # base
 
-::: tip 说明
-本节示例中的 `tedis` 为 Tedis 实例对象，演示部分省略了外部的 async 函数层
+::: tip
+This section of sample ` tedis ` as Tedis instance object, demonstration part omitted async function of the external layer
 :::
 
 ## command
 
-与 redis 交互的基础接口。当你需要使用 redis 中某个方法，但是这个方法暂时没有被 Tedis 实现时，你可以使用`command`代替
+The underlying interface for interacting with redis. When you need to use some methods in redis, but this method has not been temporarily Tedis implementation, you can use a ` command ` instead
 
-- 接口
+- interface
 
 ```ts
 command(...parameters: Array<string | number>): Promise<any>;
 ```
 
-- 示例
+- example
 
 ```ts
 await tedis.command("SET", "mykey", "hello tedis");
@@ -30,9 +30,9 @@ await tedis.command("GET", "mykey");
 
 ## on
 
-Tedis 实例的状态监听钩子
+The status of the Tedis instance listening hook
 
-- 接口
+- interface
 
 ```ts
 on(event: "connect" | "timeout", listener: () => void): void;
@@ -40,7 +40,7 @@ on(event: "error", listener: (err: Error) => void): void;
 on(event: "close", listener: (had_error: boolean) => void): void;
 ```
 
-- 示例
+- example
 
 ```ts
 tedis.on("connect", () => {
@@ -59,15 +59,15 @@ tedis.on("close", had_error => {
 
 ## close
 
-关闭 Tedis 实例
+Close the Tedis instance
 
-- 接口
+- interface
 
 ```ts
 close(): void;
 ```
 
-- 示例
+- example
 
 ```ts
 tedis.close()
