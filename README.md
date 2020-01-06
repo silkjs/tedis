@@ -60,6 +60,19 @@ const tedis = new Tedis({
 });
 ```
 
+_tls_
+
+```ts
+const tedis = new Tedis({
+  port: 6379,
+  host: "127.0.0.1",
+  tls: {
+    key: fs.readFileSync(__dirname + "/client_server/client_key.pem"),
+    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem")
+  }
+});
+```
+
 ### TedisPool
 
 ```ts
@@ -81,6 +94,19 @@ const pool = new TedisPool({
 const tedis = await pool.getTedis();
 // ... do some commands
 pool.putTedis(tedis);
+```
+
+_tls_
+
+```ts
+const tedis = new TedisPool({
+  port: 6379,
+  host: "127.0.0.1",
+  tls: {
+    key: fs.readFileSync(__dirname + "/client_server/client_key.pem"),
+    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem")
+  }
+});
 ```
 
 ### Example
