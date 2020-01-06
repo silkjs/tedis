@@ -1,4 +1,5 @@
 import { createConnection, Socket } from "net";
+import { connect, TLSSocket } from "tls";
 import { v4 as uuidv4 } from "uuid";
 // core
 import { Protocol } from "./protocol";
@@ -17,7 +18,7 @@ export interface InterfaceBase {
 
 export class Base implements InterfaceBase {
   public id: string;
-  private socket: Socket;
+  private socket: Socket | TLSSocket;
   private protocol: Protocol;
   private callbacks: callback[];
   private handle_connect?: () => void;
@@ -30,13 +31,26 @@ export class Base implements InterfaceBase {
       port?: number;
       password?: string;
       timeout?: number;
+      tls?: {
+        key: Buffer;
+        cert: Buffer;
+      };
     } = {}
   ) {
     this.id = uuidv4();
-    this.socket = createConnection({
-      host: options.host || "127.0.0.1",
-      port: options.port || 6379,
-    });
+    if (typeof options.tls !== "undefined") {
+      this.socket = connect({
+        host: options.host || "127.0.0.1",
+        port: options.port || 6379,
+        key: options.tls.key,
+        cert: options.tls.cert,
+      });
+    } else {
+      this.socket = createConnection({
+        host: options.host || "127.0.0.1",
+        port: options.port || 6379,
+      });
+    }
     this.protocol = new Protocol();
     this.callbacks = [];
     this.init();

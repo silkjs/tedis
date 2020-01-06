@@ -18,6 +18,10 @@ export class TedisPool implements InterfacePool {
   private port: number;
   private password?: string;
   private timeout?: number;
+  private tls?: {
+    key: Buffer;
+    cert: Buffer;
+  };
   constructor(
     options: {
       host?: string;
@@ -26,6 +30,10 @@ export class TedisPool implements InterfacePool {
       min_conn?: number;
       max_conn?: number;
       timeout?: number;
+      tls?: {
+        key: Buffer;
+        cert: Buffer;
+      };
     } = {}
   ) {
     this.connection_pool = [];
@@ -37,6 +45,7 @@ export class TedisPool implements InterfacePool {
     this.port = options.port || 6379;
     this.password = options.password;
     this.timeout = options.timeout;
+    this.tls = options.tls;
   }
   public release() {
     this.connection_pool.forEach((conn) => {
@@ -80,6 +89,7 @@ export class TedisPool implements InterfacePool {
         port: this.port,
         password: this.password,
         timeout: this.timeout,
+        tls: this.tls,
       });
       conn.on("connect", () => {
         conn.on("error", (err) => {
