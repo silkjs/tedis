@@ -129,16 +129,13 @@ export class Base implements InterfaceBase {
     });
     this.socket.on("data", (data) => {
       this.protocol.write(data);
-      while (true) {
-        this.protocol.parse();
-        if (!this.protocol.data.state) {
-          break;
-        }
+      const parsed = this.protocol.parse();
+      parsed.forEach((message) => {
         (this.callbacks.shift() as callback)(
-          this.protocol.data.res.error,
-          this.protocol.data.res.data
+          false,
+          message
         );
-      }
+      });
     });
   }
 }

@@ -1,7 +1,8 @@
 import { DESTRUCTION } from "dns";
-import { Protocol } from "../../src/core/protocol";
+import { Protocol, RedisProtocolError } from "../../src/core/protocol";
 
 let protocol: Protocol;
+let data: any;
 
 interface Encode {
   title: string;
@@ -23,25 +24,13 @@ describe("parse", () => {
      */
     it(`+OK`, () => {
       protocol.write(Buffer.from(`+OK\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: "OK",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual(["OK"]);
     });
     it(`+Another Simple String`, () => {
       protocol.write(Buffer.from(`+Another Simple String\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: "Another Simple String",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual(["Another Simple String"]);
     });
   });
 
@@ -55,36 +44,18 @@ describe("parse", () => {
      */
     it(`-Error message`, () => {
       protocol.write(Buffer.from(`-Error message\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: true,
-          data: "Error message",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([new RedisProtocolError("Error", "message")]);
     });
     it(`-ERR unknown command 'foobar'`, () => {
       protocol.write(Buffer.from(`-ERR unknown command 'foobar'\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: true,
-          data: "ERR unknown command 'foobar'",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([new RedisProtocolError("ERR", "unknown command 'foobar'")]);
     });
     it(`-WRONGTYPE Operation against a key holding the wrong kind of value`, () => {
       protocol.write(Buffer.from(`-WRONGTYPE Operation against a key holding the wrong kind of value\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: true,
-          data: "WRONGTYPE Operation against a key holding the wrong kind of value",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([new RedisProtocolError("WRONGTYPE", "Operation against a key holding the wrong kind of value")]);
     });
   });
 
@@ -99,58 +70,28 @@ describe("parse", () => {
      */
     it(`:0`, () => {
       protocol.write(Buffer.from(`:0\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: 0,
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([0]);
     });
     it(`:1000`, () => {
       protocol.write(Buffer.from(`:1000\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: 1000,
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([1000]);
     });
     it(`:-1`, () => {
       protocol.write(Buffer.from(`:-1\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: -1,
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([-1]);
     });
     it(`:-2147483648`, () => {
       protocol.write(Buffer.from(`:-2147483648\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: -2147483648,
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([-2147483648]);
     });
     it(`:2147483647`, () => {
       protocol.write(Buffer.from(`:2147483647\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: 2147483647,
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([2147483647]);
     });
   });
 
@@ -173,130 +114,111 @@ describe("parse", () => {
      */
     it(`$6 foobar`, () => {
       protocol.write(Buffer.from(`$6\r\nfoobar\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: "foobar",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual(["foobar"]);
     });
     it(`$0`, () => {
       protocol.write(Buffer.from(`$0\r\n\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: "",
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([""]);
     });
     it(`$-1`, () => {
       protocol.write(Buffer.from(`$-1\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: null,
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([null]);
     });
     it(`$ array`, () => {
-      protocol.write(Buffer.from(`$9\r\nhello\r\nworld!\r\n`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: ["hello", "world!"],
-        },
-      });
+      protocol.write(Buffer.from(`$9\r\nhello world!\r\n`));
+      data = protocol.parse();
+      expect(data).toEqual(["hello wor"]);
     });
     it(`$ incomplete`, () => {
-      protocol.write(Buffer.from(`$3\r\nhello`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: false,
-        res: {
-          error: false,
-          data: null,
-        },
-      });
+      protocol.write(Buffer.from(`$3\r\nhe`));
+      data = protocol.parse();
+      expect(data).toEqual([]);
     });
   });
 
   describe("RESP Arrays", () => {
     /**
      * RESP Arrays are sent using the following format:
-     *  - A '*' character as the first byte, followed by the number of elements
-     *    in the array as a decimal number, followed by CRLF.
+     *  - A '*' character as the first byte, followed by the number of elements in the array as a decimal number,
+     *    followed by CRLF.
      *  - An additional RESP type for every element of the Array.
+     *
+     * ... A client library API should return a null object and not an empty Array when Redis replies with a Null
+     *     Array. This is necessary to distinguish between an empty list and a different condition (for instance the
+     *     timeout condition of the BLPOP command).
      */
-    it(`*0 Empty Array`, () => {
+    it(`*0 [] Empty Array`, () => {
       protocol.write(
         Buffer.from(`*0\r\n`)
       );
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: [],
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([[]]);
     });
-    it(`*2 foo bar`, () => {
+    it(`*2 [foo bar]`, () => {
       protocol.write(
         Buffer.from(`*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n`)
       );
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: ["foo", "bar"],
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([["foo", "bar"]]);
+    });
+    it(`*3 [1 2 3]`, () => {
+      protocol.write(
+        Buffer.from(`*3\r\n:1\r\n:2\r\n:3\r\n`)
+      );
+      data = protocol.parse();
+      expect(data).toEqual([[1, 2, 3]]);
+    });
+    it(`*5 [1 2 3 4 foobar]`, () => {
+      protocol.write(
+        Buffer.from(`*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$6\r\nfoobar\r\n`)
+      );
+      data = protocol.parse();
+      expect(data).toEqual([[1, 2, 3, 4, "foobar"]]);
+    });
+    it(`*-1 null`, () => {
+      protocol.write(
+        Buffer.from(`*-1\r\n`)
+      );
+      data = protocol.parse();
+      expect(data).toEqual([null]);
+    });
+    it(`*3 foo null bar`, () => {
+      protocol.write(
+        Buffer.from(`*3\r\n$3\r\nfoo\r\n$-1\r\n$3\r\nbar\r\n`)
+      );
+      data = protocol.parse();
+      expect(data).toEqual([["foo", null, "bar"]]);
     });
     it(`* array`, () => {
       protocol.write(
         Buffer.from(`*3\r\n$1\r\n1\r\n$5\r\nhello\r\n$5\r\ntedis\r\n`)
       );
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: true,
-        res: {
-          error: false,
-          data: ["1", "hello", "tedis"],
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([["1", "hello", "tedis"]]);
     });
     it(`* incomplete`, () => {
       protocol.write(Buffer.from(`*3\r\n$1\r\nhello`));
-      protocol.parse();
-      expect(protocol.data).toEqual({
-        state: false,
-        res: {
-          error: false,
-          data: [],
-        },
-      });
+      data = protocol.parse();
+      expect(data).toEqual([]);
     });
   });
-  it(`! type error`, () => {
-    protocol.write(Buffer.from(`!3\r\nhello\r\n`));
-    protocol.parse();
-    expect(protocol.data).toEqual({
-      state: false,
-      res: {
-        error: false,
-        data: null,
-      },
-    });
-  });
+  // it(`! type error`, () => {
+  //   protocol.write(Buffer.from(`!3\r\nhello\r\n`));
+  //   data = protocol.parse();
+  //   expect(data).toEqual({
+  //     state: false,
+  //     res: {
+  //       error: false,
+  //       data: [
+  //         new RedisProtocolError("UNRECOGNIZED RESP", "Failed to parse the line: '!3'."),
+  //         new RedisProtocolError("UNRECOGNIZED RESP", "Failed to parse the line: 'hello'."),
+  //       ],
+  //     },
+  //   });
+  // });
 });
 
 describe("encode", () => {
