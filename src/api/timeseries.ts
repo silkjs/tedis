@@ -6,6 +6,9 @@ enum MethodTimeseries {
   tsalter = "TS.ALTER",
   tsadd = "TS.ADD",
   tsmadd = "TS.MADD",
+  tsincrby = "TS.INCRBY",
+  tsdecrby = "TS.DECRBY",
+  tsget = "TS.GET",
   tsinfo = "TS.INFO",
 }
 
@@ -38,6 +41,25 @@ export interface InterfaceTimeseries {
       timestamp?: number | "*" | undefined,
       value: number | string
     }>): Promise<number[]>;
+  tsincrby(
+    key: string,
+    value: number | string,
+    timestamp: number | "*" | undefined,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
+    }): Promise<number>;
+  tsdecrby(
+    key: string,
+    value: number | string,
+    timestamp: number | "*" | undefined,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
+    }): Promise<number>;
+  tsget(key: string): Promise<number | string>;
   tsinfo(key: string): Promise<any>;
 }
 
@@ -105,6 +127,47 @@ export class RedisTimeseries extends Base implements InterfaceTimeseries {
       collected.push(item.value);
     });
     return this.command(MethodTimeseries.tsmadd, ...collected);
+  }
+  public tsincrby(
+    key: string,
+    value: number | string,
+    timestamp: number | "*" | undefined,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
+    }) {
+    if (timestamp === undefined) {
+      timestamp = "*";
+    }
+    if (options !== undefined) {
+      const collected = collectOptions(options);
+      return this.command(MethodTimeseries.tsincrby, key, value, "TIMESTAMP", timestamp, ...collected);
+    } else {
+      return this.command(MethodTimeseries.tsincrby, key, value, "TIMESTAMP", timestamp);
+    }
+  }
+  public tsdecrby(
+    key: string,
+    value: number | string,
+    timestamp: number | "*" | undefined,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
+    }) {
+    if (timestamp === undefined) {
+      timestamp = "*";
+    }
+    if (options !== undefined) {
+      const collected = collectOptions(options);
+      return this.command(MethodTimeseries.tsdecrby, key, value, "TIMESTAMP", timestamp, ...collected);
+    } else {
+      return this.command(MethodTimeseries.tsdecrby, key, value, "TIMESTAMP", timestamp);
+    }
+  }
+  public tsget(key: string) {
+    return this.command(MethodTimeseries.tsget, key);
   }
   public async tsinfo(key: string) {
     return this.command(MethodTimeseries.tsinfo, key).then((array) => {

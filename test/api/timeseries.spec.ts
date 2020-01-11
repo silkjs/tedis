@@ -1,3 +1,4 @@
+import ts = require("typescript");
 import { RedisProtocolError } from "../../src/core/protocol";
 import { Tedis, TedisPool } from "../../src/main";
 import { config } from "../../tools/index";
@@ -112,6 +113,8 @@ describe("Redis Timeseries Test: TS.ADD", () => {
       uncompressed: true,
       labels: {sensor_id: 4, area_id: 42},
     })).toBe(now);
+    expect(await Timeseries.tsget("temperature:2:32")).toMatchObject([now, "1"]);
+
     const info = await Timeseries.tsinfo("temperature:2:32");
     expect(info.retentionTime).toBe(60000);
     expect(info.labels.sensor_id).toBe("2");
@@ -176,5 +179,93 @@ describe("Redis Timeseries Test: TS.MADD", () => {
       {key: "temperature:2:32", timestamp: now, value: 10},
       {key: "temperature:3:32", timestamp: now + 100, value: 20},
     ])).toMatchObject([now, new RedisProtocolError("TSDB", "the key is not a TSDB key")]);
+  });
+});
+
+describe("Redis Timeseries Test: TS.INCRBY", () => {
+  it(`increment existing key, info shouldn't change`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32", {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+    expect(await Timeseries.tsget("temperature:2:32")).toMatchObject([0, "0"]);
+
+    const now = Date.now();
+    expect(await Timeseries.tsincrby("temperature:2:32", 1, now, {
+      retention: 40000,
+      uncompressed: true,
+      labels: {sensor_id: 4, area_id: 42},
+    })).toBe("OK");
+    expect(await Timeseries.tsget("temperature:2:32")).toMatchObject([now, "1"]);
+
+    const info = await Timeseries.tsinfo("temperature:2:32");
+    expect(info.retentionTime).toBe(60000);
+    expect(info.labels.sensor_id).toBe("2");
+  });
+  it(`increment existing key with no additional options`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32", {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+
+    const now = Date.now();
+    expect(await Timeseries.tsincrby("temperature:2:32", 1, now)).toBe("OK");
+  });
+  it(`create new key through incrby`, async () => {
+    const now = Date.now();
+    expect(await Timeseries.tsincrby("temperature:2:32", 1, now, {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+
+    const info = await Timeseries.tsinfo("temperature:2:32");
+    expect(info.retentionTime).toBe(60000);
+    expect(info.labels.sensor_id).toBe("2");
+  });
+});
+
+describe("Redis Timeseries Test: TS.DECRBY", () => {
+  it(`decrement existing key, info shouldn't change`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32", {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+    expect(await Timeseries.tsget("temperature:2:32")).toMatchObject([0, "0"]);
+
+    const now = Date.now();
+    expect(await Timeseries.tsdecrby("temperature:2:32", 1, now, {
+      retention: 40000,
+      uncompressed: true,
+      labels: {sensor_id: 4, area_id: 42},
+    })).toBe("OK");
+    expect(await Timeseries.tsget("temperature:2:32")).toMatchObject([now, "-1"]);
+    const info = await Timeseries.tsinfo("temperature:2:32");
+    expect(info.retentionTime).toBe(60000);
+    expect(info.labels.sensor_id).toBe("2");
+  });
+  it(`decrement existing key with no additional options`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32", {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+
+    const now = Date.now();
+    expect(await Timeseries.tsdecrby("temperature:2:32", 1, now)).toBe("OK");
+  });
+  it(`create new key through decrby`, async () => {
+    const now = Date.now();
+    expect(await Timeseries.tsdecrby("temperature:2:32", 1, now, {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+    const info = await Timeseries.tsinfo("temperature:2:32");
+    expect(info.retentionTime).toBe(60000);
+    expect(info.labels.sensor_id).toBe("2");
   });
 });
