@@ -19,3 +19,14 @@ services:
     environment:
       REDIS_PASSWORD: tedis_love_you
     command: ["sh", "-c", 'exec redis-server --requirepass "$$REDIS_PASSWORD"']
+  redis-ts:
+    image: redislabs/redistimeseries
+    networks:
+      - net-redis
+    ports:
+      - "6371:6371"
+    volumes:
+      - volume-redis:/data
+    environment:
+      REDIS_PASSWORD: tedis_love_you
+    command: ["sh", "-c", 'exec redis-server --requirepass "$$REDIS_PASSWORD" --port 6371 --loadmodule /usr/lib/redis/modules/redistimeseries.so']

@@ -4,6 +4,7 @@ import { InterfaceKey, RedisKey } from "../api/key";
 import { InterfaceList, RedisList } from "../api/list";
 import { InterfaceSet, RedisSet } from "../api/set";
 import { InterfaceString, RedisString } from "../api/string";
+import { InterfaceTimeseries, RedisTimeseries } from "../api/timeseries";
 import { InterfaceZset, RedisZset } from "../api/zset";
 // util
 import { Mixins } from "../util/tools";
@@ -17,7 +18,8 @@ interface InterfaceRedis
     InterfaceHash,
     InterfaceList,
     InterfaceSet,
-    InterfaceZset {}
+    InterfaceZset,
+    InterfaceTimeseries {}
 
 export class Tedis extends Mixins<
   new (options?: {
@@ -30,4 +32,4 @@ export class Tedis extends Mixins<
       cert: Buffer;
     };
   }) => InterfaceRedis
->(Base, [RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisZset]) {}
+>(Base, [RedisKey, RedisString, RedisHash, RedisList, RedisSet, RedisZset, RedisTimeseries]) {}
