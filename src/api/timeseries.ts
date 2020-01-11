@@ -3,6 +3,8 @@ import { Array2Object } from "../util/tools";
 
 enum MethodTimeseries {
   tscreate = "TS.CREATE",
+  tsalter = "TS.ALTER",
+  tsadd = "TS.ADD",
   tsinfo = "TS.INFO",
 }
 
@@ -11,13 +13,35 @@ export interface InterfaceTimeseries {
     key: string,
     options?: {
       retention?: number,
+      uncompressed?: boolean,
       labels?: { [propName: string]: string | number; }
+    }): Promise<number>;
+  tsalter(
+    key: string,
+    options?: {
+      retention?: number,
+      labels?: { [propName: string]: string | number; }
+    }): Promise<number>;
+  tsadd(
+    key: string,
+    timestamp: number | "*" | undefined,
+    value: number | string,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
     }): Promise<number>;
   tsinfo(key: string): Promise<any>;
 }
 
 export class RedisTimeseries extends Base implements InterfaceTimeseries {
-  public tscreate(key: string, options?: {retention?: number, labels?: {[propName: string]: string | number; }}) {
+  public tscreate(
+    key: string,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
+    }) {
     if (options !== undefined) {
       const collected = collectOptions(options);
       return this.command(MethodTimeseries.tscreate, key, ...collected);
@@ -25,7 +49,39 @@ export class RedisTimeseries extends Base implements InterfaceTimeseries {
       return this.command(MethodTimeseries.tscreate, key);
     }
   }
-  public tsinfo(key: string) {
+  public tsalter(
+    key: string,
+    options?: {
+      retention?: number,
+      labels?: {[propName: string]: string | number; }
+    }) {
+    if (options !== undefined) {
+      const collected = collectOptions(options);
+      return this.command(MethodTimeseries.tsalter, key, ...collected);
+    } else {
+      return this.command(MethodTimeseries.tsalter, key);
+    }
+  }
+  public tsadd(
+    key: string,
+    timestamp: number | "*" | undefined,
+    value: number | string,
+    options?: {
+      retention?: number,
+      uncompressed?: boolean,
+      labels?: {[propName: string]: string | number; }
+    }) {
+    if (timestamp === undefined) {
+      timestamp = "*";
+    }
+    if (options !== undefined) {
+      const collected = collectOptions(options);
+      return this.command(MethodTimeseries.tsadd, key, timestamp, value, ...collected);
+    } else {
+      return this.command(MethodTimeseries.tsadd, key, timestamp, value);
+    }
+  }
+  public async tsinfo(key: string) {
     return this.command(MethodTimeseries.tsinfo, key).then((array) => {
       const response = Array2Object(array);
       if (response.labels !== undefined) {
@@ -42,10 +98,19 @@ export class RedisTimeseries extends Base implements InterfaceTimeseries {
   }
 }
 
-function collectOptions(options: {retention?: number, labels?: {[propName: string]: string | number; }}) {
+function collectOptions(
+  options: {
+    retention?: number,
+    uncompressed?: boolean,
+    labels?: {[propName: string]: string | number; }
+  }) {
   const collected = new Array();
   if (options.retention !== undefined) {
     collected.push("RETENTION", options.retention);
+  }
+
+  if (options.uncompressed !== undefined && options.uncompressed) {
+    collected.push("UNCOMPRESSED");
   }
 
   if (options.labels !== undefined) {
