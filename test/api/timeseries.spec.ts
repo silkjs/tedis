@@ -1,3 +1,4 @@
+import { RedisProtocolError } from "../../src/core/protocol";
 import { Tedis, TedisPool } from "../../src/main";
 import { config } from "../../tools/index";
 
@@ -135,5 +136,45 @@ describe("Redis Timeseries Test: TS.ADD", () => {
     const info = await Timeseries.tsinfo("temperature:2:32");
     expect(info.retentionTime).toBe(60000);
     expect(info.labels.sensor_id).toBe("2");
+  });
+});
+
+describe("Redis Timeseries Test: TS.MADD", () => {
+  it(`add to existing key`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32", {
+      retention: 60000,
+      uncompressed: true,
+      labels: {sensor_id: 2, area_id: 32},
+    })).toBe("OK");
+
+    const now = Date.now();
+    expect(await Timeseries.tsmadd([{key: "temperature:2:32", timestamp: now, value: 10}])).toMatchObject([now]);
+  });
+  it(`add to existing keys`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32")).toBe("OK");
+    expect(await Timeseries.tscreate("temperature:3:32")).toBe("OK");
+
+    const now = Date.now();
+    expect(await Timeseries.tsmadd([
+      {key: "temperature:2:32", timestamp: now, value: 10},
+      {key: "temperature:3:32", timestamp: now + 100, value: 20},
+    ])).toMatchObject([now, now + 100]);
+  });
+  it(`add to existing key without timestamp`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32")).toBe("OK");
+
+    const result = await Timeseries.tsmadd([
+      {key: "temperature:2:32", value: 10},
+    ]);
+    expect(result[0]).toBeCloseTo(Date.now(), -1);
+  });
+  it(`add to non-existing key`, async () => {
+    expect(await Timeseries.tscreate("temperature:2:32")).toBe("OK");
+
+    const now = Date.now();
+    expect(await Timeseries.tsmadd([
+      {key: "temperature:2:32", timestamp: now, value: 10},
+      {key: "temperature:3:32", timestamp: now + 100, value: 20},
+    ])).toMatchObject([now, new RedisProtocolError("TSDB", "the key is not a TSDB key")]);
   });
 });

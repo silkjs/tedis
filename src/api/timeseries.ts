@@ -5,6 +5,7 @@ enum MethodTimeseries {
   tscreate = "TS.CREATE",
   tsalter = "TS.ALTER",
   tsadd = "TS.ADD",
+  tsmadd = "TS.MADD",
   tsinfo = "TS.INFO",
 }
 
@@ -31,6 +32,12 @@ export interface InterfaceTimeseries {
       uncompressed?: boolean,
       labels?: {[propName: string]: string | number; }
     }): Promise<number>;
+  tsmadd(
+    data: Array<{
+      key: string,
+      timestamp?: number | "*" | undefined,
+      value: number | string
+    }>): Promise<number[]>;
   tsinfo(key: string): Promise<any>;
 }
 
@@ -80,6 +87,24 @@ export class RedisTimeseries extends Base implements InterfaceTimeseries {
     } else {
       return this.command(MethodTimeseries.tsadd, key, timestamp, value);
     }
+  }
+  public tsmadd(
+    data: Array<{
+      key: string,
+      timestamp?: number | "*" | undefined,
+      value: number | string
+    }>) {
+    const collected = new Array();
+    data.forEach((item) => {
+      collected.push(item.key);
+      if (item.timestamp === undefined) {
+        collected.push("*");
+      } else {
+        collected.push(item.timestamp);
+      }
+      collected.push(item.value);
+    });
+    return this.command(MethodTimeseries.tsmadd, ...collected);
   }
   public async tsinfo(key: string) {
     return this.command(MethodTimeseries.tsinfo, key).then((array) => {
