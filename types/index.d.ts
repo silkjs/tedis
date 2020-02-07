@@ -6,6 +6,10 @@ export class Tedis {
     port?: number;
     password?: string;
     timeout?: number;
+    tls?: {
+      key: Buffer;
+      cert: Buffer;
+    };
   });
   public command(...parameters: Array<string | number>): Promise<any>;
   public close(): void;
@@ -396,6 +400,10 @@ export class TedisPool {
     min_conn?: number;
     max_conn?: number;
     timeout?: number;
+    tls?: {
+      key: Buffer;
+      cert: Buffer;
+    };
   });
   public getTedis(): Promise<Tedis>;
   public putTedis(tedis: Tedis): void;
