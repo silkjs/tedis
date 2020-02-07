@@ -1,6 +1,6 @@
 {
   "name": "tedis",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "main": "build/main.js",
   "typings": "types/index.d.ts",
   "scripts": {
