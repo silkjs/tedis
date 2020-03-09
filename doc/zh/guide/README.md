@@ -65,7 +65,7 @@ _Tedis_
 | host?     | string | 127.0.0.1 |
 | port?     | number | 6379      |
 | password? | string |           |
-| timeour?  | number |           |
+| timeout?  | number |           |
 
 ```ts
 const tedis = new Tedis({
@@ -84,7 +84,7 @@ _TedisPool_
 | password? | string |           |
 | min_conn? | number | 1         |
 | max_conn? | number | 10        |
-| timeour?  | number |           |
+| timeout?  | number |           |
 
 ```ts
 const tedispool = new TedisPool({
