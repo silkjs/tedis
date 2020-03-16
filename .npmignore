@@ -7,8 +7,7 @@ example
 node_modules
 reference
 script
-src/**/*.spec.ts
-tools
+src/
 .coveralls.yml
 .editorconfig
 .eslintrc.json
@@ -18,5 +17,5 @@ docker-compose.yml
 jest.config.js
 package-lock.json
 tsconfig.json
+tsconfig.app.json
 tsconfig.spec.json
-tslint.json

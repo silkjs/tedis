@@ -1,6 +1,6 @@
 {
   "name": "tedis",
-  "version": "0.1.12",
+  "version": "0.2.0-beta",
   "main": "build/main.js",
   "scripts": {
     "doc:dev": "vuepress dev doc",
