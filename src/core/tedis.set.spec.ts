@@ -1,5 +1,5 @@
-import { Tedis, TedisPool } from "../../src/main";
-import { config } from "../../tools/index";
+import { Tedis, TedisPool } from "../main";
+import { config } from "../util/index";
 
 const Pool = new TedisPool(config);
 let Set: Tedis;
@@ -121,7 +121,7 @@ describe("Redis List Test: SMOVE", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
   it(`destination error`, async () => {
@@ -134,7 +134,7 @@ describe("Redis List Test: SMOVE", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -148,7 +148,7 @@ describe("Redis List Test: SPOP", () => {
     expect(await Set.command("SADD", "myset", "a", "b", "c", 2018)).toBe(4);
     expect(["a", "b", "c", "2018"]).toContain(await Set.spop("myset"));
     expect(["a", "b", "c", "2018"]).toEqual(
-      expect.arrayContaining(await Set.spop("myset", 2))
+      expect.arrayContaining(await Set.spop("myset", 2)),
     );
   });
 });
@@ -162,7 +162,7 @@ describe("Redis List Test: SRANDMEMBER", () => {
     expect(await Set.command("SADD", "myset", "a", "b", "c", 2018)).toBe(4);
     expect(["a", "b", "c", "2018"]).toContain(await Set.spop("myset"));
     expect(["a", "b", "c", "2018"]).toEqual(
-      expect.arrayContaining(await Set.spop("myset", 2))
+      expect.arrayContaining(await Set.spop("myset", 2)),
     );
   });
 });
@@ -186,7 +186,7 @@ describe("Redis List Test: SREM", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -198,7 +198,9 @@ describe("Redis List Test: SUNION", () => {
   it(`key exists`, async () => {
     expect(await Set.command("SADD", "key1", "a", "b", "c")).toBe(3);
     expect(await Set.command("SADD", "key2", "c", "d", "e")).toBe(3);
-    expect((await Set.sunion("key1", "key2")).sort()).toEqual(["a", "b", "c", "d", "e"].sort());
+    expect((await Set.sunion("key1", "key2")).sort()).toEqual(
+      ["a", "b", "c", "d", "e"].sort(),
+    );
   });
 });
 

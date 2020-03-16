@@ -1,5 +1,5 @@
-import { Tedis, TedisPool } from "../../src/main";
-import { config } from "../../tools/index";
+import { Tedis, TedisPool } from "../main";
+import { config } from "../util/index";
 
 const Pool = new TedisPool(config);
 let Key: Tedis;
@@ -54,9 +54,7 @@ describe("Redis Key Test: EXPIREAT", () => {
   it(`mykey expireat (Date.now() / 1000).toFixed(0) + 1`, async () => {
     expect(await Key.command("SET", "mykey", "Hello")).toBe("OK");
     expect(await Key.command("TTL", "mykey")).toBe(-1);
-    expect(
-      await Key.expireat("mykey", +(Date.now() / 1000).toFixed(0) + 1)
-    ).toBe(1);
+    expect(await Key.expireat("mykey", +(Date.now() / 1000).toFixed(0) + 1)).toBe(1);
     expect(await Key.command("TTL", "mykey")).not.toBe(-1);
   });
   it(`key does not exist`, async () => {
@@ -69,22 +67,16 @@ describe("Redis Key Test: KEYS", () => {
     expect(await Key.command("SET", "firstname", "Jack")).toBe("OK");
     expect(await Key.command("SET", "lastname", "Stuntman")).toBe("OK");
     expect(await Key.command("SET", "age", 35)).toBe("OK");
-    expect((await Key.keys("*name*")).sort()).toEqual(
-      ["firstname", "lastname"].sort()
-    );
+    expect((await Key.keys("*name*")).sort()).toEqual(["firstname", "lastname"].sort());
     expect((await Key.keys("a??")).sort()).toEqual(["age"].sort());
-    expect((await Key.keys("*")).sort()).toEqual(
-      ["firstname", "lastname", "age"].sort()
-    );
+    expect((await Key.keys("*")).sort()).toEqual(["firstname", "lastname", "age"].sort());
   });
 });
 
 describe("Redis Key Test: MOVE", () => {
   it(`move mymovekey from 7 to 0`, async () => {
     expect(await Key.command("SELECT", 7)).toBe("OK");
-    expect(await Key.command("SET", "mymovekey", "secret base - Zone")).toBe(
-      "OK"
-    );
+    expect(await Key.command("SET", "mymovekey", "secret base - Zone")).toBe("OK");
     expect(await Key.move("mymovekey", 0)).toBe(1);
   });
   it(`key was not moved`, async () => {
@@ -155,7 +147,7 @@ describe("Redis Key Test: RANDOMKEY", () => {
       key2: "World",
     };
     const keys = Reflect.ownKeys(obj) as string[];
-    keys.forEach(async (key) => {
+    keys.forEach(async key => {
       expect(await Key.command("SET", key, obj[key])).toBe("OK");
     });
     const res = await Key.randomkey();
@@ -183,7 +175,7 @@ describe("Redis Key Test: RENAME", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -206,7 +198,7 @@ describe("Redis Key Test: RENAMENX", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });

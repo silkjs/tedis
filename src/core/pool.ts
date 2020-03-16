@@ -34,7 +34,7 @@ export class TedisPool implements InterfacePool {
         key: Buffer;
         cert: Buffer;
       };
-    } = {}
+    } = {},
   ) {
     this.connection_pool = [];
     this.cushion_list = [];
@@ -48,7 +48,7 @@ export class TedisPool implements InterfacePool {
     this.tls = options.tls;
   }
   public release() {
-    this.connection_pool.forEach((conn) => {
+    this.connection_pool.forEach(conn => {
       conn.close();
     });
   }
@@ -92,7 +92,7 @@ export class TedisPool implements InterfacePool {
         tls: this.tls,
       });
       conn.on("connect", () => {
-        conn.on("error", (err) => {
+        conn.on("error", err => {
           console.log(err);
         });
         conn.on("close", (had_error: boolean) => {
@@ -103,14 +103,14 @@ export class TedisPool implements InterfacePool {
         });
         resolve(conn);
       });
-      conn.on("error", (err) => {
+      conn.on("error", err => {
         this.act_conn--;
         reject(err);
       });
     });
   }
   private closeConnection(conn: Tedis) {
-    const index = this.connection_pool.findIndex((item) => {
+    const index = this.connection_pool.findIndex(item => {
       return item.id === conn.id;
     });
     if (-1 !== index) {

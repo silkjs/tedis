@@ -1,5 +1,5 @@
-import { Tedis, TedisPool } from "../../src/main";
-import { config } from "../../tools/index";
+import { Tedis, TedisPool } from "../main";
+import { config } from "../util/index";
 
 const Pool = new TedisPool(config);
 let List: Tedis;
@@ -71,13 +71,11 @@ describe("Redis List Test: LINSERT", () => {
     await expect(
       (async () => {
         try {
-          return Promise.reject(
-            await List.linsert("mylist", "BEFORE", "World", "Hello")
-          );
+          return Promise.reject(await List.linsert("mylist", "BEFORE", "World", "Hello"));
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -100,7 +98,7 @@ describe("Redis List Test: LLEN", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -124,7 +122,7 @@ describe("Redis List Test: LPOP", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -147,7 +145,7 @@ describe("Redis List Test: LPUSH", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -170,7 +168,7 @@ describe("Redis List Test: LPUSHX", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -195,7 +193,7 @@ describe("Redis List Test: LRANGE", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -217,8 +215,8 @@ describe("Redis List Test: LREM", () => {
         "2",
         "one",
         "two",
-        "3"
-      )
+        "3",
+      ),
     ).toBe(9);
     expect(await List.lrem("mylist", 2, "hello")).toBe(0);
     expect(await List.lrem("mylist", 2, "one")).toBe(2);
@@ -233,7 +231,7 @@ describe("Redis List Test: LREM", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -247,7 +245,7 @@ describe("Redis List Test: LSET", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
   it(`type is list`, async () => {
@@ -263,8 +261,8 @@ describe("Redis List Test: LSET", () => {
         "2",
         "one",
         "two",
-        "3"
-      )
+        "3",
+      ),
     ).toBe(9);
     expect(await List.lset("mylist", 0, "hello")).toBe("OK");
     expect(await List.lset("mylist", 1, "world")).toBe("OK");
@@ -278,7 +276,7 @@ describe("Redis List Test: LSET", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -301,8 +299,8 @@ describe("Redis List Test: LTRIM", () => {
         "2",
         "one",
         "two",
-        "3"
-      )
+        "3",
+      ),
     ).toBe(9);
     expect(await List.ltrim("mylist", 1, -1)).toBe("OK");
     expect(await List.command("LRANGE", "mylist", 0, -1)).toEqual([
@@ -325,7 +323,7 @@ describe("Redis List Test: LTRIM", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -349,7 +347,7 @@ describe("Redis List Test: RPOP", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -371,8 +369,8 @@ describe("Redis List Test: RPOPLPUSH", () => {
         2,
         "one",
         "two",
-        3
-      )
+        3,
+      ),
     ).toBe(9);
     expect(await List.rpoplpush("mylist", "myotherlist")).toBe("3");
   });
@@ -385,7 +383,7 @@ describe("Redis List Test: RPOPLPUSH", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -408,7 +406,7 @@ describe("Redis List Test: RPUSH", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });
@@ -431,7 +429,7 @@ describe("Redis List Test: RPUSHX", () => {
         } catch (error) {
           throw new Error(error);
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
 });

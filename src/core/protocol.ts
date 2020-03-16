@@ -9,7 +9,7 @@ export class Protocol {
   private _result: string[];
   private _end: string;
   constructor() {
-    this._result = new Array();
+    this._result = [];
     this._end = "";
     this.data = {
       state: true,
@@ -101,11 +101,7 @@ export class Protocol {
           } else {
             this.data.res.data = [];
             let i: number;
-            for (
-              i = 1;
-              i < this._result.length && this.data.res.data.length < len;
-              i++
-            ) {
+            for (i = 1; i < this._result.length && this.data.res.data.length < len; i++) {
               if ("$-1" === this._result[i].slice(0, 3)) {
                 this.data.res.data.push(null);
               } else if (typeof this._result[i + 1] === "undefined") {

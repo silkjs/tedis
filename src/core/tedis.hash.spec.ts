@@ -1,5 +1,5 @@
-import { Tedis, TedisPool } from "../../src/main";
-import { config } from "../../tools/index";
+import { Tedis, TedisPool } from "../main";
+import { config } from "../util/index";
 
 const Pool = new TedisPool(config);
 let Hash: Tedis;
@@ -45,9 +45,7 @@ describe("Redis Hash Test: HGET", () => {
     expect(await Hash.hget("myhash", "field")).toBeNull();
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
     expect(await Hash.hget("myhash", "field1")).toBe("foo");
     expect(await Hash.hget("myhash", "field2")).toBe("2");
   });
@@ -58,9 +56,7 @@ describe("Redis Hash Test: HGETALL", () => {
     expect(await Hash.hgetall("myhash")).toEqual({});
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
     expect(await Hash.hgetall("myhash")).toEqual({
       field1: "foo",
       field2: "2",
@@ -81,7 +77,7 @@ describe("Redis Hash Test: HINCRBY", () => {
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
   it(`hash value is an integer`, async () => {
@@ -99,13 +95,11 @@ describe("Redis Hash Test: HINCRBYFLOAT", () => {
     await expect(
       (async () => {
         try {
-          return Promise.reject(
-            await Hash.hincrbyfloat("myhash", "field1", 0.1)
-          );
+          return Promise.reject(await Hash.hincrbyfloat("myhash", "field1", 0.1));
         } catch (error) {
           throw new Error();
         }
-      })()
+      })(),
     ).rejects.toThrow(Error);
   });
   it(`hash value is an integer`, async () => {
@@ -119,12 +113,8 @@ describe("Redis Hash Test: HKEYS", () => {
     expect(await Hash.hkeys("myhash")).toEqual([]);
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
-    expect((await Hash.hkeys("myhash")).sort()).toEqual(
-      ["field1", "field2"].sort()
-    );
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
+    expect((await Hash.hkeys("myhash")).sort()).toEqual(["field1", "field2"].sort());
   });
 });
 
@@ -133,9 +123,7 @@ describe("Redis Hash Test: HLEN", () => {
     expect(await Hash.hlen("myhash")).toBe(0);
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
     expect(await Hash.hlen("myhash")).toBe(2);
   });
 });
@@ -145,9 +133,7 @@ describe("Redis Hash Test: HMGET", () => {
     expect(await Hash.hmget("myhash", "field1")).toEqual([null]);
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
     expect(await Hash.hmget("myhash", "field1", "field2", "field3")).toEqual([
       "foo",
       "2",
@@ -163,7 +149,7 @@ describe("Redis Hash Test: HMSET", () => {
         field1: "Hello",
         field2: "World",
         field3: 2018,
-      })
+      }),
     ).toBe("OK");
     expect(await Hash.hgetall("myhash")).toEqual({
       field1: "Hello",
@@ -172,9 +158,7 @@ describe("Redis Hash Test: HMSET", () => {
     });
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
     const mock = {
       field1: "Hello",
       field2: "World",
@@ -185,7 +169,7 @@ describe("Redis Hash Test: HMSET", () => {
         field1: "Hello",
         field2: "World",
         field3: 2018,
-      })
+      }),
     ).toBe("OK");
     expect(await Hash.hgetall("myhash")).toEqual({
       field1: "Hello",
@@ -230,9 +214,7 @@ describe("Redis Hash Test: HVALS", () => {
     expect(await Hash.hvals("myhash")).toEqual([]);
   });
   it(`key exists`, async () => {
-    expect(
-      await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)
-    ).toBe(2);
+    expect(await Hash.command("HSET", "myhash", "field1", "foo", "field2", 2)).toBe(2);
     expect(await Hash.hvals("myhash")).toEqual(["foo", "2"]);
   });
 });
