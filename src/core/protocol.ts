@@ -48,14 +48,16 @@ export class RedisProtocolError extends Error {
 
 class ProtocolParser {
   public static parse(raw: string): any[] {
-    const masterRegex = [
-      "(?<simple>(?<=(?:\\r\\n|^)\\+).+?(?=\\r\\n))",
-      "(?<error>(?<=(?:\\r\\n|^)\\-).+?(?=\\r\\n))",
-      "(?<int>(?<=(?:\\r\\n|^)\\:)-?\\d+(?=\\r\\n))",
-      "(?<bulk>(?<=(?:\\r\\n|^)\\$(?<bulk_n>\\d+)\\r\\n).*?(?=\\r\\n))",
-      "(?<null_string>(?<=(?:\\r\\n|^)(\\$|\\*)-1\\r\\n))",
-      "(?<array>(?<=(?:\\r\\n|^)\\*(?<array_n>\\d+)\\r\\n))",
+    let masterRegex = [
+      "\\+(?<simple>.+?)",
+      "\\-(?<error>.+?)",
+      "\\:(?<int>-?\\d+)",
+      "\\$(?<bulk_n>\\d+)\\r\\n(?<bulk>.*?)",
+      "\\*(?<array_n>\\d+)(?<array>)",
+      "(\\$|\\*)(?<null_string>-1)",
     ].join("|");
+
+    masterRegex = `(?<=\\r\\n|^)(?:${masterRegex})(?=\\r\\n)`;
     return Array.from(raw.matchAll(new RegExp(masterRegex, "g")));
   }
 
@@ -103,9 +105,9 @@ class ProtocolParser {
       } else if ("error" in current.groups && current.groups.error !== undefined) {
         output.push(RedisProtocolError.fromMessage(current[0]));
       } else if ("int" in current.groups && current.groups.int !== undefined) {
-        output.push(parseInt(current[0], 10));
-      } else {
-        output.push(current[0]);
+        output.push(parseInt(current.groups.int, 10));
+      } else if ("simple" in current.groups && current.groups.simple !== undefined) {
+        output.push(current.groups.simple);
       }
     }
   }
