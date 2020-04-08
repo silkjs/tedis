@@ -34,7 +34,6 @@ export class Protocol {
 }
 
 export class RedisProtocolError extends Error {
-
   public static fromMessage(message: string) {
     const space = message.indexOf(" ");
     return new RedisProtocolError(message.slice(0, space), message.slice(space + 1));
@@ -60,13 +59,6 @@ class ProtocolParser {
     masterRegex = `(?<=\\r\\n|^)(?:${masterRegex})(?=\\r\\n)`;
     return Array.from(raw.matchAll(new RegExp(masterRegex, "g")));
   }
-
-  /**
-   * Collect message arrays and bulk strings and convert messages to their correct types
-   * @param parsed - array of parsed messages
-   *
-   * @return
-   */
   public static collect(parsed: any[]): any[] {
     const output = new Array();
     do {
@@ -75,12 +67,6 @@ class ProtocolParser {
 
     return output;
   }
-
-  /**
-   * Iterate over parsed response array collecting messages in output
-   * @param parsed - array of parsed messages
-   * @param output
-   */
   private static aggregateMessages(parsed: any[], output: any[]) {
     const current = parsed.shift();
     if (current !== undefined) {
