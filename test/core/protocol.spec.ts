@@ -127,10 +127,10 @@ describe("parse", () => {
       data = protocol.parse();
       expect(data).toEqual([null]);
     });
-    it(`$ array`, () => {
-      protocol.write(Buffer.from(`$9\r\nhello world!\r\n`));
+    it(`$ includes CRLF`, () => {
+      protocol.write(Buffer.from(`$13\r\nhello\r\nworld!\r\n`));
       data = protocol.parse();
-      expect(data).toEqual(["hello wor"]);
+      expect(data).toEqual([`hello\r\nworld!`]);
     });
     it(`$ incomplete`, () => {
       protocol.write(Buffer.from(`$3\r\nhe`));
@@ -205,20 +205,6 @@ describe("parse", () => {
       expect(data).toEqual([]);
     });
   });
-  // it(`! type error`, () => {
-  //   protocol.write(Buffer.from(`!3\r\nhello\r\n`));
-  //   data = protocol.parse();
-  //   expect(data).toEqual({
-  //     state: false,
-  //     res: {
-  //       error: false,
-  //       data: [
-  //         new RedisProtocolError("UNRECOGNIZED RESP", "Failed to parse the line: '!3'."),
-  //         new RedisProtocolError("UNRECOGNIZED RESP", "Failed to parse the line: 'hello'."),
-  //       ],
-  //     },
-  //   });
-  // });
 });
 
 describe("encode", () => {
