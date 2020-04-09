@@ -117,7 +117,7 @@ describe("parse", () => {
       data = protocol.parse();
       expect(data).toEqual(["foobar"]);
     });
-    it(`$0`, () => {
+    it(`$0 Empty String`, () => {
       protocol.write(Buffer.from(`$0\r\n\r\n`));
       data = protocol.parse();
       expect(data).toEqual([""]);
@@ -137,6 +137,12 @@ describe("parse", () => {
       data = protocol.parse();
       expect(data).toEqual([]);
     });
+    it(`$ incomplete`, () => {
+      protocol.write(Buffer.from(`$9\r\n世界！\r\n`));
+      data = protocol.parse();
+      expect(data).toEqual(["世界！"]);
+    });
+
   });
 
   describe("RESP Arrays", () => {

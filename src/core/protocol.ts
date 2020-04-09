@@ -95,14 +95,20 @@ class ProtocolParser {
     for (const blob of blobMatches) {
       if (blob.groups !== undefined) {
         // this expression looks for something like `$N\r\n1..N\r\n` (where N = byteCount characters to match)
-        const fullBlobRegex = `${respStart}\\${blobByte}(?<byteCount>${blob.groups.byteCount})\\r\\n` +
-                              `(?<blob>.{${blob.groups.byteCount}})${respEnd}`;
-        const blobMatch = buffer.match(new RegExp(fullBlobRegex, "s"));
+        const fullBlobRegex = `${respStart}\\${blobByte}${blob.groups.byteCount}\\r\\n(?<blob>.*)${respEnd}`;
+        const blobMatch = buffer.match(new RegExp(fullBlobRegex, "su"));
+
         if (blobMatch !== null && blobMatch.groups !== undefined) {
-          const key = `${blobByte}blobRef_${refInx}`;
-          refInx++;
-          blobs.set(key, blobMatch.groups.blob);
-          buffer = buffer.replace(new RegExp(fullBlobRegex, "s"), key);
+          const stringLength = parseInt(blob.groups.byteCount, 10);
+          const bulkString = Buffer.from(blobMatch.groups.blob).slice(0, stringLength);
+
+          if (bulkString.length === stringLength) {
+            const key = `${blobByte}blobRef_${refInx}`;
+            refInx++;
+            blobs.set(key, bulkString.toString());
+            const extractedBlobRegex = `${respStart}\\${blobByte}${blob.groups.byteCount}\\r\\n${blobs.get(key)}`;
+            buffer = buffer.replace(new RegExp(extractedBlobRegex, "s"), key);
+          }
         }
       }
     }
