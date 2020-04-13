@@ -1,130 +1,25 @@
+import { Base } from "./base";
+
+const respStart = "(?<=\\r\\n|^)";
+const respEnd = "(?=\\r\\n)";
+
+interface InterfaceParser {
+  matches: RegExpMatchArray[];
+  blobs: Map<string, string>;
+}
+
 export class Protocol {
-  public data: {
-    state: boolean;
-    res: {
-      error: boolean;
-      data: any;
-    };
-  };
-  private _result: string[];
-  private _end: string;
+  private _buffer: string;
   constructor() {
-    this._result = new Array();
-    this._end = "";
-    this.data = {
-      state: true,
-      res: {
-        error: false,
-        data: null,
-      },
-    };
+    this._buffer = "";
   }
   public write(data: Buffer) {
-    const array: string[] = (this._end + data.toString()).split("\r\n");
-    this._end = array.pop() as string;
-    this._result = this._result.concat(array);
+    this._buffer += data.toString();
   }
   public parse() {
-    this.data = {
-      state: true,
-      res: {
-        error: false,
-        data: null,
-      },
-    };
-    if (
-      this._result.length < 1 ||
-      (this._result.length === 1 && this._end.length !== 0)
-    ) {
-      this.data.state = false;
-    } else {
-      const current = this._result[0];
-      switch (current.charAt(0)) {
-        case "+":
-          this.data.res = {
-            error: false,
-            data: current.slice(1),
-          };
-          this._result.shift();
-          break;
-        case "-":
-          this.data.res = {
-            error: true,
-            data: current.slice(1),
-          };
-          this._result.shift();
-          break;
-        case ":":
-          this.data.res = {
-            error: false,
-            data: +current.slice(1),
-          };
-          this._result.shift();
-          break;
-        case "$":
-          const size = parseInt(current.slice(1), 10);
-          this._result.shift();
-          if (-1 === size) {
-            this.data.res = {
-              error: false,
-              data: null,
-            };
-          } else {
-            const res = this._result.shift() as string;
-            let ls = Buffer.byteLength(res);
-            if (ls === size) {
-              this.data.res = {
-                error: false,
-                data: res,
-              };
-            } else {
-              this.data.res = {
-                error: false,
-                data: [res],
-              };
-              do {
-                const str = this._result.shift() as string;
-                this.data.res.data.push(str);
-                ls += Buffer.byteLength(str);
-              } while (this._result.length > 0);
-            }
-          }
-          break;
-        case "*":
-          const len = parseInt(current.slice(1), 10);
-          if (0 === len) {
-            this.data.res = {
-              error: false,
-              data: [],
-            };
-            this._result.shift();
-          } else {
-            this.data.res.data = [];
-            let i: number;
-            for (
-              i = 1;
-              i < this._result.length && this.data.res.data.length < len;
-              i++
-            ) {
-              if ("$-1" === this._result[i].slice(0, 3)) {
-                this.data.res.data.push(null);
-              } else if (typeof this._result[i + 1] === "undefined") {
-                break;
-              } else {
-                this.data.res.data.push(this._result[++i]);
-              }
-            }
-            if (this.data.res.data.length === len) {
-              this._result.splice(0, i);
-            } else {
-              this.data.state = false;
-            }
-          }
-          break;
-        default:
-          this.data.state = false;
-      }
-    }
+    const parsed = ProtocolParser.parse(this._buffer);
+    this._buffer = "";
+    return ProtocolParser.collect(parsed);
   }
   public encode(...parameters: Array<string | number>): string {
     const length = parameters.length;
@@ -143,5 +38,109 @@ export class Protocol {
       }
     }
     return request;
+  }
+}
+
+export class RedisProtocolError extends Error {
+  public static fromMessage(message: string) {
+    const space = message.indexOf(" ");
+    return new RedisProtocolError(message.slice(0, space), message.slice(space + 1));
+  }
+  constructor(name: string, message: string) {
+    super();
+    this.name = name;
+    this.message = message;
+  }
+}
+
+class ProtocolParser {
+  public static parse(raw: string): InterfaceParser {
+    let masterRegex = [
+      "\\+(?<simple>.+?)",
+      "\\-(?<error>.+?)",
+      "\\:(?<int>-?\\d+)",
+      "(?<blobString>\\$blobRef_\\d+)", // Note: this matches our replaced Blob-Ref
+      "\\*(?<array_n>\\d+)(?<array>)",
+      "(\\$|\\*)(?<null_string>-1)",
+    ].join("|");
+
+    // Preprocess blobs since they can include <CR><LF>
+    const blobs = ProtocolParser.extractBlobs(raw, "$");
+
+    masterRegex = `${respStart}(?:${masterRegex})${respEnd}`;
+    const matches = Array.from(blobs.buffer.matchAll(new RegExp(masterRegex, "g")));
+    return {
+      matches,
+      blobs: blobs.output,
+    };
+  }
+  public static collect(parsed: InterfaceParser): any[] {
+    const output = new Array();
+    do {
+      ProtocolParser.aggregateMessages(parsed, output);
+    } while (parsed.matches.length > 0);
+
+    return output;
+  }
+  private static extractBlobs(
+    raw: string,
+    blobByte: string,
+    blobs: Map<string, string>= new Map()
+  ): {output: Map<string, string>, buffer: string} {
+    let buffer = raw;
+    let refInx = 0;
+    // This expression matches all `\r\n$N\r\n` where `N` is digit(s) to find all blob specifications
+    const blobSizeRegex = `${respStart}\\${blobByte}(?<byteCount>\\d+)${respEnd}`;
+    const blobMatches = Array.from(buffer.matchAll(new RegExp(blobSizeRegex, "g")));
+    for (const blob of blobMatches) {
+      if (blob.groups !== undefined) {
+        // this expression looks for something like `$N\r\n1..N\r\n` (where N = byteCount characters to match)
+        const fullBlobRegex = `${respStart}\\${blobByte}${blob.groups.byteCount}\\r\\n(?<blob>.*)${respEnd}`;
+        const blobMatch = buffer.match(new RegExp(fullBlobRegex, "su"));
+
+        if (blobMatch !== null && blobMatch.groups !== undefined) {
+          const stringLength = parseInt(blob.groups.byteCount, 10);
+          const bulkString = Buffer.from(blobMatch.groups.blob).slice(0, stringLength);
+
+          if (bulkString.length === stringLength) {
+            const key = `${blobByte}blobRef_${refInx}`;
+            refInx++;
+            blobs.set(key, bulkString.toString());
+            const extractedBlobRegex = `${respStart}\\${blobByte}${blob.groups.byteCount}\\r\\n${blobs.get(key)}`;
+            buffer = buffer.replace(new RegExp(extractedBlobRegex, "s"), key);
+          }
+        }
+      }
+    }
+    return {
+      output: blobs,
+      buffer,
+    };
+  }
+  private static aggregateMessages(parsed: InterfaceParser, output: any[]) {
+    const current = parsed.matches.shift();
+    if (current !== undefined && current.groups !== undefined) {
+      if ("array_n" in current.groups && current.groups.array_n !== undefined) {
+        const array_n = parseInt(current.groups.array_n, 10);
+        const arrayResp = new Array();
+        for (let inx = 0; inx < array_n; inx++) {
+          ProtocolParser.aggregateMessages(parsed, arrayResp);
+        }
+
+        if (arrayResp.length === array_n) {
+          output.push(arrayResp);
+        }
+      } else if ("blobString" in current.groups && current.groups.blobString !== undefined) {
+        output.push(parsed.blobs.get(current.groups.blobString));
+      } else if ("null_string" in current.groups && current.groups.null_string !== undefined) {
+        output.push(null);
+      } else if ("error" in current.groups && current.groups.error !== undefined) {
+        output.push(RedisProtocolError.fromMessage(current[0]));
+      } else if ("int" in current.groups && current.groups.int !== undefined) {
+        output.push(parseInt(current.groups.int, 10));
+      } else if ("simple" in current.groups && current.groups.simple !== undefined) {
+        output.push(current.groups.simple);
+      }
+    }
   }
 }
