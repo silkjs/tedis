@@ -1,9 +1,8 @@
-import { Http2ServerResponse } from "http2";
 import { createConnection, Socket } from "net";
 import { connect, TLSSocket } from "tls";
 import { v4 as uuidv4 } from "uuid";
 // core
-import { Protocol, RedisProtocolError } from "./protocol";
+import { Protocol } from "./protocol";
 
 type callback = (err: boolean, res: any) => void;
 
@@ -97,9 +96,7 @@ export class Base implements InterfaceBase {
   }
   private async auth(password: string) {
     try {
-      const authResponse = await this.command("AUTH", password);
-      if (authResponse instanceof Error) { throw authResponse; }
-      return authResponse;
+      return await this.command("AUTH", password);
     } catch (error) {
       this.socket.emit("error", error);
       this.socket.end();
@@ -132,13 +129,16 @@ export class Base implements InterfaceBase {
     });
     this.socket.on("data", (data) => {
       this.protocol.write(data);
-      const parsed = this.protocol.parse();
-      parsed.forEach((message) => {
+      while (true) {
+        this.protocol.parse();
+        if (!this.protocol.data.state) {
+          break;
+        }
         (this.callbacks.shift() as callback)(
-          false,
-          message
+          this.protocol.data.res.error,
+          this.protocol.data.res.data
         );
-      });
+      }
     });
   }
 }
