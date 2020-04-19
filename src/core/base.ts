@@ -19,11 +19,13 @@ export interface InterfaceBase {
 export interface BaseParams {
   host?: string;
   port?: number;
+  url?: string;
   password?: string;
   timeout?: number;
   tls?: {
-    key: Buffer;
-    cert: Buffer;
+    key?: Buffer;
+    cert?: Buffer;
+    ca?: Buffer;
   };
 }
 
@@ -38,13 +40,24 @@ export class Base implements InterfaceBase {
   private handle_close?: (had_error: boolean) => void;
   constructor(options: BaseParams = {}) {
     this.id = uuidv4();
-    if (typeof options.tls !== "undefined") {
-      this.socket = connect({
-        host: options.host || "127.0.0.1",
-        port: options.port || 6379,
-        key: options.tls.key,
-        cert: options.tls.cert,
-      });
+    if (typeof options.tls !== "undefined" || typeof options.url !== "undefined") {
+      let connectionObject: BaseParams = {};
+      if (typeof options.url !== "undefined") {
+        connectionObject.url = options.url;
+      } else {
+        connectionObject.host = options.host || "127.0.0.1";
+        connectionObject.port = options.port || 6379;
+      }
+      if (options.tls) {
+        connectionObject.tls = {};
+        if (typeof options.tls.ca !== "undefined") {
+          connectionObject.tls.ca = options.tls.ca;
+        } else {
+          connectionObject.tls.key = options.tls.key;
+          connectionObject.tls.cert = options.tls.cert;
+        }
+      }
+      this.socket = connect(connectionObject);
     } else {
       this.socket = createConnection({
         host: options.host || "127.0.0.1",
