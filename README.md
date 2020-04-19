@@ -49,14 +49,14 @@ import { Tedis, TedisPool } from "tedis";
 // no auth
 const tedis = new Tedis({
   port: 6379,
-  host: "127.0.0.1"
+  host: "127.0.0.1",
 });
 
 // auth
 const tedis = new Tedis({
   port: 6379,
   host: "127.0.0.1",
-  password: "your_password"
+  password: "your_password",
 });
 ```
 
@@ -68,8 +68,36 @@ const tedis = new Tedis({
   host: "127.0.0.1",
   tls: {
     key: fs.readFileSync(__dirname + "/client_server/client_key.pem"),
-    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem")
-  }
+    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem"),
+  },
+});
+```
+
+_url_
+
+Passing a url will override the host and port.
+
+```ts
+const tedis = new Tedis({
+  url: "redis://redisuser:authpassword@127.0.0.1:6380/4",
+  tls: {
+    key: fs.readFileSync(__dirname + "/client_server/client_key.pem"),
+    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem"),
+  },
+});
+```
+
+_ca cert_
+
+Passing a ca (self signed) cert will override the key and cert.
+
+```ts
+const tedis = new Tedis({
+  port: 6379,
+  host: "127.0.0.1",
+  tls: {
+    ca: fs.readFileSync(__dirname + "/client_server/client_ca.pem"),
+  },
 });
 ```
 
@@ -79,14 +107,14 @@ const tedis = new Tedis({
 // no auth
 const pool = new TedisPool({
   port: 6379,
-  host: "127.0.0.1"
+  host: "127.0.0.1",
 });
 
 // auth
 const pool = new TedisPool({
   port: 6379,
   host: "127.0.0.1",
-  password: "your_password"
+  password: "your_password",
 });
 ```
 
@@ -104,8 +132,8 @@ const tedis = new TedisPool({
   host: "127.0.0.1",
   tls: {
     key: fs.readFileSync(__dirname + "/client_server/client_key.pem"),
-    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem")
-  }
+    cert: fs.readFileSync(__dirname + "/client_server/client_cert.pem"),
+  },
 });
 ```
 
@@ -141,7 +169,7 @@ await tedis.get("mystring");
  */
 await tedis.hmset("myhash", {
   name: "tedis",
-  age: 18
+  age: 18,
 });
 // "OK"
 await tedis.hgetall("myhash");
