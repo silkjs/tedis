@@ -14,4 +14,4 @@ git init
 git add -A
 git commit -m 'deploy'
 
-git push -f https://github.com/silkjs/tedis.git master:gh-pages
+git push -f https://github.com/SamSteele01/tedis.git master:gh-pages
