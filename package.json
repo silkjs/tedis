@@ -35,12 +35,11 @@
   },
   "homepage": "https://github.com/silkjs/tedis#readme",
   "dependencies": {
-    "uuid": "^7.0.2"
+    "nanoid": "^3.3.1"
   },
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.1",
-    "@types/uuid": "^7.0.0",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "codecov": "^3.6.5",

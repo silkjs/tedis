@@ -1,6 +1,6 @@
 import { createConnection, Socket } from "net";
 import { connect, TLSSocket } from "tls";
-import { v4 as uuidv4 } from "uuid";
+import { nanoid } from "nanoid";
 // core
 import { Protocol } from "./protocol";
 
@@ -37,7 +37,7 @@ export class Base implements InterfaceBase {
   private handle_error?: (err: Error) => void;
   private handle_close?: (had_error: boolean) => void;
   constructor(options: BaseParams = {}) {
-    this.id = uuidv4();
+    this.id = nanoid();
     if (typeof options.tls !== "undefined") {
       this.socket = connect({
         host: options.host || "127.0.0.1",
