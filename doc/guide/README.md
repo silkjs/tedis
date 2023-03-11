@@ -135,10 +135,10 @@ await client.zcard("zset1");
 client.close();
 ```
 
-## pool
+## Connection pooling
 
-Using `Tedis` initializes the client is using a single TCP connection, when the size of the single instance on the service concurrently without enough to cope with. When complicated with large enough, a single instance of a TCP connection and did not play out redis real ability, you may need to use this time `TedisPool` to improve service capability
+Initializing a client with `Tedis` uses a single tcp connection, which is sufficient for a single instance when the service does not scale up in terms of concurrency. When the concurrency is large enough, a single instance of tcp connections doesn't give redis its true power, so you may need to use `TedisPool` to increase the service's power
 
-::: danger
-When using a `TedisPool`, remember to take out after the instance of using call `putTedis` return release, in order to ensure the normal use of the next
+::: danger warning
+When using `TedisPool`, remember to call `putTedis` to return the instance after it has been used to ensure that it is used properly next time.
 :::
