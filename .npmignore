@@ -7,7 +7,6 @@ example
 node_modules
 reference
 script
-src/
 .coveralls.yml
 .editorconfig
 .eslintrc.json
