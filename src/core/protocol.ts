@@ -71,6 +71,13 @@ export class Protocol {
             };
           } else {
             const res = this._result.shift() as string;
+            if (res === undefined) {
+              this.data.res = {
+                error: true,
+                data: res,
+              };
+              break;
+            }
             let ls = Buffer.byteLength(res);
             if (ls === size) {
               this.data.res = {
