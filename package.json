@@ -40,6 +40,7 @@
   "devDependencies": {
     "@types/jest": "^25.1.4",
     "@types/node": "^13.9.1",
+    "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^2.23.0",
     "@typescript-eslint/parser": "^2.23.0",
     "codecov": "^3.6.5",
@@ -52,7 +53,7 @@
     "prettier": "^1.19.1",
     "ts-jest": "^24.0.2",
     "tslint": "^5.18.0",
-    "typescript": "^3.8.3",
+    "typescript": "^5.3.2",
     "vuepress": "^1.0.2"
   },
   "directories": {

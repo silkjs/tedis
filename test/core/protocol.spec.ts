@@ -1,4 +1,4 @@
-import { Protocol } from "./protocol";
+import { Protocol } from "../../src/core/protocol";
 
 let protocol: Protocol;
 
@@ -47,7 +47,9 @@ describe("parse", () => {
     });
   });
   it(`* array`, () => {
-    protocol.write(Buffer.from(`*3\r\n$1\r\n1\r\n$5\r\nhello\r\n$5\r\ntedis\r\n`));
+    protocol.write(
+      Buffer.from(`*3\r\n$1\r\n1\r\n$5\r\nhello\r\n$5\r\ntedis\r\n`)
+    );
     protocol.parse();
     expect(protocol.data).toEqual({
       state: true,
@@ -121,7 +123,7 @@ describe("encode", () => {
       output: `*2\r\n$3\r\nDEL\r\n$7\r\nstring1\r\n`,
     },
   ];
-  mock.forEach(item => {
+  mock.forEach((item) => {
     it(item.title, () => {
       expect(protocol.encode(...item.input)).toBe(item.output);
     });

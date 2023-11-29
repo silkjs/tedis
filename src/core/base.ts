@@ -1,6 +1,5 @@
 import { createConnection, Socket } from "net";
-import { connect, TLSSocket } from "tls";
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from "uuid";
 // core
 import { Protocol } from "./protocol";
 
@@ -16,41 +15,28 @@ export interface InterfaceBase {
   on(event: string, listener: (...args: any[]) => void): void;
 }
 
-export interface BaseParams {
-  host?: string;
-  port?: number;
-  password?: string;
-  timeout?: number;
-  tls?: {
-    key: Buffer;
-    cert: Buffer;
-  };
-}
-
 export class Base implements InterfaceBase {
   public id: string;
-  private socket: Socket | TLSSocket;
+  private socket: Socket;
   private protocol: Protocol;
   private callbacks: callback[];
   private handle_connect?: () => void;
   private handle_timeout?: () => void;
   private handle_error?: (err: Error) => void;
   private handle_close?: (had_error: boolean) => void;
-  constructor(options: BaseParams = {}) {
-    this.id = nanoid();
-    if (typeof options.tls !== "undefined") {
-      this.socket = connect({
-        host: options.host || "127.0.0.1",
-        port: options.port || 6379,
-        key: options.tls.key,
-        cert: options.tls.cert,
-      });
-    } else {
-      this.socket = createConnection({
-        host: options.host || "127.0.0.1",
-        port: options.port || 6379,
-      });
-    }
+  constructor(
+    options: {
+      host?: string;
+      port?: number;
+      password?: string;
+      timeout?: number;
+    } = {}
+  ) {
+    this.id = uuidv4();
+    this.socket = createConnection({
+      host: options.host || "127.0.0.1",
+      port: options.port || 6379,
+    });
     this.protocol = new Protocol();
     this.callbacks = [];
     this.init();
@@ -62,7 +48,7 @@ export class Base implements InterfaceBase {
       this.auth(options.password);
     }
   }
-  public command<T>(...parameters: Array<string | number>): Promise<T> {
+  public command(...parameters: Array<string | number>): Promise<any> {
     return new Promise((resolve, reject) => {
       this.callbacks.push((err, res) => {
         err ? reject(res) : resolve(res);
@@ -115,7 +101,7 @@ export class Base implements InterfaceBase {
         this.close();
       }
     });
-    this.socket.on("error", err => {
+    this.socket.on("error", (err) => {
       if ("function" === typeof this.handle_error) {
         this.handle_error(err);
       } else {
@@ -127,7 +113,7 @@ export class Base implements InterfaceBase {
         this.handle_close(had_error);
       }
     });
-    this.socket.on("data", data => {
+    this.socket.on("data", (data) => {
       this.protocol.write(data);
       while (true) {
         this.protocol.parse();
@@ -136,7 +122,7 @@ export class Base implements InterfaceBase {
         }
         (this.callbacks.shift() as callback)(
           this.protocol.data.res.error,
-          this.protocol.data.res.data,
+          this.protocol.data.res.data
         );
       }
     });

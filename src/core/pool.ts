@@ -18,10 +18,6 @@ export class TedisPool implements InterfacePool {
   private port: number;
   private password?: string;
   private timeout?: number;
-  private tls?: {
-    key: Buffer;
-    cert: Buffer;
-  };
   constructor(
     options: {
       host?: string;
@@ -30,11 +26,7 @@ export class TedisPool implements InterfacePool {
       min_conn?: number;
       max_conn?: number;
       timeout?: number;
-      tls?: {
-        key: Buffer;
-        cert: Buffer;
-      };
-    } = {},
+    } = {}
   ) {
     this.connection_pool = [];
     this.cushion_list = [];
@@ -45,10 +37,9 @@ export class TedisPool implements InterfacePool {
     this.port = options.port || 6379;
     this.password = options.password;
     this.timeout = options.timeout;
-    this.tls = options.tls;
   }
   public release() {
-    this.connection_pool.forEach(conn => {
+    this.connection_pool.forEach((conn) => {
       conn.close();
     });
   }
@@ -89,10 +80,9 @@ export class TedisPool implements InterfacePool {
         port: this.port,
         password: this.password,
         timeout: this.timeout,
-        tls: this.tls,
       });
       conn.on("connect", () => {
-        conn.on("error", err => {
+        conn.on("error", (err) => {
           console.log(err);
         });
         conn.on("close", (had_error: boolean) => {
@@ -103,14 +93,14 @@ export class TedisPool implements InterfacePool {
         });
         resolve(conn);
       });
-      conn.on("error", err => {
+      conn.on("error", (err) => {
         this.act_conn--;
         reject(err);
       });
     });
   }
   private closeConnection(conn: Tedis) {
-    const index = this.connection_pool.findIndex(item => {
+    const index = this.connection_pool.findIndex((item) => {
       return item.id === conn.id;
     });
     if (-1 !== index) {

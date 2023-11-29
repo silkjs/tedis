@@ -1,50 +1,50 @@
-import { Base } from "./base";
-import { config } from "../util/index";
+import { Tedis } from "../../src/main";
+import { config } from "../../tools/index";
 
 describe("core base", () => {
   it(`empty`, async () => {
-    const base: Base = new Base();
-    base.close();
+    const Base: Tedis = new Tedis();
+    Base.close();
   });
   it(`on event_not_found`, async () => {
-    const base: Base = new Base(config);
+    const Base: Tedis = new Tedis(config);
     await expect(
       new Promise((resolve, reject) => {
         try {
-          base.on("event_not_found" as any, () => {
+          Base.on("event_not_found", () => {
             reject("error");
           });
         } catch (error) {
           throw error;
         }
-      }),
+      })
     ).rejects.toThrow(Error);
-    base.close();
+    Base.close();
   });
   it(`on default -> error and timeout`, async () => {
-    const base: Base = new Base({
+    const Base: Tedis = new Tedis({
       port: 6377,
       timeout: 1,
     });
     await expect(
       new Promise((resolve, reject) => {
-        base.on("close", () => {
+        Base.on("close", () => {
           reject("error");
         });
-      }),
+      })
     ).rejects.toBe("error");
   });
   it(`on error with auth`, async () => {
-    const base: Base = new Base({
+    const Base: Tedis = new Tedis({
       password: "6377",
     });
     await expect(
       new Promise((resolve, reject) => {
-        base.on("error", err => {
+        Base.on("error", (err) => {
           reject("error");
         });
-      }),
+      })
     ).rejects.toBe("error");
-    base.close();
+    Base.close();
   });
 });

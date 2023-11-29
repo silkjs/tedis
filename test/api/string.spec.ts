@@ -1,5 +1,5 @@
-import { Tedis, TedisPool } from "../main";
-import { config } from "../util/index";
+import { Tedis, TedisPool } from "../../src/main";
+import { config } from "../../tools/index";
 
 const Pool = new TedisPool(config);
 let String: Tedis;
@@ -37,9 +37,9 @@ describe("Redis String Test: DECR", () => {
     expect(await String.decr("mykey")).toBe(9);
   });
   it(`string can not be represented as integer.`, async () => {
-    expect(await String.command("SET", "mykey", "234293482390480948029348230948")).toBe(
-      "OK",
-    );
+    expect(
+      await String.command("SET", "mykey", "234293482390480948029348230948")
+    ).toBe("OK");
     await expect(
       (async () => {
         try {
@@ -47,7 +47,7 @@ describe("Redis String Test: DECR", () => {
         } catch (error) {
           throw new Error();
         }
-      })(),
+      })()
     ).rejects.toThrow(Error);
   });
 });
@@ -61,9 +61,9 @@ describe("Redis String Test: DECRBY", () => {
     expect(await String.decrby("mykey", 3)).toBe(7);
   });
   it(`string can not be represented as integer.`, async () => {
-    expect(await String.command("SET", "mykey", "234293482390480948029348230948")).toBe(
-      "OK",
-    );
+    expect(
+      await String.command("SET", "mykey", "234293482390480948029348230948")
+    ).toBe("OK");
     await expect(
       (async () => {
         try {
@@ -71,7 +71,7 @@ describe("Redis String Test: DECRBY", () => {
         } catch (error) {
           throw new Error();
         }
-      })(),
+      })()
     ).rejects.toThrow(Error);
   });
 });
@@ -103,7 +103,7 @@ describe("Redis String Test: GET", () => {
         } catch (error) {
           throw new Error();
         }
-      })(),
+      })()
     ).rejects.toThrow(Error);
   });
 });
@@ -153,9 +153,9 @@ describe("Redis String Test: INCR", () => {
     expect(await String.incr("mykey")).toBe(11);
   });
   it(`string can not be represented as integer.`, async () => {
-    expect(await String.command("SET", "mykey", "234293482390480948029348230948")).toBe(
-      "OK",
-    );
+    expect(
+      await String.command("SET", "mykey", "234293482390480948029348230948")
+    ).toBe("OK");
     await expect(
       (async () => {
         try {
@@ -163,7 +163,7 @@ describe("Redis String Test: INCR", () => {
         } catch (error) {
           throw new Error();
         }
-      })(),
+      })()
     ).rejects.toThrow(Error);
   });
 });
@@ -177,9 +177,9 @@ describe("Redis String Test: INCRBY", () => {
     expect(await String.incrby("mykey", 3)).toBe(13);
   });
   it(`string can not be represented as integer.`, async () => {
-    expect(await String.command("SET", "mykey", "234293482390480948029348230948")).toBe(
-      "OK",
-    );
+    expect(
+      await String.command("SET", "mykey", "234293482390480948029348230948")
+    ).toBe("OK");
     await expect(
       (async () => {
         try {
@@ -187,7 +187,7 @@ describe("Redis String Test: INCRBY", () => {
         } catch (error) {
           throw new Error();
         }
-      })(),
+      })()
     ).rejects.toThrow(Error);
   });
 });
@@ -210,7 +210,7 @@ describe("Redis String Test: INCRBYFLOAT", () => {
         } catch (error) {
           throw new Error();
         }
-      })(),
+      })()
     ).rejects.toThrow(Error);
   });
 });
@@ -321,7 +321,9 @@ describe("Redis String Test: SETNX", () => {
 describe("Redis String Test: SETRANGE", () => {
   it(`key not exists`, async () => {
     expect(await String.setrange("mykey", 5, "Hello")).toBe(10);
-    expect(await String.get("mykey")).toBe("\u0000\u0000\u0000\u0000\u0000Hello");
+    expect(await String.get("mykey")).toBe(
+      "\u0000\u0000\u0000\u0000\u0000Hello"
+    );
   });
   it(`key exists`, async () => {
     expect(await String.set("mykey", "Hello World")).toBe("OK");
